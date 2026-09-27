@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Resident Details | Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
+</head>
+
+
+<body>
+
+    <main class="dashboard-page">
+
+
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+
+                <h2>
+                    ADMIN PANEL
+                </h2>
+
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="admin-dashboard.html">
+                    Dashboard
+                </a>
+
+                <a href="admin-requests.html">
+                    Document Requests
+                </a>
+
+                <a
+                    href="admin-residents.html"
+                    class="active">
+
+                    Residents
+
+                </a>
+
+                <a href="admin-notifications.html">
+                    Notifications
+                </a>
+
+                <a href="admin-reports.html">
+                    Reports
+                </a>
+
+                <a href="admin-settings.html">
+                    Settings
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
+                    Logout
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <section class="dashboard-content">
+
+
+            <!-- =================================================
+                 PAGE HEADER
+                 ================================================= -->
+
+            <header class="page-header">
+
+                <a
+                    href="admin-residents.html"
+                    class="back-link">
+
+                    ← Back to Residents
+
+                </a>
+
+
+                <h1>
+                    Resident Details
+                </h1>
+
+
+                <p>
+                    View resident account and profile information.
+                </p>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 ACCOUNT INFORMATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Account Information
+                        </h2>
+
+                        <p>
+                            Basic account information registered in the system.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="residentDetailStatus"
+                        class="resident-detail-status">
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Resident ID
+                        </span>
+
+                        <strong id="detailAccountId">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Registration Date
+                        </span>
+
+                        <strong id="detailCreatedAt">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            First Name
+                        </span>
+
+                        <strong id="detailAccountFirstName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Last Name
+                        </span>
+
+                        <strong id="detailAccountLastName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Email Address
+                        </span>
+
+                        <strong id="detailAccountEmail">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Account Status
+                        </span>
+
+                        <strong id="detailAccountStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PERSONAL INFORMATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Personal Information
+                        </h2>
+
+                        <p>
+                            Personal information provided by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            First Name
+                        </span>
+
+                        <strong id="detailFirstName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Middle Name
+                        </span>
+
+                        <strong id="detailMiddleName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Last Name
+                        </span>
+
+                        <strong id="detailLastName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Birthdate
+                        </span>
+
+                        <strong id="detailBirthdate">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Age
+                        </span>
+
+                        <strong id="detailAge">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Gender
+                        </span>
+
+                        <strong id="detailGender">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Civil Status
+                        </span>
+
+                        <strong id="detailCivilStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Birthplace
+                        </span>
+
+                        <strong id="detailBirthplace">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Nationality
+                        </span>
+
+                        <strong id="detailNationality">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ADDRESS & RESIDENCY
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Address & Residency
+                        </h2>
+
+                        <p>
+                            Current residence and residency information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            House / Unit
+                        </span>
+
+                        <strong id="detailHouse">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Street
+                        </span>
+
+                        <strong id="detailStreet">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Purok
+                        </span>
+
+                        <strong id="detailPurok">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Barangay
+                        </span>
+
+                        <strong id="detailBarangay">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Municipality
+                        </span>
+
+                        <strong id="detailMunicipality">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Province
+                        </span>
+
+                        <strong id="detailProvince">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Years of Residency
+                        </span>
+
+                        <strong id="detailResidencyYears">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Resident Status
+                        </span>
+
+                        <strong id="detailResidentStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CONTACT INFORMATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Contact Information
+                        </h2>
+
+                        <p>
+                            Resident contact information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Mobile Number
+                        </span>
+
+                        <strong id="detailMobile">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Email Address
+                        </span>
+
+                        <strong id="detailEmailContact">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 HOUSEHOLD INFORMATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Household Information
+                        </h2>
+
+                        <p>
+                            Household and voter information provided by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Voter Status
+                        </span>
+
+                        <strong id="detailVoterStatus">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Household Head
+                        </span>
+
+                        <strong id="detailHouseholdHead">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Family Members
+                        </span>
+
+                        <strong id="detailFamilyMembers">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 EMPLOYMENT & BUSINESS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Employment & Business
+                        </h2>
+
+                        <p>
+                            Employment and business information provided by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Employment Status
+                        </span>
+
+                        <strong id="detailEmployment">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Occupation
+                        </span>
+
+                        <strong id="detailOccupation">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Business Name
+                        </span>
+
+                        <strong id="detailBusinessName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Business Address
+                        </span>
+
+                        <strong id="detailBusinessAddress">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 IDENTIFICATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Identification
+                        </h2>
+
+                        <p>
+                            Identification information provided by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            ID Type
+                        </span>
+
+                        <strong id="detailIdType">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            ID Number
+                        </span>
+
+                        <strong id="detailIdNumber">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 EMERGENCY CONTACT
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Emergency Contact
+                        </h2>
+
+                        <p>
+                            Emergency contact information provided by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Contact Name
+                        </span>
+
+                        <strong id="detailEmergencyName">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Contact Number
+                        </span>
+
+                        <strong id="detailEmergencyNumber">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>
+                            Relationship
+                        </span>
+
+                        <strong id="detailRelationship">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 REQUEST HISTORY
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Request History
+                        </h2>
+
+                        <p>
+                            Previous document requests submitted by this resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Request ID
+                                </th>
+
+                                <th>
+                                    Document
+                                </th>
+
+                                <th>
+                                    Date Requested
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="residentRequestHistory">
+
+                            <tr>
+
+                                <td
+                                    colspan="4"
+                                    class="empty-state">
+
+                                    No document requests found.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

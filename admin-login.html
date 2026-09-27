@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Barangay Pandi</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="admin-login-page">
+
+        <!-- LEFT: LOGIN -->
+        <section class="admin-login-left">
+
+            <div class="admin-login-box">
+
+                <!-- BRAND -->
+                <div class="admin-login-brand">
+                    <img
+                        src="https://pandi.bulacan.gov.ph/wp-content/uploads/2024/10/Poblacion-768x765.png"
+                        alt="Barangay Pandi Logo"
+                    >
+
+                    <span>Barangay Pandi</span>
+                </div>
+
+
+                <!-- HEADER -->
+                <div class="admin-login-header">
+                    <h1>Admin Login</h1>
+
+                    <p>
+                        Login to access your barangay document
+                        management system.
+                    </p>
+                </div>
+
+
+                <!-- FORM -->
+                <form id="adminLoginForm" class="admin-login-form">
+
+                    <div class="form-group">
+                        <label for="adminUsername">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="adminUsername"
+                            name="username"
+                            placeholder="Enter your username"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="adminPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="adminPassword"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="admin-login-options">
+
+                        <label class="remember-me">
+                            <input
+                                type="checkbox"
+                                id="rememberAdmin"
+                                name="remember"
+                            >
+
+                            <span>Remember me</span>
+                        </label>
+
+                        <a href="#">
+                            Forgot Password?
+                        </a>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="login-button">
+                        Login
+                    </button>
+
+                </form>
+
+
+                <!-- FOOTER -->
+                <div class="admin-login-footer">
+
+                    <p>
+                        Are you a resident?
+                        <a href="resident-login.html">
+                            Resident Login
+                        </a>
+                    </p>
+
+                    <a
+                        href="home.html"
+                        class="back-home">
+                        ← Back to Home
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT: ADMIN INFORMATION -->
+        <section class="admin-login-right">
+
+            <div class="admin-welcome-content">
+
+                <h2>
+                    BarangayCert <br>
+                    Document Request System
+                </h2>
+
+                <p>
+                    Access the administrative portal to manage
+                    barangay document requests and resident accounts.
+                </p>
+
+
+                <div class="admin-features">
+
+                    <div class="admin-feature">
+
+                        <span>✓</span>
+
+                        <div>
+                            <strong>
+                                Manage Requests
+                            </strong>
+
+                            <p>
+                                Review and process resident document requests.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="admin-feature">
+
+                        <span>✓</span>
+
+                        <div>
+                            <strong>
+                                Manage Residents
+                            </strong>
+
+                            <p>
+                                View and manage registered resident accounts.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="admin-feature">
+
+                        <span>✓</span>
+
+                        <div>
+                            <strong>
+                                Monitor Documents
+                            </strong>
+
+                            <p>
+                                Track document processing and release status.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

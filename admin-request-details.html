@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Request Details | Admin</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="dashboard-page">
+
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <h2>ADMIN PANEL</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html"> Dashboard</a>
+                <a href="admin-requests.html"> Document Requests </a>
+                <a href="admin-residents.html"> Residents </a>
+                <a href="admin-notifications.html"> Notifications </a>
+                <a href="admin-reports.html"> Reports </a>
+                <a href="admin-settings.html"> Settings</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="admin-login.html" class="logout-link">
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <section class="dashboard-content">
+
+            <!-- PAGE HEADER -->
+
+            <header class="page-header">
+
+                <a href="admin-requests.html" class="back-link">
+                    ← Back to Document Requests
+                </a>
+
+                <h1>Request Details</h1>
+
+                <p>
+                    Review and process the resident's document request.
+                </p>
+
+            </header>
+
+
+            <!-- =================================================
+                 REQUEST INFORMATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Request Information</h2>
+
+                        <p>
+                            Basic information about this request.
+                        </p>
+                    </div>
+
+                    <span class="status-badge pending">
+                        Pending
+                    </span>
+
+                </div>
+
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+
+                        <span>Request ID</span>
+
+                        <strong>
+                            BRGY-2026-0001
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>Date Requested</span>
+
+                        <strong>
+                            September 27, 2026
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>Document Type</span>
+
+                        <strong>
+                            Barangay Clearance
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>Purpose</span>
+
+                        <strong>
+                            Employment
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RESIDENT INFORMATION
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Resident Information</h2>
+
+                        <p>
+                            Information submitted by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+
+                        <span>Full Name</span>
+
+                        <strong>
+                            Juan Dela Cruz
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>Email Address</span>
+
+                        <strong>
+                            juandelacruz@email.com
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <span>Contact Number</span>
+
+                        <strong>
+                            0917 123 4567
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-item detail-full">
+
+                        <span>Address</span>
+
+                        <strong>
+                            Barangay Poblacion, Pandi, Bulacan
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DOCUMENT REQUIREMENTS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Document Requirements</h2>
+
+                        <p>
+                            Review the requirements submitted by the resident.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="requirement-list">
+
+                    <div class="requirement-item">
+
+                        <div>
+
+                            <strong>
+                                Valid Government-Issued ID
+                            </strong>
+
+                            <p>
+                                Required
+                            </p>
+
+                        </div>
+
+                        <span class="requirement-status submitted">
+                            Submitted
+                        </span>
+
+                    </div>
+
+
+                    <div class="requirement-item">
+
+                        <div>
+
+                            <strong>
+                                Proof of Residency
+                            </strong>
+
+                            <p>
+                                Required when applicable
+                            </p>
+
+                        </div>
+
+                        <span class="requirement-status submitted">
+                            Submitted
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ADMIN PROCESSING
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Processing</h2>
+
+                        <p>
+                            Update the status and add administrative remarks.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="requestStatus">
+                        Request Status
+                    </label>
+
+                    <select id="requestStatus">
+
+                        <option value="pending" selected>
+                            Pending
+                        </option>
+
+                        <option value="processing">
+                            Processing
+                        </option>
+
+                        <option value="ready">
+                            Ready for Pickup
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+
+                        <option value="rejected">
+                            Rejected
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="adminRemarks">
+                        Admin Remarks
+                    </label>
+
+                    <textarea
+                        id="adminRemarks"
+                        rows="5"
+                        placeholder="Enter remarks or additional instructions..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a
+                        href="admin-requests.html"
+                        class="dashboard-button secondary"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="button"
+                        class="dashboard-button"
+                    >
+                        Update Request
+                    </button>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

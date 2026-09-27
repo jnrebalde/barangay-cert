@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - Barangay Pandi</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="resident-layout">
+
+        <!-- LEFT PANEL -->
+
+        <aside class="sidebar">
+
+            <h2>RESIDENT PANEL</h2>
+
+            <nav>
+                <a href="resident-dashboard.html">Dashboard</a>
+
+                <a href="resident-request.html">
+                    Request Document
+                </a>
+
+                <a href="resident-track.html">
+                    Track Request
+                </a>
+
+                <a href="resident-notifications.html">
+                    Notifications
+                </a>
+
+                <a href="resident-profile.html" class="active">
+                    My Profile
+                </a>
+            </nav>
+            <div class="sidebar-bottom">
+                <a href="resident-login.html" class="logout-link">
+                    Logout
+                </a>
+            </div>
+
+        </aside>
+
+
+        <!-- PROFILE CONTENT -->
+
+        <main class="resident-content">
+
+            <!-- PAGE HEADER -->
+
+            <section class="profile-header">
+
+                <h1>My Profile</h1>
+
+                <p>
+                    View and manage your resident information.
+                </p>
+
+            </section>
+
+
+            <!-- PERSONAL INFORMATION -->
+
+            <section class="profile-section">
+
+                <h2>Personal Information</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="firstName">
+                            First Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="firstName"
+                            placeholder="First Name">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="middleName">
+                            Middle Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="middleName"
+                            placeholder="Middle Name">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="lastName">
+                            Last Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="lastName"
+                            placeholder="Last Name">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="birthdate">
+                            Birthdate
+                        </label>
+
+                        <input
+                            id="birthdate"
+                            name="birthdate"
+                            type="date"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="age">
+                            Age
+                        </label>
+
+                        <input
+                            id="age"
+                            name="age"
+                            type="number"
+                            min="1"
+                            max="120"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="gender">
+                            Gender
+                        </label>
+
+                        <select id="gender">
+
+                            <option>
+                                Select Gender
+                            </option>
+
+                            <option>
+                                Male
+                            </option>
+
+                            <option>
+                                Female
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="civilStatus">
+                            Civil Status
+                        </label>
+
+                        <select id="civilStatus">
+
+                            <option>
+                                Select Civil Status
+                            </option>
+
+                            <option>
+                                Single
+                            </option>
+
+                            <option>
+                                Married
+                            </option>
+
+                            <option>
+                                Widowed
+                            </option>
+
+                            <option>
+                                Separated
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="birthplace">
+                            Place of Birth
+                        </label>
+
+                        <input
+                            type="text"
+                            id="birthplace"
+                            placeholder="City / Municipality">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="nationality">
+                            Nationality
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nationality"
+                            value="Filipino">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- BARANGAY ADDRESS -->
+
+            <section class="profile-section">
+
+                <h2>Barangay Address</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="house">
+                            House / Block / Lot
+                        </label>
+
+                        <input
+                            type="text"
+                            id="house"
+                            placeholder="House / Block / Lot">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="street">
+                            Street
+                        </label>
+
+                        <input
+                            type="text"
+                            id="street"
+                            placeholder="Street">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="purok">
+                            Purok
+                        </label>
+
+                        <select id="purok">
+
+                            <option>
+                                Select Purok
+                            </option>
+                            <option>None</option>
+                            <option>Purok 1</option>
+                            <option>Purok 2</option>
+                            <option>Purok 3</option>
+                            <option>Purok 4</option>
+                            <option>Purok 5</option>
+                            <option>Purok 6</option>
+                            <option>Purok 7</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="barangay">
+                            Barangay
+                        </label>
+
+                        <input
+                            type="text"
+                            id="barangay"
+                            value="Poblacion"
+                            readonly>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="municipality">
+                            Municipality
+                        </label>
+
+                        <input
+                            type="text"
+                            id="municipality"
+                            value="Pandi"
+                            readonly>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="province">
+                            Province
+                        </label>
+
+                        <input
+                            type="text"
+                            id="province"
+                            value="Bulacan"
+                            readonly>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="residencyYears">
+                            Years of Residency
+                        </label>
+
+                        <input
+                            id="residencyYears"
+                            name="residencyYears"
+                            type="number"
+                            min="0"
+                            max="120"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="residentStatus">
+                            Resident Status
+                        </label>
+
+                        <select id="residentStatus">
+
+                            <option>
+                                Select Status
+                            </option>
+
+                            <option>
+                                Permanent Resident
+                            </option>
+
+                            <option>
+                                Temporary Resident
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CONTACT INFORMATION -->
+
+            <section class="profile-section">
+
+                <h2>Contact Information</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="mobile">
+                            Mobile Number
+                        </label>
+
+                        <input
+                            id="mobile"
+                            type="number"
+                            inputmode="numeric"
+                            maxlength="11"
+                            pattern="09[0-9]{9}"
+                            placeholder="09XXXXXXXXX"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RESIDENCY INFORMATION -->
+
+            <section class="profile-section">
+
+                <h2>Residency Information</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="voterStatus">
+                            Voter Status
+                        </label>
+
+                        <select id="voterStatus">
+
+                            <option>
+                                Select Voter Status
+                            </option>
+
+                            <option>
+                                Registered Voter
+                            </option>
+
+                            <option>
+                                Not Registered
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="householdHead">
+                            Household Head
+                        </label>
+
+                        <select id="householdHead">
+
+                            <option>
+                                Select
+                            </option>
+
+                            <option>
+                                Yes
+                            </option>
+
+                            <option>
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="familyMembers">
+                            Number of Family Members
+                        </label>
+
+                        <input
+                            id="familyMembers"
+                            name="familyMembers"
+                            type="number"
+                            min="1"
+                            required>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- EMPLOYMENT / BUSINESS -->
+
+            <section class="profile-section">
+
+                <h2>Employment / Business Information</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="employment">
+                            Employment Status
+                        </label>
+
+                        <select id="employment">
+
+                            <option>
+                                Select Employment Status
+                            </option>
+
+                            <option>
+                                Employed
+                            </option>
+
+                            <option>
+                                Self-Employed
+                            </option>
+
+                            <option>
+                                Unemployed
+                            </option>
+
+                            <option>
+                                Student
+                            </option>
+
+                            <option>
+                                Retired
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="occupation">
+                            Occupation
+                        </label>
+
+                        <input
+                            type="text"
+                            id="occupation"
+                            placeholder="Occupation">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="businessName">
+                            Business Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="businessName"
+                            placeholder="Business Name">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="businessAddress">
+                            Business Address
+                        </label>
+
+                        <input
+                            type="text"
+                            id="businessAddress"
+                            placeholder="Business Address">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- IDENTIFICATION -->
+
+            <section class="profile-section">
+
+                <h2>Identification</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="idType">
+                            Valid ID Type
+                        </label>
+
+                        <select id="idType">
+
+                            <option>
+                                Select ID Type
+                            </option>
+
+                            <option>
+                                Philippine National ID
+                            </option>
+
+                            <option>
+                                Driver's License
+                            </option>
+
+                            <option>
+                                Passport
+                            </option>
+
+                            <option>
+                                UMID
+                            </option>
+
+                            <option>
+                                Postal ID
+                            </option>
+
+                            <option>
+                                Other Government ID
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="idNumber">
+                            ID Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="idNumber"
+                            placeholder="ID Number">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- EMERGENCY CONTACT -->
+
+            <section class="profile-section">
+
+                <h2>Emergency Contact</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="emergencyName">
+                            Contact Person
+                        </label>
+
+                        <input
+                            type="text"
+                            id="emergencyName"
+                            placeholder="Full Name">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="emergencyNumber">
+                            Contact Number
+                        </label>
+
+                        <input
+                            id="emergencyNumber"
+                            type="number"
+                            inputmode="numeric"
+                            maxlength="11"
+                            pattern="09[0-9]{9}"
+                            placeholder="09XXXXXXXXX"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="relationship">
+                            Relationship
+                        </label>
+
+                        <input
+                            type="text"
+                            id="relationship"
+                            placeholder="Relationship">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SAVE BUTTON -->
+             <section class="profile-actions">
+
+                <button
+                    type="button"
+                    class="edit-button"
+                    id="editProfileButton">
+
+                    Edit Profile
+
+                </button>
+
+                <button
+                    type="button"
+                    class="cancel-button"
+                    id="cancelProfileButton"
+                    hidden>
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="button"
+                    class="save-button"
+                    id="saveProfileButton"
+                    hidden>
+
+                    Save Changes
+
+                </button>
+
+            </section>
+        </main>
+
+    </div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
