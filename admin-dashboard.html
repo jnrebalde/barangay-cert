@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Admin Dashboard | Barangay Pandi</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css">
+
 </head>
+
 
 <body>
 
     <main class="dashboard-page">
+
 
         <!-- =====================================================
              ADMIN SIDEBAR
@@ -20,23 +30,77 @@
         <aside class="sidebar">
 
             <div class="sidebar-brand">
-                <h2>ADMIN PANEL</h2>
+
+                <h2>
+                    ADMIN PANEL
+                </h2>
+
             </div>
+
+
             <nav class="sidebar-nav">
-                <a href="admin-dashboard.html"> Dashboard</a>
-                <a href="admin-requests.html"> Document Requests </a>
-                <a href="admin-residents.html"> Residents </a>
-                <a href="admin-notifications.html"> Notifications </a>
-                <a href="admin-reports.html"> Reports </a>
-                <a href="admin-settings.html"> Settings</a>
+
+                <a
+                    href="admin-dashboard.html"
+                    class="active">
+
+                    Dashboard
+
+                </a>
+
+
+                <a href="admin-requests.html">
+
+                    Document Requests
+
+                </a>
+
+
+                <a href="admin-residents.html">
+
+                    Residents
+
+                </a>
+
+
+                <a href="admin-notifications.html">
+
+                    Notifications
+
+                </a>
+
+
+                <a href="admin-reports.html">
+
+                    Reports
+
+                </a>
+
+
+                <a href="admin-settings.html">
+
+                    Settings
+
+                </a>
+
             </nav>
 
+
             <div class="sidebar-bottom">
-                <a href="admin-login.html" class="logout-link">
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
                     Logout
+
                 </a>
+
             </div>
+
         </aside>
+
 
 
         <!-- =====================================================
@@ -45,32 +109,47 @@
 
         <section class="dashboard-content">
 
-            <!-- PAGE HEADER -->
+
+            <!-- =================================================
+                 PAGE HEADER
+                 ================================================= -->
 
             <header class="page-header">
 
-                <h1>Welcome, Administrator!</h1>
+                <h1>
+                    Welcome, Administrator!
+                </h1>
 
                 <p>
-                    Manage barangay document requests and resident accounts.
+                    Manage barangay document requests and resident
+                    accounts.
                 </p>
 
             </header>
 
 
+
             <!-- =================================================
-                 SUMMARY
+                 REQUEST SUMMARY
                  ================================================= -->
 
             <section class="content-card">
 
-                <h2>Request Summary</h2>
+                <h2>
+                    Request Summary
+                </h2>
+
 
                 <div class="summary-grid">
 
+
+                    <!-- TOTAL REQUESTS -->
+
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <strong id="dashboardTotalRequests">
+                            0
+                        </strong>
 
                         <span>
                             Total Requests
@@ -79,9 +158,14 @@
                     </div>
 
 
+
+                    <!-- PENDING -->
+
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <strong id="dashboardPendingRequests">
+                            0
+                        </strong>
 
                         <span>
                             Pending
@@ -90,9 +174,14 @@
                     </div>
 
 
+
+                    <!-- PROCESSING -->
+
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <strong id="dashboardProcessingRequests">
+                            0
+                        </strong>
 
                         <span>
                             Processing
@@ -101,9 +190,14 @@
                     </div>
 
 
+
+                    <!-- READY FOR PICKUP -->
+
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <strong id="dashboardReadyRequests">
+                            0
+                        </strong>
 
                         <span>
                             Ready for Pickup
@@ -116,28 +210,43 @@
             </section>
 
 
+
             <!-- =================================================
                  DOCUMENT REQUESTS
                  ================================================= -->
 
             <section class="content-card">
 
+
                 <div class="section-header">
 
                     <div>
-                        <h2>Document Requests</h2>
+
+                        <h2>
+                            Document Requests
+                        </h2>
 
                         <p>
-                            Review and manage recent resident requests.
+                            Review and manage recent resident
+                            requests.
                         </p>
+
                     </div>
 
-                    <a href="#" class="outline-button">
+
+                    <a
+                        href="admin-requests.html"
+                        class="outline-button">
+
                         View All
+
                     </a>
 
                 </div>
 
+
+
+                <!-- RECENT REQUESTS TABLE -->
 
                 <div class="table-container">
 
@@ -146,21 +255,42 @@
                         <thead>
 
                             <tr>
-                                <th>Request ID</th>
-                                <th>Resident</th>
-                                <th>Document</th>
-                                <th>Date</th>
-                                <th>Status</th>
+
+                                <th>
+                                    Request ID
+                                </th>
+
+                                <th>
+                                    Resident
+                                </th>
+
+                                <th>
+                                    Document
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
                             </tr>
 
                         </thead>
 
-                        <tbody>
+
+                        <tbody id="dashboardRequestTableBody">
 
                             <tr>
 
-                                <td colspan="5">
+                                <td
+                                    colspan="5"
+                                    class="empty-state">
+
                                     No document requests yet.
+
                                 </td>
 
                             </tr>
@@ -174,35 +304,49 @@
             </section>
 
 
+
             <!-- =================================================
                  RECENT ACTIVITY
                  ================================================= -->
 
             <section class="content-card">
 
+
                 <div class="section-header">
 
                     <div>
-                        <h2>Recent Activity</h2>
+
+                        <h2>
+                            Recent Activity
+                        </h2>
 
                         <p>
-                            Latest activity in the barangay document system.
+                            Latest activity in the barangay
+                            document system.
                         </p>
+
                     </div>
 
                 </div>
 
 
-                <div class="activity-list">
+
+                <div
+                    class="activity-list"
+                    id="dashboardActivityList">
 
                     <div class="activity-item">
 
                         <div>
-                            <strong>No recent activity</strong>
+
+                            <strong>
+                                No recent activity
+                            </strong>
 
                             <p>
                                 System activity will appear here.
                             </p>
+
                         </div>
 
                     </div>
@@ -214,7 +358,15 @@
         </section>
 
     </main>
-<script src="script.js"></script>
+
+
+
+    <!-- =========================================================
+         MAIN JAVASCRIPT
+         ========================================================= -->
+
+    <script src="script.js"></script>
 
 </body>
+
 </html>

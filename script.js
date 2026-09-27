@@ -2307,10 +2307,6 @@ function saveResidentProfile() {
         ];
 
 
-    /*
-     * EMAIL REMAINS PART OF THE
-     * ACCOUNT, NOT THE PROFILE.
-     */
 
     const newEmail =
         getProfileValue(
@@ -2491,11 +2487,6 @@ function saveResidentProfile() {
 
     /* CONTACT */
 
-    /*
-     * Email is intentionally NOT
-     * duplicated in profile.
-     */
-
     profile.mobile =
         getProfileValue(
             "mobile"
@@ -2636,6 +2627,1176 @@ function saveResidentProfile() {
     );
 
 }
+/* =========================================================
+   RESIDENT REQUEST - DOCUMENT SELECTION
+   ========================================================= */
+
+const documentType =
+    document.getElementById("documentType");
+
+const documentForms =
+    document.querySelectorAll(".document-form");
+
+
+if (documentType) {
+
+    documentType.addEventListener(
+        "change",
+        function () {
+
+            documentForms.forEach(
+                function (form) {
+
+                    form.style.display = "none";
+
+                }
+            );
+
+
+            if (this.value === "clearance") {
+
+                document.getElementById(
+                    "clearanceForm"
+                ).style.display = "block";
+
+            }
+
+
+            else if (this.value === "residency") {
+
+                document.getElementById(
+                    "residencyForm"
+                ).style.display = "block";
+
+            }
+
+
+            else if (this.value === "indigency") {
+
+                document.getElementById(
+                    "indigencyForm"
+                ).style.display = "block";
+
+            }
+
+
+            else if (this.value === "business") {
+
+                document.getElementById(
+                    "businessForm"
+                ).style.display = "block";
+
+            }
+
+        }
+    );
+
+}
+/* =========================================================
+   RESIDENT REQUEST - LOAD RESIDENT INFORMATION
+   ========================================================= */
+
+function loadResidentRequestProfile() {
+
+    const fullNameField =
+        document.getElementById("fullName");
+
+    const mobileField =
+        document.getElementById("mobile");
+
+    const addressField =
+        document.getElementById("address");
+
+
+    /*
+     * Only run when the request page
+     * contains these fields.
+     */
+
+    if (
+        !fullNameField ||
+        !mobileField ||
+        !addressField
+    ) {
+        return;
+    }
+
+
+    /* =====================================================
+       GET LOGGED-IN RESIDENT SESSION
+       ===================================================== */
+
+    const session =
+        getResidentSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "resident-login.html";
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       GET RESIDENT ACCOUNTS
+       ===================================================== */
+
+    const residents =
+        getResidents();
+
+
+    /* =====================================================
+       FIND RESIDENT USING RESIDENT ID
+       ===================================================== */
+
+    const resident =
+        residents.find(
+            function (account) {
+
+                return Number(account.id) ===
+                    Number(session.residentId);
+
+            }
+        );
+
+
+    if (!resident) {
+
+        alert(
+            "Resident account could not be found."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       FULL NAME
+       ===================================================== */
+
+    const nameParts = [
+
+        resident.firstName,
+
+        resident.middleName,
+
+        resident.lastName
+
+    ].filter(
+        function (value) {
+
+            return value &&
+                value.toString().trim() !== "";
+
+        }
+    );
+
+
+    const fullName =
+        nameParts.join(" ");
+
+
+    /* =====================================================
+       MOBILE NUMBER
+       ===================================================== */
+
+    const mobile =
+        resident.mobile || "";
+
+
+    /* =====================================================
+       COMPLETE ADDRESS
+       ===================================================== */
+
+    const addressParts = [
+
+        resident.house,
+
+        resident.street,
+
+        resident.purok,
+
+        resident.barangay,
+
+        resident.municipality,
+
+        resident.province
+
+    ].filter(
+        function (value) {
+
+            return value &&
+                value.toString().trim() !== "";
+
+        }
+    );
+
+
+    const completeAddress =
+        addressParts.join(", ");
+
+
+    /* =====================================================
+       DISPLAY INFORMATION
+       ===================================================== */
+
+    fullNameField.value =
+        fullName || "—";
+
+    mobileField.value =
+        mobile || "—";
+
+    addressField.value =
+        completeAddress || "—";
+
+}
+loadResidentRequestProfile();
+
+/* =========================================================
+   RESIDENT DOCUMENT REQUEST - SUBMIT
+   ========================================================= */
+
+const residentRequestForm =
+    document.getElementById("residentRequestForm");
+
+
+if (residentRequestForm) {
+
+    residentRequestForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            /* =================================================
+               GET RESIDENT SESSION
+               ================================================= */
+
+            const session =
+                getResidentSession();
+
+
+            if (!session) {
+
+                alert(
+                    "Your session has expired. Please log in again."
+                );
+
+                window.location.href =
+                    "resident-login.html";
+
+                return;
+
+            }
+
+
+            /* =================================================
+               GET RESIDENT
+               ================================================= */
+
+            const residents =
+                getResidents();
+
+
+            const resident =
+                residents.find(
+                    function (account) {
+
+                        return Number(account.id) ===
+                            Number(session.residentId);
+
+                    }
+                );
+
+
+            if (!resident) {
+
+                alert(
+                    "Resident account could not be found."
+                );
+
+                return;
+
+            }
+
+
+            /* =================================================
+               DOCUMENT TYPE
+               ================================================= */
+
+            const documentType =
+                document.getElementById(
+                    "documentType"
+                ).value;
+
+
+            if (!documentType) {
+
+                alert(
+                    "Please select a document type."
+                );
+
+                return;
+
+            }
+
+
+            /* =================================================
+               VALIDATE SELECTED DOCUMENT
+               ================================================= */
+
+            let documentData = {};
+
+
+            if (documentType === "clearance") {
+
+                const purpose =
+                    document.getElementById(
+                        "clearancePurpose"
+                    ).value.trim();
+
+                const idType =
+                    document.getElementById(
+                        "clearanceIdType"
+                    ).value;
+
+                const idNumber =
+                    document.getElementById(
+                        "clearanceIdNumber"
+                    ).value.trim();
+
+
+                if (
+                    !purpose ||
+                    !idType ||
+                    !idNumber
+                ) {
+
+                    alert(
+                        "Please complete all required Barangay Clearance information."
+                    );
+
+                    return;
+
+                }
+
+
+                documentData = {
+
+                    purpose: purpose,
+
+                    validIdType: idType,
+
+                    validIdNumber: idNumber
+
+                };
+
+            }
+
+
+            else if (documentType === "residency") {
+
+                const years =
+                    document.getElementById(
+                        "residencyYears"
+                    ).value;
+
+                const purpose =
+                    document.getElementById(
+                        "residencyPurpose"
+                    ).value.trim();
+
+                const idType =
+                    document.getElementById(
+                        "residencyIdType"
+                    ).value;
+
+                const idNumber =
+                    document.getElementById(
+                        "residencyIdNumber"
+                    ).value.trim();
+
+
+                if (
+                    !years ||
+                    !purpose ||
+                    !idType ||
+                    !idNumber
+                ) {
+
+                    alert(
+                        "Please complete all required Certificate of Residency information."
+                    );
+
+                    return;
+
+                }
+
+
+                documentData = {
+
+                    yearsOfResidency:
+                        Number(years),
+
+                    purpose: purpose,
+
+                    validIdType: idType,
+
+                    validIdNumber: idNumber
+
+                };
+
+            }
+
+
+            else if (documentType === "indigency") {
+
+                const reason =
+                    document.getElementById(
+                        "indigencyReason"
+                    ).value.trim();
+
+                const employmentStatus =
+                    document.getElementById(
+                        "employmentStatus"
+                    ).value;
+
+                const householdMembers =
+                    document.getElementById(
+                        "householdMembers"
+                    ).value;
+
+                const idType =
+                    document.getElementById(
+                        "indigencyIdType"
+                    ).value;
+
+                const idNumber =
+                    document.getElementById(
+                        "indigencyIdNumber"
+                    ).value.trim();
+
+
+                if (
+                    !reason ||
+                    !employmentStatus ||
+                    !householdMembers ||
+                    !idType ||
+                    !idNumber
+                ) {
+
+                    alert(
+                        "Please complete all required Certificate of Indigency information."
+                    );
+
+                    return;
+
+                }
+
+
+                documentData = {
+
+                    reason: reason,
+
+                    employmentStatus:
+                        employmentStatus,
+
+                    occupation:
+                        document.getElementById(
+                            "occupation"
+                        ).value.trim(),
+
+                    incomeSource:
+                        document.getElementById(
+                            "incomeSource"
+                        ).value.trim(),
+
+                    monthlyIncome:
+                        document.getElementById(
+                            "monthlyIncome"
+                        ).value,
+
+                    householdMembers:
+                        Number(householdMembers),
+
+                    householdHead:
+                        document.getElementById(
+                            "householdHead"
+                        ).value,
+
+                    validIdType:
+                        idType,
+
+                    validIdNumber:
+                        idNumber
+
+                };
+
+            }
+
+
+            else if (documentType === "business") {
+
+                const businessName =
+                    document.getElementById(
+                        "businessName"
+                    ).value.trim();
+
+                const businessType =
+                    document.getElementById(
+                        "businessType"
+                    ).value;
+
+                const businessNature =
+                    document.getElementById(
+                        "businessNature"
+                    ).value.trim();
+
+                const businessAddress =
+                    document.getElementById(
+                        "businessAddress"
+                    ).value.trim();
+
+
+                if (
+                    !businessName ||
+                    !businessType ||
+                    !businessNature ||
+                    !businessAddress
+                ) {
+
+                    alert(
+                        "Please complete all required Business Clearance information."
+                    );
+
+                    return;
+
+                }
+
+
+                documentData = {
+
+                    businessName:
+                        businessName,
+
+                    businessType:
+                        businessType,
+
+                    businessNature:
+                        businessNature,
+
+                    businessAddress:
+                        businessAddress,
+
+                    registrationType:
+                        document.getElementById(
+                            "registrationType"
+                        ).value,
+
+                    registrationNumber:
+                        document.getElementById(
+                            "registrationNumber"
+                        ).value.trim()
+
+                };
+
+            }
+
+
+            /* =================================================
+               GET EXISTING REQUESTS
+               ================================================= */
+
+            const requests =
+                JSON.parse(
+                    localStorage.getItem("requests")
+                ) || [];
+
+
+            /* =================================================
+               CREATE REQUEST NUMBER
+               ================================================= */
+
+            const requestNumber =
+                "REQ-" +
+                new Date().getFullYear() +
+                "-" +
+                String(
+                    requests.length + 1
+                ).padStart(4, "0");
+
+
+            /* =================================================
+               CREATE REQUEST
+               ================================================= */
+
+            const newRequest = {
+
+                requestId:
+                    requestNumber,
+
+                residentId:
+                    resident.id,
+
+                residentEmail:
+                    resident.email,
+
+                residentName:
+                    [
+                        resident.firstName,
+                        resident.middleName,
+                        resident.lastName
+                    ]
+                        .filter(Boolean)
+                        .join(" "),
+
+                mobile:
+                    resident.mobile || "",
+
+                address:
+                    [
+                        resident.house,
+                        resident.street,
+                        resident.purok,
+                        resident.barangay,
+                        resident.municipality,
+                        resident.province
+                    ]
+                        .filter(Boolean)
+                        .join(", "),
+
+                documentType:
+                    documentType,
+
+                documentData:
+                    documentData,
+
+                status:
+                    "Pending",
+
+                dateRequested:
+                    new Date().toISOString(),
+
+                dateProcessed:
+                    null,
+
+                processedBy:
+                    null,
+
+                remarks:
+                    ""
+
+            };
+
+
+            /* =================================================
+               SAVE REQUEST
+               ================================================= */
+
+            requests.push(newRequest);
+
+
+            localStorage.setItem(
+                "requests",
+                JSON.stringify(requests)
+            );
+
+
+            /* =================================================
+               SUCCESS
+               ================================================= */
+
+            alert(
+                "Your document request has been submitted successfully."
+            );
+
+
+            /* =================================================
+               RESET FORM
+               ================================================= */
+
+            residentRequestForm.reset();
+
+
+            /* Hide document sections */
+
+            document.querySelectorAll(
+                ".document-form"
+            ).forEach(
+                function (section) {
+
+                    section.style.display = "none";
+
+                }
+            );
+
+
+            /* Reload resident information */
+
+            loadResidentRequestProfile();
+
+
+            /* =================================================
+               GO TO TRACK REQUEST
+               ================================================= */
+
+            window.location.href =
+                "resident-track.html";
+
+        }
+    );
+
+}
+
+/* =========================================================
+   RESIDENT - TRACK REQUESTS
+   ========================================================= */
+
+function loadResidentRequests() {
+
+    const tableBody =
+        document.getElementById(
+            "requestTableBody"
+        );
+
+
+    /*
+     * Only run on the track request page
+     */
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    /* =====================================================
+       GET RESIDENT SESSION
+       ===================================================== */
+
+    const session =
+        getResidentSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "resident-login.html";
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       GET ALL REQUESTS
+       ===================================================== */
+
+    const requests =
+        JSON.parse(
+            localStorage.getItem("requests")
+        ) || [];
+
+
+    /* =====================================================
+       GET CURRENT RESIDENT'S REQUESTS
+       ===================================================== */
+
+    const residentRequests =
+        requests.filter(
+            function (request) {
+
+                return Number(request.residentId) ===
+                    Number(session.residentId);
+
+            }
+        );
+
+
+    /* =====================================================
+       NO REQUESTS
+       ===================================================== */
+
+    if (residentRequests.length === 0) {
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    No document requests yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       SORT - MOST RECENT FIRST
+       ===================================================== */
+
+    residentRequests.sort(
+        function (a, b) {
+
+            return new Date(b.dateRequested) -
+                new Date(a.dateRequested);
+
+        }
+    );
+
+
+    /* =====================================================
+       DISPLAY REQUESTS
+       ===================================================== */
+
+    tableBody.innerHTML = "";
+
+
+    residentRequests.forEach(
+        function (request) {
+
+            const row =
+                document.createElement("tr");
+
+
+            /* DOCUMENT NAME */
+
+            const documentName =
+                getDocumentName(
+                    request.documentType
+                );
+
+
+            /* PURPOSE */
+
+            const purpose =
+                getRequestPurpose(
+                    request
+                );
+
+
+            /* DATE */
+
+            const dateRequested =
+                request.dateRequested
+                    ? new Date(
+                        request.dateRequested
+                    ).toLocaleDateString(
+                        "en-PH",
+                        {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric"
+                        }
+                    )
+                    : "—";
+
+
+            /* STATUS */
+
+            const status =
+                request.status || "Pending";
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <button
+                        type="button"
+                        class="request-reference-button"
+                        data-request-id="${request.requestId}">
+
+                        ${request.requestId}
+
+                    </button>
+
+                </td>
+
+
+                <td>
+                    ${documentName}
+                </td>
+
+
+                <td>
+                    ${purpose}
+                </td>
+
+
+                <td>
+                    ${dateRequested}
+                </td>
+
+
+                <td>
+
+                    <span class="request-status-badge">
+
+                        ${status}
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        }
+    );
+
+
+    /* =====================================================
+       REQUEST SELECTION
+       ===================================================== */
+
+    const requestButtons =
+        document.querySelectorAll(
+            ".request-reference-button"
+        );
+
+
+    requestButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const requestId =
+                        this.dataset.requestId;
+
+
+                    const selectedRequest =
+                        residentRequests.find(
+                            function (request) {
+
+                                return request.requestId ===
+                                    requestId;
+
+                            }
+                        );
+
+
+                    if (selectedRequest) {
+
+                        displayRequestStatus(
+                            selectedRequest
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       DISPLAY MOST RECENT REQUEST
+       ===================================================== */
+
+    displayRequestStatus(
+        residentRequests[0]
+    );
+
+}
+
+
+/* =========================================================
+   DOCUMENT NAME
+   ========================================================= */
+
+function getDocumentName(documentType) {
+
+    const documentNames = {
+
+        clearance:
+            "Barangay Clearance",
+
+        residency:
+            "Certificate of Residency",
+
+        indigency:
+            "Certificate of Indigency",
+
+        business:
+            "Business Clearance"
+
+    };
+
+
+    return documentNames[documentType]
+        || documentType
+        || "Unknown Document";
+
+}
+
+
+/* =========================================================
+   REQUEST PURPOSE
+   ========================================================= */
+
+function getRequestPurpose(request) {
+
+    const data =
+        request.documentData || {};
+
+
+    if (request.documentType === "clearance") {
+
+        return data.purpose || "—";
+
+    }
+
+
+    if (request.documentType === "residency") {
+
+        return data.purpose || "—";
+
+    }
+
+
+    if (request.documentType === "indigency") {
+
+        return data.reason || "—";
+
+    }
+
+
+    if (request.documentType === "business") {
+
+        return data.businessNature ||
+            data.businessName ||
+            "—";
+
+    }
+
+
+    return "—";
+
+}
+
+
+/* =========================================================
+   DISPLAY REQUEST STATUS
+   ========================================================= */
+
+function displayRequestStatus(request) {
+
+    const statusContainer =
+        document.getElementById(
+            "requestStatus"
+        );
+
+
+    const message =
+        document.getElementById(
+            "selectedRequestMessage"
+        );
+
+
+    if (
+        !statusContainer ||
+        !message ||
+        !request
+    ) {
+        return;
+    }
+
+
+    message.textContent =
+        `${request.requestId} — ${
+            getDocumentName(
+                request.documentType
+            )
+        }`;
+
+
+    const steps =
+        statusContainer.querySelectorAll(
+            ".status-step"
+        );
+
+
+    /*
+     * Status sequence
+     */
+
+    const statusOrder = [
+
+        "Pending",
+
+        "Under Review",
+
+        "Approved",
+
+        "Ready for Pickup",
+
+        "Released"
+
+    ];
+
+
+    let currentIndex =
+        statusOrder.indexOf(
+            request.status
+        );
+
+
+    /*
+     * If an unknown status is encountered,
+     * keep Pending as the default.
+     */
+
+    if (currentIndex < 0) {
+
+        currentIndex = 0;
+
+    }
+
+
+    steps.forEach(
+        function (step, index) {
+
+            step.classList.remove(
+                "active"
+            );
+
+            if (index <= currentIndex) {
+
+                step.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE TRACK REQUEST PAGE
+   ========================================================= */
+
+loadResidentRequests();
+
 
 
 /* =========================================================
@@ -2820,9 +3981,988 @@ function getAdminSession() {
 
 }
 
+/* =========================================================
+   ADMIN - DOCUMENT REQUEST MANAGEMENT
+   ========================================================= */
+
+const adminRequestTableBody =
+    document.getElementById("adminRequestTableBody");
+
+
+if (adminRequestTableBody) {
+
+    loadAdminRequests();
+
+
+    /* =====================================================
+       LOAD REQUESTS
+       ===================================================== */
+
+    function loadAdminRequests() {
+
+        const requests =
+            JSON.parse(
+                localStorage.getItem("requests")
+            ) || [];
+
+
+        /* SUMMARY */
+
+        updateRequestSummary(requests);
+
+
+        /* NO REQUESTS */
+
+        if (requests.length === 0) {
+
+            adminRequestTableBody.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty-state">
+
+                        No document requests yet.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        /* MOST RECENT FIRST */
+
+        requests.sort(
+            function (a, b) {
+
+                return new Date(
+                    b.dateRequested
+                ) -
+                new Date(
+                    a.dateRequested
+                );
+
+            }
+        );
+
+
+        /* DISPLAY */
+
+        adminRequestTableBody.innerHTML =
+            requests.map(
+                function (request) {
+
+                    const documentName =
+                        getAdminDocumentName(
+                            request.documentType
+                        );
+
+
+                    const dateRequested =
+                        request.dateRequested
+                            ? new Date(
+                                request.dateRequested
+                            ).toLocaleDateString(
+                                "en-PH",
+                                {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric"
+                                }
+                            )
+                            : "—";
+
+
+                    const status =
+                        request.status ||
+                        "Pending";
+
+
+                    return `
+
+                        <tr>
+
+                            <td>
+
+                                <a
+                                    href="admin-request-details.html?id=${encodeURIComponent(request.requestId)}"
+                                    class="resident-name-link">
+
+                                    ${request.requestId}
+
+                                </a>
+
+                            </td>
+
+
+                            <td>
+
+                                ${request.residentName || "—"}
+
+                            </td>
+
+
+                            <td>
+
+                                ${documentName}
+
+                            </td>
+
+
+                            <td>
+
+                                ${dateRequested}
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="status-badge ${getRequestStatusClass(status)}">
+
+                                    ${status}
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                ${getRequestActions(request)}
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            ).join("");
+
+
+        setupRequestActionButtons();
+
+    }
+
+
+
+    /* =====================================================
+       REQUEST ACTIONS
+       ===================================================== */
+
+    function getRequestActions(request) {
+
+        const status =
+            request.status || "Pending";
+
+
+        /* PENDING */
+
+        if (status === "Pending") {
+
+            return `
+
+                <div class="request-actions">
+
+                    <button
+                        type="button"
+                        class="resident-action approve-request-button"
+                        data-id="${request.requestId}">
+
+                        Approve
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="resident-action reject-request-button"
+                        data-id="${request.requestId}">
+
+                        Reject
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* APPROVED */
+
+        if (status === "Approved") {
+
+            return `
+
+                <button
+                    type="button"
+                    class="resident-action ready-request-button"
+                    data-id="${request.requestId}">
+
+                    Ready for Pickup
+
+                </button>
+
+            `;
+
+        }
+
+
+        /* READY FOR PICKUP */
+
+        if (status === "Ready for Pickup") {
+
+            return `
+
+                <button
+                    type="button"
+                    class="resident-action release-request-button"
+                    data-id="${request.requestId}">
+
+                    Released
+
+                </button>
+
+            `;
+
+        }
+
+
+        /* RELEASED */
+
+        if (status === "Released") {
+
+            return `
+
+                <span class="approved-label">
+
+                    Completed
+
+                </span>
+
+            `;
+
+        }
+
+
+        /* REJECTED */
+
+        if (status === "Rejected") {
+
+            return `
+
+                <span class="approved-label">
+
+                    Rejected
+
+                </span>
+
+            `;
+
+        }
+
+
+        return "—";
+
+    }
+
+
+
+    /* =====================================================
+       ACTION BUTTON EVENTS
+       ===================================================== */
+
+    function setupRequestActionButtons() {
+
+
+        /* APPROVE */
+
+        document
+            .querySelectorAll(
+                ".approve-request-button"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            updateDocumentRequestStatus(
+                                this.dataset.id,
+                                "Approved"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* REJECT */
+
+        document
+            .querySelectorAll(
+                ".reject-request-button"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            rejectDocumentRequest(
+                                this.dataset.id
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* READY FOR PICKUP */
+
+        document
+            .querySelectorAll(
+                ".ready-request-button"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            updateDocumentRequestStatus(
+                                this.dataset.id,
+                                "Ready for Pickup"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* RELEASE */
+
+        document
+            .querySelectorAll(
+                ".release-request-button"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            updateDocumentRequestStatus(
+                                this.dataset.id,
+                                "Released"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+
+    /* =====================================================
+       UPDATE REQUEST STATUS
+       ===================================================== */
+
+    function updateDocumentRequestStatus(
+        requestId,
+        newStatus
+    ) {
+
+        const requests =
+            JSON.parse(
+                localStorage.getItem("requests")
+            ) || [];
+
+
+        const request =
+            requests.find(
+                function (item) {
+
+                    return String(
+                        item.requestId
+                    ) === String(
+                        requestId
+                    );
+
+                }
+            );
+
+
+        if (!request) {
+
+            alert(
+                "Document request could not be found."
+            );
+
+            return;
+
+        }
+
+
+        /* =================================================
+           VALID STATUS TRANSITIONS
+           ================================================= */
+
+        const allowedTransitions = {
+
+            "Pending": [
+                "Approved"
+            ],
+
+            "Approved": [
+                "Ready for Pickup"
+            ],
+
+            "Ready for Pickup": [
+                "Released"
+            ]
+
+        };
+
+
+        const allowed =
+            allowedTransitions[
+                request.status
+            ] || [];
+
+
+        if (
+            !allowed.includes(
+                newStatus
+            )
+        ) {
+
+            alert(
+                "This request cannot be moved to this status."
+            );
+
+            return;
+
+        }
+
+
+        /* CONFIRMATION */
+
+        const confirmed =
+            confirm(
+                `Change ${request.requestId} to "${newStatus}"?`
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        /* UPDATE */
+
+        request.status =
+            newStatus;
+
+
+        request.dateProcessed =
+            new Date().toISOString();
+
+
+        const adminSession =
+            getAdminSession();
+
+
+        request.processedBy =
+            adminSession
+                ? adminSession.username
+                : "Administrator";
+
+
+        request.remarks =
+            `Request status updated to ${newStatus}.`;
+
+
+        /* SAVE */
+
+        localStorage.setItem(
+            "requests",
+            JSON.stringify(requests)
+        );
+
+
+        alert(
+            `Request ${request.requestId} is now ${newStatus}.`
+        );
+
+
+        loadAdminRequests();
+
+    }
+
+
+
+    /* =====================================================
+       REJECT REQUEST
+       ===================================================== */
+
+    function rejectDocumentRequest(
+        requestId
+    ) {
+
+        const requests =
+            JSON.parse(
+                localStorage.getItem("requests")
+            ) || [];
+
+
+        const request =
+            requests.find(
+                function (item) {
+
+                    return String(
+                        item.requestId
+                    ) === String(
+                        requestId
+                    );
+
+                }
+            );
+
+
+        if (!request) {
+
+            alert(
+                "Document request could not be found."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            request.status !== "Pending"
+        ) {
+
+            alert(
+                "Only pending requests can be rejected."
+            );
+
+            return;
+
+        }
+
+
+        const reason =
+            prompt(
+                "Enter the reason for rejecting this request:"
+            );
+
+
+        if (
+            reason === null
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            reason.trim() === ""
+        ) {
+
+            alert(
+                "A rejection reason is required."
+            );
+
+            return;
+
+        }
+
+
+        const confirmed =
+            confirm(
+                `Reject ${request.requestId}?`
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        /* UPDATE */
+
+        request.status =
+            "Rejected";
+
+
+        request.dateProcessed =
+            new Date().toISOString();
+
+
+        const adminSession =
+            getAdminSession();
+
+
+        request.processedBy =
+            adminSession
+                ? adminSession.username
+                : "Administrator";
+
+
+        request.remarks =
+            reason.trim();
+
+
+        /* SAVE */
+
+        localStorage.setItem(
+            "requests",
+            JSON.stringify(requests)
+        );
+
+
+        alert(
+            `Request ${request.requestId} has been rejected.`
+        );
+
+
+        loadAdminRequests();
+
+    }
+
+
+
+    /* =====================================================
+       SUMMARY
+       ===================================================== */
+
+    function updateRequestSummary(
+        requests
+    ) {
+
+        const total =
+            requests.length;
+
+
+        const pending =
+            requests.filter(
+                function (request) {
+
+                    return request.status ===
+                        "Pending";
+
+                }
+            ).length;
+
+
+        const approved =
+            requests.filter(
+                function (request) {
+
+                    return request.status ===
+                        "Approved";
+
+                }
+            ).length;
+
+
+        const released =
+            requests.filter(
+                function (request) {
+
+                    return request.status ===
+                        "Released";
+
+                }
+            ).length;
+
+
+        const totalElement =
+            document.getElementById(
+                "totalRequests"
+            );
+
+        const pendingElement =
+            document.getElementById(
+                "pendingRequests"
+            );
+
+        const approvedElement =
+            document.getElementById(
+                "approvedRequests"
+            );
+
+        const releasedElement =
+            document.getElementById(
+                "releasedRequests"
+            );
+
+
+        if (totalElement) {
+
+            totalElement.textContent =
+                total;
+
+        }
+
+
+        if (pendingElement) {
+
+            pendingElement.textContent =
+                pending;
+
+        }
+
+
+        if (approvedElement) {
+
+            approvedElement.textContent =
+                approved;
+
+        }
+
+
+        if (releasedElement) {
+
+            releasedElement.textContent =
+                released;
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       DOCUMENT NAME
+       ===================================================== */
+
+    function getAdminDocumentName(
+        documentType
+    ) {
+
+        const names = {
+
+            clearance:
+                "Barangay Clearance",
+
+            residency:
+                "Certificate of Residency",
+
+            indigency:
+                "Certificate of Indigency",
+
+            business:
+                "Business Clearance"
+
+        };
+
+
+        return names[documentType]
+            || documentType
+            || "Unknown";
+
+    }
+
+
+
+    /* =====================================================
+       STATUS CLASS
+       ===================================================== */
+
+    function getRequestStatusClass(
+        status
+    ) {
+
+        if (
+            status === "Pending"
+        ) {
+
+            return "status-pending";
+
+        }
+
+
+        if (
+            status === "Approved"
+        ) {
+
+            return "status-approved";
+
+        }
+
+
+        if (
+            status === "Ready for Pickup"
+        ) {
+
+            return "status-approved";
+
+        }
+
+
+        if (
+            status === "Released"
+        ) {
+
+            return "status-approved";
+
+        }
+
+
+        if (
+            status === "Rejected"
+        ) {
+
+            return "status-rejected";
+
+        }
+
+
+        return "status-default";
+
+    }
+
+}
 
 /* =========================================================
-   11. PAGE ACCESS PROTECTION
+   ADMIN DASHBOARD
+   ========================================================= */
+
+const dashboardTotalRequests =
+    document.getElementById(
+        "dashboardTotalRequests"
+    );
+
+
+if (dashboardTotalRequests) {
+
+    loadAdminDashboard();
+
+
+    function loadAdminDashboard() {
+
+        const requests =
+            JSON.parse(
+                localStorage.getItem("requests")
+            ) || [];
+
+
+        /* =================================================
+           REQUEST COUNTS
+           ================================================= */
+
+        const total =
+            requests.length;
+
+
+        const pending =
+            requests.filter(
+                function (request) {
+
+                    return (
+                        request.status ===
+                        "Pending"
+                    );
+
+                }
+            ).length;
+
+
+        /*
+         * PROCESSING
+         *
+         * Approved requests are considered
+         * processing until they are ready
+         * for pickup.
+         */
+
+        const processing =
+            requests.filter(
+                function (request) {
+
+                    return (
+                        request.status ===
+                        "Approved"
+                    );
+
+                }
+            ).length;
+
+
+        const ready =
+            requests.filter(
+                function (request) {
+
+                    return (
+                        request.status ===
+                        "Ready for Pickup"
+                    );
+
+                }
+            ).length;
+
+
+        /* =================================================
+           UPDATE DASHBOARD
+           ================================================= */
+
+        document.getElementById(
+            "dashboardTotalRequests"
+        ).textContent = total;
+
+
+        document.getElementById(
+            "dashboardPendingRequests"
+        ).textContent = pending;
+
+
+        document.getElementById(
+            "dashboardProcessingRequests"
+        ).textContent = processing;
+
+
+        document.getElementById(
+            "dashboardReadyRequests"
+        ).textContent = ready;
+
+    }
+
+}
+
+/* =========================================================
+   12. PAGE ACCESS PROTECTION
    ========================================================= */
 
 const residentPages = [
@@ -2906,7 +5046,7 @@ if (
 
 
 /* =========================================================
-   12. LOGOUT
+   13. LOGOUT
    ========================================================= */
 
 function logout() {

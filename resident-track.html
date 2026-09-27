@@ -2,70 +2,159 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Request</title>
-    <link rel="stylesheet" href="style.css">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Track Request | Barangay Pandi</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
 </head>
+
 
 <body>
 
     <div class="resident-layout">
 
-        <!-- LEFT PANEL -->
+
+        <!-- =====================================================
+             LEFT PANEL
+             ===================================================== -->
+
         <aside class="sidebar">
 
-            <h1>RESIDENT PANEL</h1>
+            <h1>
+                RESIDENT PANEL
+            </h1>
+
 
             <nav>
-                <a href="resident-dashboard.html">Dashboard</a>
-                <a href="resident-request.html">Request Document</a>
-                <a href="resident-track.html" class="active">Track Request</a>
-                <a href="resident-notifications.html">Notifications</a>
-                <a href="resident-profile.html">My Profile</a>
-            </nav>
-            <div class="sidebar-bottom">
-                <a href="resident-login.html" class="logout-link">
-                    Logout
+
+                <a href="resident-dashboard.html">
+                    Dashboard
                 </a>
+
+                <a href="resident-request.html">
+                    Request Document
+                </a>
+
+                <a
+                    href="resident-track.html"
+                    class="active">
+
+                    Track Request
+
+                </a>
+
+                <a href="resident-notifications.html">
+                    Notifications
+                </a>
+
+                <a href="resident-profile.html">
+                    My Profile
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
+                    Logout
+
+                </a>
+
             </div>
 
         </aside>
 
 
-        <!-- MAIN CONTENT -->
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
         <main class="resident-content">
 
+
+            <!-- PAGE HEADER -->
+
             <div class="page-header">
-                <h1>Track Request</h1>
-                <p>View the status of your barangay document requests.</p>
+
+                <h1>
+                    Track Request
+                </h1>
+
+                <p>
+                    View the status of your barangay document requests.
+                </p>
+
             </div>
 
 
-            <!-- REQUEST TABLE -->
+
+            <!-- =================================================
+                 REQUEST TABLE
+                 ================================================= -->
+
             <section class="content-card">
 
-                <h2>Recent Requests</h2>
+                <h2>
+                    Recent Requests
+                </h2>
+
 
                 <div class="request-table">
 
                     <table>
 
                         <thead>
+
                             <tr>
-                                <th>Request Reference</th>
-                                <th>Document</th>
-                                <th>Purpose</th>
-                                <th>Date Requested</th>
-                                <th>Status</th>
+
+                                <th>
+                                    Request Reference
+                                </th>
+
+                                <th>
+                                    Document
+                                </th>
+
+                                <th>
+                                    Purpose
+                                </th>
+
+                                <th>
+                                    Date Requested
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
                             </tr>
+
                         </thead>
 
-                        <tbody>
+
+                        <tbody id="requestTableBody">
+
                             <tr>
-                                <td colspan="4">
-                                    No document requests yet.
+
+                                <td colspan="5">
+                                    Loading requests...
                                 </td>
+
                             </tr>
 
                         </tbody>
@@ -77,49 +166,126 @@
             </section>
 
 
-            <!-- REQUEST STATUS -->
+
+            <!-- =================================================
+                 SELECTED REQUEST STATUS
+                 ================================================= -->
+
             <section class="content-card">
 
-                <h2>Request Status</h2>
+                <h2>
+                    Request Status
+                </h2>
 
-                <div class="request-status">
 
-                    <div class="status-step active">
-                        <span>1</span>
-                        <strong>Pending</strong>
-                        <p>Request submitted.</p>
+                <p
+                    id="selectedRequestMessage"
+                    class="section-note">
+
+                    Select a request from the table to view
+                    its current status.
+
+                </p>
+
+
+                <div
+                    class="request-status"
+                    id="requestStatus">
+
+                    <div class="status-step">
+
+                        <span>
+                            1
+                        </span>
+
+                        <strong>
+                            Pending
+                        </strong>
+
+                        <p>
+                            Request submitted.
+                        </p>
+
                     </div>
+
 
                     <div class="status-line"></div>
 
+
                     <div class="status-step">
-                        <span>2</span>
-                        <strong>Under Review</strong>
-                        <p>Barangay staff will review your request.</p>
+
+                        <span>
+                            2
+                        </span>
+
+                        <strong>
+                            Under Review
+                        </strong>
+
+                        <p>
+                            Barangay staff will review your request.
+                        </p>
+
                     </div>
+
 
                     <div class="status-line"></div>
 
+
                     <div class="status-step">
-                        <span>3</span>
-                        <strong>Approved</strong>
-                        <p>Request has been approved.</p>
+
+                        <span>
+                            3
+                        </span>
+
+                        <strong>
+                            Approved
+                        </strong>
+
+                        <p>
+                            Request has been approved.
+                        </p>
+
                     </div>
+
 
                     <div class="status-line"></div>
 
+
                     <div class="status-step">
-                        <span>4</span>
-                        <strong>Ready for Pickup</strong>
-                        <p>Document is ready at the barangay office.</p>
+
+                        <span>
+                            4
+                        </span>
+
+                        <strong>
+                            Ready for Pickup
+                        </strong>
+
+                        <p>
+                            Document is ready at the barangay office.
+                        </p>
+
                     </div>
+
 
                     <div class="status-line"></div>
 
+
                     <div class="status-step">
-                        <span>5</span>
-                        <strong>Released</strong>
-                        <p>Document has been released.</p>
+
+                        <span>
+                            5
+                        </span>
+
+                        <strong>
+                            Released
+                        </strong>
+
+                        <p>
+                            Document has been released.
+                        </p>
+
                     </div>
 
                 </div>
@@ -130,7 +296,9 @@
 
     </div>
 
-<script src="script.js"></script>
+
+
+    <script src="script.js"></script>
 
 </body>
 

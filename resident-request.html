@@ -4,23 +4,35 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Request Document - Barangay Pandi</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css">
 
 </head>
+
 
 <body>
 
     <div class="resident-layout">
 
-        <!-- LEFT SIDEBAR -->
+
+        <!-- =====================================================
+             LEFT SIDEBAR
+             ===================================================== -->
 
         <aside class="sidebar">
 
-            <h2>RESIDENT PANEL</h2>
+            <h2>
+                RESIDENT PANEL
+            </h2>
+
 
             <nav>
 
@@ -28,8 +40,12 @@
                     Dashboard
                 </a>
 
-                <a href="resident-request.html" class="active">
+                <a
+                    href="resident-request.html"
+                    class="active">
+
                     Request Document
+
                 </a>
 
                 <a href="resident-track.html">
@@ -45,24 +61,41 @@
                 </a>
 
             </nav>
+
+
             <div class="sidebar-bottom">
-                <a href="resident-login.html" class="logout-link">
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
                     Logout
+
                 </a>
+
             </div>
 
         </aside>
 
 
-        <!-- MAIN CONTENT -->
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
 
         <main class="resident-content">
 
-            <!-- PAGE HEADER -->
+
+            <!-- =================================================
+                 PAGE HEADER
+                 ================================================= -->
 
             <section class="request-header">
 
-                <h1>Request Document</h1>
+                <h1>
+                    Request Document
+                </h1>
 
                 <p>
                     Submit a request for a barangay document.
@@ -71,941 +104,997 @@
             </section>
 
 
-            <!-- DOCUMENT SELECTION -->
 
-            <section class="request-section">
+            <!-- =================================================
+                 REQUEST FORM
+                 ================================================= -->
 
-                <h2>Document Information</h2>
-
-                <div class="form-group">
-
-                    <label for="documentType">
-                        Document Type
-                    </label>
-
-                    <select id="documentType">
-
-                        <option value="">
-                            Select a document
-                        </option>
-
-                        <option value="clearance">
-                            Barangay Clearance
-                        </option>
-
-                        <option value="residency">
-                            Certificate of Residency
-                        </option>
-
-                        <option value="indigency">
-                            Certificate of Indigency
-                        </option>
-
-                        <option value="business">
-                            Business Clearance
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </section>
+            <form id="residentRequestForm">
 
 
-            <!-- RESIDENT INFORMATION -->
+                <!-- =================================================
+                     DOCUMENT SELECTION
+                     ================================================= -->
 
-            <section class="request-section">
+                <section class="request-section">
 
-                <h2>Resident Information</h2>
+                    <h2>
+                        Document Information
+                    </h2>
 
-                <p class="section-note">
-                    This information is taken from your resident profile.
-                </p>
-
-
-                <div class="form-row">
 
                     <div class="form-group">
 
-                        <label for="fullName">
-                            Full Name
+                        <label for="documentType">
+                            Document Type
+                        </label>
+
+                        <select
+                            id="documentType"
+                            name="documentType"
+                            required>
+
+                            <option
+                                value=""
+                                selected
+                                disabled>
+
+                                Select a document
+
+                            </option>
+
+                            <option value="clearance">
+                                Barangay Clearance
+                            </option>
+
+                            <option value="residency">
+                                Certificate of Residency
+                            </option>
+
+                            <option value="indigency">
+                                Certificate of Indigency
+                            </option>
+
+                            <option value="business">
+                                Business Clearance
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     RESIDENT INFORMATION
+                     ================================================= -->
+
+                <section class="request-section">
+
+                    <h2>
+                        Resident Information
+                    </h2>
+
+                    <p class="section-note">
+                        The information below is taken from your resident profile.
+                    </p>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="fullName">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                readonly>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="mobile">
+                                Mobile Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="mobile"
+                                name="mobile"
+                                readonly>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="address">
+                            Complete Address
                         </label>
 
                         <input
                             type="text"
-                            id="fullName"
-                            value="Resident Name"
+                            id="address"
+                            name="address"
                             readonly>
 
                     </div>
 
+                </section>
+
+                <!-- =================================================
+                     BARANGAY CLEARANCE
+                     ================================================= -->
+
+                <section
+                    class="request-section document-form"
+                    id="clearanceForm"
+                    style="display: none;">
+
+                    <h2>
+                        Barangay Clearance
+                    </h2>
+
 
                     <div class="form-group">
 
-                        <label for="mobile">
-                            Mobile Number
+                        <label for="clearancePurpose">
+                            Purpose of Request
                         </label>
 
-                        <input
-                            type="text"
-                            id="mobile"
-                            value="09XXXXXXXXX"
-                            readonly>
+                        <textarea
+                            id="clearancePurpose"
+                            name="clearancePurpose"
+                            rows="4"
+                            placeholder="Enter the purpose of your request"></textarea>
 
                     </div>
 
-                </div>
+
+                    <div class="form-row">
 
 
-                <div class="form-group">
+                        <div class="form-group">
 
-                    <label for="address">
-                        Address
-                    </label>
+                            <label for="clearanceIdType">
+                                Valid ID Type
+                            </label>
 
-                    <input
-                        type="text"
-                        id="address"
-                        value="Poblacion, Pandi, Bulacan"
-                        readonly>
+                            <select
+                                id="clearanceIdType"
+                                name="clearanceIdType">
 
-                </div>
+                                <option value="">
+                                    Select ID Type
+                                </option>
 
-            </section>
+                                <option value="Philippine National ID">
+                                    Philippine National ID
+                                </option>
 
+                                <option value="Driver's License">
+                                    Driver's License
+                                </option>
 
-            <!-- =================================================
-                 BARANGAY CLEARANCE
-                 ================================================= -->
+                                <option value="Passport">
+                                    Passport
+                                </option>
 
-            <section
-                class="request-section document-form"
-                id="clearanceForm">
+                                <option value="UMID">
+                                    UMID
+                                </option>
 
-                <h2>Barangay Clearance</h2>
+                                <option value="Other Government ID">
+                                    Other Government ID
+                                </option>
 
+                            </select>
 
-                <div class="form-group">
-
-                    <label for="clearancePurpose">
-                        Purpose of Request
-                    </label>
-
-                    <textarea
-                        id="clearancePurpose"
-                        rows="4"
-                        placeholder="Enter the purpose of your request">
-                    </textarea>
-
-                </div>
+                        </div>
 
 
-                <div class="form-row">
+                        <div class="form-group">
 
-                    <div class="form-group">
+                            <label for="clearanceIdNumber">
+                                ID Number
+                            </label>
 
-                        <label for="clearanceIdType">
-                            Valid ID Type
-                        </label>
+                            <input
+                                type="text"
+                                id="clearanceIdNumber"
+                                name="clearanceIdNumber"
+                                placeholder="Enter ID number">
 
-                        <select id="clearanceIdType">
-
-                            <option value="">
-                                Select ID Type
-                            </option>
-
-                            <option>
-                                Philippine National ID
-                            </option>
-
-                            <option>
-                                Driver's License
-                            </option>
-
-                            <option>
-                                Passport
-                            </option>
-
-                            <option>
-                                UMID
-                            </option>
-
-                            <option>
-                                Other Government ID
-                            </option>
-
-                        </select>
+                        </div>
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label for="clearanceIdNumber">
-                            ID Number
-                        </label>
+                        <label for="clearanceSupportingDocument">
 
-                        <input
-                            type="text"
-                            id="clearanceIdNumber"
-                            placeholder="Enter ID number">
+                            Supporting Document
 
-                    </div>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="clearanceSupportingDocument">
-                        Supporting Document
-                        <span class="optional">
-                            Optional / if applicable
-                        </span>
-                    </label>
-
-                    <input
-                        type="file"
-                        id="clearanceSupportingDocument">
-
-                </div>
-
-
-                <!-- REQUIREMENTS -->
-
-                <div class="document-requirements">
-
-                    <h3>Requirements</h3>
-
-                    <ul class="requirements-list">
-
-                        <li>
-                            Valid government-issued ID
-                        </li>
-
-                        <li>
-                            Additional supporting documents,
-                            if applicable
-                        </li>
-
-                    </ul>
-
-                    <p class="requirement-note">
-                        Please bring the required documents
-                        when claiming your barangay clearance.
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 CERTIFICATE OF RESIDENCY
-                 ================================================= -->
-
-            <section
-                class="request-section document-form"
-                id="residencyForm">
-
-                <h2>Certificate of Residency</h2>
-
-
-                <div class="form-group">
-
-                    <label for="residencyYears">
-                        Length of Residency
-                    </label>
-
-                    <input
-                        type="number"
-                        id="residencyYears"
-                        placeholder="Number of years">
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="residencyPurpose">
-                        Purpose of Request
-                    </label>
-
-                    <textarea
-                        id="residencyPurpose"
-                        rows="4"
-                        placeholder="Enter the purpose of your request">
-                    </textarea>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="residencyIdType">
-                            Valid ID Type
-                        </label>
-
-                        <select id="residencyIdType">
-
-                            <option value="">
-                                Select ID Type
-                            </option>
-
-                            <option>
-                                Philippine National ID
-                            </option>
-
-                            <option>
-                                Driver's License
-                            </option>
-
-                            <option>
-                                Passport
-                            </option>
-
-                            <option>
-                                UMID
-                            </option>
-
-                            <option>
-                                Other Government ID
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="residencyIdNumber">
-                            ID Number
-                        </label>
-
-                        <input
-                            type="text"
-                            id="residencyIdNumber"
-                            placeholder="Enter ID number">
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="residencyProof">
-                        Proof of Residency
-                        <span class="conditional">
-                            If applicable
-                        </span>
-                    </label>
-
-                    <input
-                        type="file"
-                        id="residencyProof">
-
-                </div>
-
-
-                <!-- REQUIREMENTS -->
-
-                <div class="document-requirements">
-
-                    <h3>Requirements</h3>
-
-                    <ul class="requirements-list">
-
-                        <li>
-                            Valid government-issued ID
-                        </li>
-
-                        <li>
-                            Proof of residency, if applicable
-                        </li>
-
-                        <li>
-                            Additional supporting documents,
-                            if required
-                        </li>
-
-                    </ul>
-
-                    <p class="requirement-note">
-                        Please bring the required documents
-                        when claiming your certificate.
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 CERTIFICATE OF INDIGENCY
-                 ================================================= -->
-
-            <section
-                class="request-section document-form"
-                id="indigencyForm">
-
-                <h2>Certificate of Indigency</h2>
-
-
-                <div class="form-group">
-
-                    <label for="indigencyReason">
-                        Purpose / Reason for Request
-                    </label>
-
-                    <textarea
-                        id="indigencyReason"
-                        rows="4"
-                        placeholder="Explain the reason for requesting the certificate">
-                    </textarea>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="employmentStatus">
-                            Employment Status
-                        </label>
-
-                        <select id="employmentStatus">
-
-                            <option value="">
-                                Select Employment Status
-                            </option>
-
-                            <option>
-                                Employed
-                            </option>
-
-                            <option>
-                                Self-Employed
-                            </option>
-
-                            <option>
-                                Unemployed
-                            </option>
-
-                            <option>
-                                Student
-                            </option>
-
-                            <option>
-                                Retired
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="occupation">
-                            Occupation
                             <span class="optional">
-                                If applicable
+                                Optional / if applicable
                             </span>
+
                         </label>
 
                         <input
-                            type="text"
-                            id="occupation"
-                            placeholder="Occupation">
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="incomeSource">
-                            Source of Income
-                        </label>
-
-                        <input
-                            type="text"
-                            id="incomeSource"
-                            placeholder="Source of income">
+                            type="file"
+                            id="clearanceSupportingDocument"
+                            name="clearanceSupportingDocument">
 
                     </div>
 
 
+                    <div class="document-requirements">
+
+                        <h3>
+                            Requirements
+                        </h3>
+
+                        <ul class="requirements-list">
+
+                            <li>
+                                Valid government-issued ID
+                            </li>
+
+                            <li>
+                                Additional supporting documents,
+                                if applicable
+                            </li>
+
+                        </ul>
+
+                        <p class="requirement-note">
+                            Please bring the required documents
+                            when claiming your barangay clearance.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CERTIFICATE OF RESIDENCY
+                     ================================================= -->
+
+                <section
+                    class="request-section document-form"
+                    id="residencyForm"
+                    style="display: none;">
+
+                    <h2>
+                        Certificate of Residency
+                    </h2>
+
+
                     <div class="form-group">
 
-                        <label for="monthlyIncome">
-                            Monthly Household Income
+                        <label for="residencyYears">
+                            Length of Residency
                         </label>
 
                         <input
                             type="number"
-                            id="monthlyIncome"
-                            placeholder="Amount">
+                            id="residencyYears"
+                            name="residencyYears"
+                            min="0"
+                            placeholder="Number of years">
 
                     </div>
 
-                </div>
-
-
-                <div class="form-row">
 
                     <div class="form-group">
 
-                        <label for="householdMembers">
-                            Number of Household Members
+                        <label for="residencyPurpose">
+                            Purpose of Request
                         </label>
 
-                        <input
-                            type="number"
-                            id="householdMembers"
-                            placeholder="Number of members">
+                        <textarea
+                            id="residencyPurpose"
+                            name="residencyPurpose"
+                            rows="4"
+                            placeholder="Enter the purpose of your request"></textarea>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="residencyIdType">
+                                Valid ID Type
+                            </label>
+
+                            <select
+                                id="residencyIdType"
+                                name="residencyIdType">
+
+                                <option value="">
+                                    Select ID Type
+                                </option>
+
+                                <option value="Philippine National ID">
+                                    Philippine National ID
+                                </option>
+
+                                <option value="Driver's License">
+                                    Driver's License
+                                </option>
+
+                                <option value="Passport">
+                                    Passport
+                                </option>
+
+                                <option value="UMID">
+                                    UMID
+                                </option>
+
+                                <option value="Other Government ID">
+                                    Other Government ID
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="residencyIdNumber">
+                                ID Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="residencyIdNumber"
+                                name="residencyIdNumber"
+                                placeholder="Enter ID number">
+
+                        </div>
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label for="householdHead">
-                            Household Head
-                        </label>
+                        <label for="residencyProof">
 
-                        <select id="householdHead">
+                            Proof of Residency
 
-                            <option value="">
-                                Select
-                            </option>
-
-                            <option>
-                                Yes
-                            </option>
-
-                            <option>
-                                No
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="indigencyIdType">
-                            Valid ID Type
-                        </label>
-
-                        <select id="indigencyIdType">
-
-                            <option value="">
-                                Select ID Type
-                            </option>
-
-                            <option>
-                                Philippine National ID
-                            </option>
-
-                            <option>
-                                Driver's License
-                            </option>
-
-                            <option>
-                                Passport
-                            </option>
-
-                            <option>
-                                UMID
-                            </option>
-
-                            <option>
-                                Other Government ID
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="indigencyIdNumber">
-                            ID Number
-                        </label>
-
-                        <input
-                            type="text"
-                            id="indigencyIdNumber"
-                            placeholder="Enter ID number">
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="indigencySupportingDocument">
-                        Supporting Document
-                        <span class="conditional">
-                            If applicable
-                        </span>
-                    </label>
-
-                    <input
-                        type="file"
-                        id="indigencySupportingDocument">
-
-                </div>
-
-
-                <!-- REQUIREMENTS -->
-
-                <div class="document-requirements">
-
-                    <h3>Requirements</h3>
-
-                    <ul class="requirements-list">
-
-                        <li>
-                            Valid government-issued ID
-                        </li>
-
-                        <li>
-                            Proof of residency
-                        </li>
-
-                        <li>
-                            Supporting documents,
-                            depending on the purpose
-                        </li>
-
-                    </ul>
-
-                    <p class="requirement-note">
-                        Additional verification may be required
-                        by the barangay.
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 BUSINESS CLEARANCE
-                 ================================================= -->
-
-            <section
-                class="request-section document-form"
-                id="businessForm">
-
-                <h2>Business Clearance</h2>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="businessName">
-                            Business Name
-                        </label>
-
-                        <input
-                            type="text"
-                            id="businessName"
-                            placeholder="Registered business name">
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="businessType">
-                            Business Type
-                        </label>
-
-                        <select id="businessType">
-
-                            <option value="">
-                                Select Business Type
-                            </option>
-
-                            <option>
-                                Sole Proprietorship
-                            </option>
-
-                            <option>
-                                Partnership
-                            </option>
-
-                            <option>
-                                Corporation
-                            </option>
-
-                            <option>
-                                Cooperative
-                            </option>
-
-                            <option>
-                                Other
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="businessNature">
-                            Nature of Business
-                        </label>
-
-                        <input
-                            type="text"
-                            id="businessNature"
-                            placeholder="Nature of business">
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="businessAddress">
-                            Business Address
-                        </label>
-
-                        <input
-                            type="text"
-                            id="businessAddress"
-                            placeholder="Complete business address">
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-row">
-
-                    <div class="form-group">
-
-                        <label for="registrationType">
-                            Registration Type
-                        </label>
-
-                        <select id="registrationType">
-
-                            <option value="">
-                                Select Registration
-                            </option>
-
-                            <option>
-                                DTI
-                            </option>
-
-                            <option>
-                                SEC
-                            </option>
-
-                            <option>
-                                CDA
-                            </option>
-
-                            <option>
-                                Not Applicable
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="registrationNumber">
-                            Registration Number
                             <span class="conditional">
                                 If applicable
                             </span>
+
                         </label>
 
                         <input
-                            type="text"
-                            id="registrationNumber"
-                            placeholder="Registration number">
+                            type="file"
+                            id="residencyProof"
+                            name="residencyProof">
 
                     </div>
 
-                </div>
+
+                    <div class="document-requirements">
+
+                        <h3>
+                            Requirements
+                        </h3>
+
+                        <ul class="requirements-list">
+
+                            <li>
+                                Valid government-issued ID
+                            </li>
+
+                            <li>
+                                Proof of residency, if applicable
+                            </li>
+
+                            <li>
+                                Additional supporting documents,
+                                if required
+                            </li>
+
+                        </ul>
+
+                        <p class="requirement-note">
+                            Please bring the required documents
+                            when claiming your certificate.
+                        </p>
+
+                    </div>
+
+                </section>
 
 
-                <div class="form-group">
 
-                    <label for="businessSupportingDocument">
-                        Supporting Document
-                        <span class="conditional">
-                            If applicable
-                        </span>
-                    </label>
+                <!-- =================================================
+                     CERTIFICATE OF INDIGENCY
+                     ================================================= -->
 
-                    <input
-                        type="file"
-                        id="businessSupportingDocument">
+                <section
+                    class="request-section document-form"
+                    id="indigencyForm"
+                    style="display: none;">
 
-                </div>
+                    <h2>
+                        Certificate of Indigency
+                    </h2>
 
 
-                <!-- REQUIREMENTS -->
+                    <div class="form-group">
 
-                <div class="document-requirements">
+                        <label for="indigencyReason">
+                            Purpose / Reason for Request
+                        </label>
 
-                    <h3>Requirements</h3>
+                        <textarea
+                            id="indigencyReason"
+                            name="indigencyReason"
+                            rows="4"
+                            placeholder="Explain the reason for requesting the certificate"></textarea>
 
-                    <ul class="requirements-list">
+                    </div>
 
-                        <li>
-                            Valid government-issued ID
-                        </li>
 
-                        <li>
-                            Applicable business registration document
-                        </li>
+                    <div class="form-row">
 
-                        <li>
-                            Additional supporting documents,
-                            if required
-                        </li>
 
-                    </ul>
+                        <div class="form-group">
 
-                    <p class="requirement-note">
-                        Requirements may vary depending on
-                        the type and nature of the business.
+                            <label for="employmentStatus">
+                                Employment Status
+                            </label>
+
+                            <select
+                                id="employmentStatus"
+                                name="employmentStatus">
+
+                                <option value="">
+                                    Select Employment Status
+                                </option>
+
+                                <option value="Employed">
+                                    Employed
+                                </option>
+
+                                <option value="Self-Employed">
+                                    Self-Employed
+                                </option>
+
+                                <option value="Unemployed">
+                                    Unemployed
+                                </option>
+
+                                <option value="Student">
+                                    Student
+                                </option>
+
+                                <option value="Retired">
+                                    Retired
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="occupation">
+
+                                Occupation
+
+                                <span class="optional">
+                                    If applicable
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="occupation"
+                                name="occupation"
+                                placeholder="Occupation">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="incomeSource">
+                                Source of Income
+                            </label>
+
+                            <input
+                                type="text"
+                                id="incomeSource"
+                                name="incomeSource"
+                                placeholder="Source of income">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="monthlyIncome">
+                                Monthly Household Income
+                            </label>
+
+                            <input
+                                type="number"
+                                id="monthlyIncome"
+                                name="monthlyIncome"
+                                min="0"
+                                placeholder="Amount">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="householdMembers">
+                                Number of Household Members
+                            </label>
+
+                            <input
+                                type="number"
+                                id="householdMembers"
+                                name="householdMembers"
+                                min="1"
+                                placeholder="Number of members">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="householdHead">
+                                Household Head
+                            </label>
+
+                            <select
+                                id="householdHead"
+                                name="householdHead">
+
+                                <option value="">
+                                    Select
+                                </option>
+
+                                <option value="Yes">
+                                    Yes
+                                </option>
+
+                                <option value="No">
+                                    No
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="indigencyIdType">
+                                Valid ID Type
+                            </label>
+
+                            <select
+                                id="indigencyIdType"
+                                name="indigencyIdType">
+
+                                <option value="">
+                                    Select ID Type
+                                </option>
+
+                                <option value="Philippine National ID">
+                                    Philippine National ID
+                                </option>
+
+                                <option value="Driver's License">
+                                    Driver's License
+                                </option>
+
+                                <option value="Passport">
+                                    Passport
+                                </option>
+
+                                <option value="UMID">
+                                    UMID
+                                </option>
+
+                                <option value="Other Government ID">
+                                    Other Government ID
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="indigencyIdNumber">
+                                ID Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="indigencyIdNumber"
+                                name="indigencyIdNumber"
+                                placeholder="Enter ID number">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="indigencySupportingDocument">
+
+                            Supporting Document
+
+                            <span class="conditional">
+                                If applicable
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="file"
+                            id="indigencySupportingDocument"
+                            name="indigencySupportingDocument">
+
+                    </div>
+
+
+                    <div class="document-requirements">
+
+                        <h3>
+                            Requirements
+                        </h3>
+
+                        <ul class="requirements-list">
+
+                            <li>
+                                Valid government-issued ID
+                            </li>
+
+                            <li>
+                                Proof of residency
+                            </li>
+
+                            <li>
+                                Supporting documents,
+                                depending on the purpose
+                            </li>
+
+                        </ul>
+
+                        <p class="requirement-note">
+                            Additional verification may be required
+                            by the barangay.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     BUSINESS CLEARANCE
+                     ================================================= -->
+
+                <section
+                    class="request-section document-form"
+                    id="businessForm"
+                    style="display: none;">
+
+                    <h2>
+                        Business Clearance
+                    </h2>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="businessName">
+                                Business Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="businessName"
+                                name="businessName"
+                                placeholder="Registered business name">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="businessType">
+                                Business Type
+                            </label>
+
+                            <select
+                                id="businessType"
+                                name="businessType">
+
+                                <option value="">
+                                    Select Business Type
+                                </option>
+
+                                <option value="Sole Proprietorship">
+                                    Sole Proprietorship
+                                </option>
+
+                                <option value="Partnership">
+                                    Partnership
+                                </option>
+
+                                <option value="Corporation">
+                                    Corporation
+                                </option>
+
+                                <option value="Cooperative">
+                                    Cooperative
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="businessNature">
+                                Nature of Business
+                            </label>
+
+                            <input
+                                type="text"
+                                id="businessNature"
+                                name="businessNature"
+                                placeholder="Nature of business">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="businessAddress">
+                                Business Address
+                            </label>
+
+                            <input
+                                type="text"
+                                id="businessAddress"
+                                name="businessAddress"
+                                placeholder="Complete business address">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+
+                        <div class="form-group">
+
+                            <label for="registrationType">
+                                Registration Type
+                            </label>
+
+                            <select
+                                id="registrationType"
+                                name="registrationType">
+
+                                <option value="">
+                                    Select Registration
+                                </option>
+
+                                <option value="DTI">
+                                    DTI
+                                </option>
+
+                                <option value="SEC">
+                                    SEC
+                                </option>
+
+                                <option value="CDA">
+                                    CDA
+                                </option>
+
+                                <option value="Not Applicable">
+                                    Not Applicable
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="registrationNumber">
+
+                                Registration Number
+
+                                <span class="conditional">
+                                    If applicable
+                                </span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="registrationNumber"
+                                name="registrationNumber"
+                                placeholder="Registration number">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="businessSupportingDocument">
+
+                            Supporting Document
+
+                            <span class="conditional">
+                                If applicable
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="file"
+                            id="businessSupportingDocument"
+                            name="businessSupportingDocument">
+
+                    </div>
+
+
+                    <div class="document-requirements">
+
+                        <h3>
+                            Requirements
+                        </h3>
+
+                        <ul class="requirements-list">
+
+                            <li>
+                                Valid government-issued ID
+                            </li>
+
+                            <li>
+                                Applicable business registration document
+                            </li>
+
+                            <li>
+                                Additional supporting documents,
+                                if required
+                            </li>
+
+                        </ul>
+
+                        <p class="requirement-note">
+                            Requirements may vary depending on
+                            the type and nature of the business.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     DOCUMENT RELEASE
+                     ================================================= -->
+
+                <section class="request-section">
+
+                    <h2>
+                        Document Release
+                    </h2>
+
+                    <p class="section-note">
+                        Your requested document will be released
+                        at the Barangay Office.
                     </p>
 
-                </div>
 
-            </section>
+                    <div class="release-method">
+                        Pickup at Barangay Office
+                    </div>
 
-
-            <!-- =================================================
-                 DOCUMENT RELEASE
-                 ================================================= -->
-
-            <section class="request-section">
-
-                <h2>Document Release</h2>
-
-                <p class="section-note">
-                    Your requested document will be released
-                    at the Barangay Office.
-                </p>
-
-                <div class="release-method">
-                    Pickup at Barangay Office
-                </div>
-
-            </section>
+                </section>
 
 
-            <!-- =================================================
-                 ACTION
-                 ================================================= -->
 
-            <section class="request-actions">
+                <!-- =================================================
+                     ACTION
+                     ================================================= -->
 
-                <button
-                    type="button"
-                    class="submit-request-button">
+                <section class="request-actions">
 
-                    Review Request
+                    <button
+                        type="submit"
+                        class="submit-request-button">
 
-                </button>
+                        Submit Request
 
-            </section>
+                    </button>
+
+                </section>
+
+
+            </form>
 
         </main>
 
     </div>
 
 
-    <!-- DOCUMENT SELECTION SCRIPT -->
 
-    <script>
+    <!-- =========================================================
+         MAIN JAVASCRIPT
+         ========================================================= -->
 
-        const documentType =
-            document.getElementById("documentType");
-
-        const documentForms =
-            document.querySelectorAll(".document-form");
-
-
-        documentType.addEventListener("change", function () {
-
-            /* Hide all document sections */
-
-            documentForms.forEach(function(form) {
-
-                form.style.display = "none";
-
-            });
-
-
-            /* Show selected document */
-
-            if (this.value === "clearance") {
-
-                document.getElementById("clearanceForm")
-                    .style.display = "block";
-
-            }
-
-            else if (this.value === "residency") {
-
-                document.getElementById("residencyForm")
-                    .style.display = "block";
-
-            }
-
-            else if (this.value === "indigency") {
-
-                document.getElementById("indigencyForm")
-                    .style.display = "block";
-
-            }
-
-            else if (this.value === "business") {
-
-                document.getElementById("businessForm")
-                    .style.display = "block";
-
-            }
-
-        });
-
-    </script>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 

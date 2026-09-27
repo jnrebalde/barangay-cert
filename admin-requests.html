@@ -2,17 +2,26 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Document Requests | Admin</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css">
+
 </head>
+
 
 <body>
 
     <main class="dashboard-page">
+
 
         <!-- =====================================================
              SIDEBAR
@@ -21,23 +30,62 @@
         <aside class="sidebar">
 
             <div class="sidebar-brand">
-                <h2>ADMIN PANEL</h2>
+
+                <h2>
+                    ADMIN PANEL
+                </h2>
+
             </div>
+
+
             <nav class="sidebar-nav">
-                <a href="admin-dashboard.html"> Dashboard</a>
-                <a href="admin-requests.html"> Document Requests </a>
-                <a href="admin-residents.html"> Residents </a>
-                <a href="admin-notifications.html"> Notifications </a>
-                <a href="admin-reports.html"> Reports </a>
-                <a href="admin-settings.html"> Settings</a>
+
+                <a href="admin-dashboard.html">
+                    Dashboard
+                </a>
+
+                <a
+                    href="admin-requests.html"
+                    class="active">
+
+                    Document Requests
+
+                </a>
+
+                <a href="admin-residents.html">
+                    Residents
+                </a>
+
+                <a href="admin-notifications.html">
+                    Notifications
+                </a>
+
+                <a href="admin-reports.html">
+                    Reports
+                </a>
+
+                <a href="admin-settings.html">
+                    Settings
+                </a>
+
             </nav>
 
+
             <div class="sidebar-bottom">
-                <a href="admin-login.html" class="logout-link">
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
                     Logout
+
                 </a>
+
             </div>
+
         </aside>
+
 
 
         <!-- =====================================================
@@ -46,11 +94,14 @@
 
         <section class="dashboard-content">
 
+
             <!-- PAGE HEADER -->
 
             <header class="page-header">
 
-                <h1>Document Requests</h1>
+                <h1>
+                    Document Requests
+                </h1>
 
                 <p>
                     Review and manage resident document requests.
@@ -59,54 +110,64 @@
             </header>
 
 
+
             <!-- =================================================
-                 REQUEST SUMMARY
+                 SUMMARY
                  ================================================= -->
 
-            <section class="content-card">
+            <section class="dashboard-section">
 
                 <div class="summary-grid">
 
+
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <h3 id="totalRequests">
+                            0
+                        </h3>
 
-                        <span>
-                            Total
-                        </span>
+                        <p>
+                            Total Requests
+                        </p>
 
                     </div>
 
 
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <h3 id="pendingRequests">
+                            0
+                        </h3>
 
-                        <span>
+                        <p>
                             Pending
-                        </span>
+                        </p>
 
                     </div>
 
 
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <h3 id="approvedRequests">
+                            0
+                        </h3>
 
-                        <span>
-                            Processing
-                        </span>
+                        <p>
+                            Approved
+                        </p>
 
                     </div>
 
 
                     <div class="summary-card">
 
-                        <strong>0</strong>
+                        <h3 id="releasedRequests">
+                            0
+                        </h3>
 
-                        <span>
-                            Ready for Pickup
-                        </span>
+                        <p>
+                            Released
+                        </p>
 
                     </div>
 
@@ -115,20 +176,23 @@
             </section>
 
 
+
             <!-- =================================================
                  REQUEST TABLE
                  ================================================= -->
 
-            <section class="content-card">
+            <section class="dashboard-section">
 
                 <div class="section-header">
 
                     <div>
 
-                        <h2>All Requests</h2>
+                        <h2>
+                            Resident Requests
+                        </h2>
 
                         <p>
-                            View submitted barangay document requests.
+                            Document requests submitted by residents.
                         </p>
 
                     </div>
@@ -144,28 +208,45 @@
 
                             <tr>
 
-                                <th>Request ID</th>
+                                <th>
+                                    Request ID
+                                </th>
 
-                                <th>Resident</th>
+                                <th>
+                                    Resident
+                                </th>
 
-                                <th>Document</th>
+                                <th>
+                                    Document
+                                </th>
 
-                                <th>Date Requested</th>
+                                <th>
+                                    Date Requested
+                                </th>
 
-                                <th>Status</th>
+                                <th>
+                                    Status
+                                </th>
 
-                                <th>Action</th>
+                                <th>
+                                    Action
+                                </th>
 
                             </tr>
 
                         </thead>
 
-                        <tbody>
+
+                        <tbody id="adminRequestTableBody">
 
                             <tr>
 
-                                <td colspan="6">
-                                    No document requests yet.
+                                <td
+                                    colspan="6"
+                                    class="empty-state">
+
+                                    Loading requests...
+
                                 </td>
 
                             </tr>
@@ -181,8 +262,9 @@
         </section>
 
     </main>
-    
-<script src="script.js"></script>
+
+
+    <script src="script.js"></script>
 
 </body>
 
