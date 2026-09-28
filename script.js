@@ -2881,6 +2881,10 @@ if (documentType) {
 
 function loadResidentRequestProfile() {
 
+    /* ---------------------------------------------------------
+       GET REQUEST PAGE FIELDS
+       --------------------------------------------------------- */
+
     const fullNameField =
         document.getElementById("fullName");
 
@@ -2891,23 +2895,24 @@ function loadResidentRequestProfile() {
         document.getElementById("address");
 
 
-    /*
-     * Only run when the request page
-     * contains these fields.
-     */
+    /* ---------------------------------------------------------
+       ONLY RUN ON REQUEST PAGE
+       --------------------------------------------------------- */
 
     if (
         !fullNameField ||
         !mobileField ||
         !addressField
     ) {
+
         return;
+
     }
 
 
-    /* =====================================================
-       GET LOGGED-IN RESIDENT SESSION
-       ===================================================== */
+    /* ---------------------------------------------------------
+       GET LOGGED-IN RESIDENT
+       --------------------------------------------------------- */
 
     const session =
         getResidentSession();
@@ -2923,24 +2928,24 @@ function loadResidentRequestProfile() {
     }
 
 
-    /* =====================================================
+    /* ---------------------------------------------------------
        GET RESIDENT ACCOUNTS
-       ===================================================== */
+       --------------------------------------------------------- */
 
     const residents =
         getResidents();
 
 
-    /* =====================================================
-       FIND RESIDENT USING RESIDENT ID
-       ===================================================== */
+    /* ---------------------------------------------------------
+       FIND CURRENT RESIDENT
+       --------------------------------------------------------- */
 
     const resident =
         residents.find(
             function (account) {
 
-                return Number(account.id) ===
-                    Number(session.residentId);
+                return String(account.id) ===
+                    String(session.residentId);
 
             }
         );
@@ -2957,15 +2962,26 @@ function loadResidentRequestProfile() {
     }
 
 
-    /* =====================================================
+    /* ---------------------------------------------------------
+       PROFILE DATA
+       
+       Profile information is saved inside:
+       resident.profile
+       --------------------------------------------------------- */
+
+    const profile =
+        resident.profile || {};
+
+
+    /* ---------------------------------------------------------
        FULL NAME
-       ===================================================== */
+       --------------------------------------------------------- */
 
     const nameParts = [
 
         resident.firstName,
 
-        resident.middleName,
+        profile.middleName,
 
         resident.lastName
 
@@ -2973,71 +2989,73 @@ function loadResidentRequestProfile() {
         function (value) {
 
             return value &&
-                value.toString().trim() !== "";
+                String(value).trim() !== "";
 
         }
     );
 
 
     const fullName =
-        nameParts.join(" ");
+        nameParts.join(" ").trim();
 
 
-    /* =====================================================
+    /* ---------------------------------------------------------
        MOBILE NUMBER
-       ===================================================== */
+       --------------------------------------------------------- */
 
     const mobile =
-        resident.mobile || "";
+        profile.mobile || "";
 
 
-    /* =====================================================
+    /* ---------------------------------------------------------
        COMPLETE ADDRESS
-       ===================================================== */
+       --------------------------------------------------------- */
 
     const addressParts = [
 
-        resident.house,
+        profile.house,
 
-        resident.street,
+        profile.street,
 
-        resident.purok,
+        profile.purok,
 
-        resident.barangay,
+        profile.barangay,
 
-        resident.municipality,
+        profile.municipality,
 
-        resident.province
+        profile.province
 
     ].filter(
         function (value) {
 
             return value &&
-                value.toString().trim() !== "";
+                String(value).trim() !== "";
 
         }
     );
 
 
     const completeAddress =
-        addressParts.join(", ");
+        addressParts.join(", ").trim();
 
 
-    /* =====================================================
+    /* ---------------------------------------------------------
        DISPLAY INFORMATION
-       ===================================================== */
+       --------------------------------------------------------- */
 
     fullNameField.value =
         fullName || "—";
 
+
     mobileField.value =
         mobile || "—";
+
 
     addressField.value =
         completeAddress || "—";
 
 }
-loadResidentRequestProfile();
+
 
 /* =========================================================
    RESIDENT DOCUMENT REQUEST - SUBMIT
@@ -3045,7 +3063,7 @@ loadResidentRequestProfile();
 
 const residentRequestForm =
     document.getElementById("residentRequestForm");
-
+    loadResidentRequestProfile();
 
 if (residentRequestForm) {
 
