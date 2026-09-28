@@ -2158,7 +2158,6 @@ td {
 
 /* =========================================================
    PAGE HEADER
-   Same scale as resident dashboard
    ========================================================= */
 
 .page-header {
@@ -2863,4 +2862,42 @@ td {
     justify-content: flex-start;
 
     margin-top: 10px;
+}
+
+/* =========================================================
+   RESIDENT DASHBOARD - REQUEST SUMMARY
+   ========================================================= */
+
+.resident-content .summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 15px !important;
+    width: 100%;
+}
+
+.resident-content .summary-card {
+    width: auto !important;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RESIDENT DASHBOARD - RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .resident-content .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .resident-content .summary-grid {
+        grid-template-columns: 1fr !important;
+    }
+
 }

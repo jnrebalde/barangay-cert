@@ -609,6 +609,10 @@ const residentTableBody =
 
 if (residentTableBody) {
 
+    /* =====================================================
+       LOAD RESIDENTS
+       ===================================================== */
+
     loadResidents();
 
 
@@ -618,7 +622,16 @@ if (residentTableBody) {
             getResidents();
 
 
-        /* NO RESIDENTS */
+        /* =================================================
+           UPDATE RESIDENT SUMMARY
+           ================================================= */
+
+        updateResidentSummary(residents);
+
+
+        /* =================================================
+           NO RESIDENTS
+           ================================================= */
 
         if (
             residents.length === 0
@@ -646,18 +659,28 @@ if (residentTableBody) {
         }
 
 
-        /* DISPLAY RESIDENTS */
+        /* =================================================
+           DISPLAY RESIDENTS
+           ================================================= */
 
         residentTableBody.innerHTML =
             residents
                 .map(
                     function (resident) {
 
+                        /* ---------------------------------
+                           FULL NAME
+                           --------------------------------- */
+
                         const fullName =
                             `${resident.firstName || ""}
                             ${resident.lastName || ""}`
                                 .trim();
 
+
+                        /* ---------------------------------
+                           REGISTRATION DATE
+                           --------------------------------- */
 
                         const registrationDate =
                             resident.createdAt
@@ -678,6 +701,10 @@ if (residentTableBody) {
                                 )
                                 : "-";
 
+
+                        /* ---------------------------------
+                           ACTION
+                           --------------------------------- */
 
                         let action;
 
@@ -715,6 +742,10 @@ if (residentTableBody) {
 
                         }
 
+
+                        /* ---------------------------------
+                           RESIDENT ROW
+                           --------------------------------- */
 
                         return `
 
@@ -776,7 +807,131 @@ if (residentTableBody) {
                 .join("");
 
 
+        /* =================================================
+           SETUP APPROVAL BUTTONS
+           ================================================= */
+
         setupApprovalButtons();
+
+    }
+
+
+    /* =====================================================
+       UPDATE RESIDENT SUMMARY
+       ===================================================== */
+
+    function updateResidentSummary(
+        residents
+    ) {
+
+        /* ---------------------------------------------
+           SUMMARY ELEMENTS
+           --------------------------------------------- */
+
+        const totalResidentsElement =
+            document.getElementById(
+                "totalResidents"
+            );
+
+
+        const verifiedResidentsElement =
+            document.getElementById(
+                "verifiedResidents"
+            );
+
+
+        const pendingResidentsElement =
+            document.getElementById(
+                "pendingResidents"
+            );
+
+
+        const activeResidentsElement =
+            document.getElementById(
+                "activeResidents"
+            );
+
+
+        /* ---------------------------------------------
+           TOTAL RESIDENTS
+           --------------------------------------------- */
+
+        const totalCount =
+            residents.length;
+
+
+        if (totalResidentsElement) {
+
+            totalResidentsElement.textContent =
+                totalCount;
+
+        }
+
+
+        /* ---------------------------------------------
+           VERIFIED RESIDENTS
+           --------------------------------------------- */
+
+        const verifiedCount =
+            residents.filter(
+                function (resident) {
+
+                    return (
+                        resident.status ===
+                        RESIDENT_STATUS.APPROVED
+                    );
+
+                }
+            ).length;
+
+
+        if (verifiedResidentsElement) {
+
+            verifiedResidentsElement.textContent =
+                verifiedCount;
+
+        }
+
+
+        /* ---------------------------------------------
+           PENDING VERIFICATION
+           --------------------------------------------- */
+
+        const pendingCount =
+            residents.filter(
+                function (resident) {
+
+                    return (
+                        resident.status ===
+                        RESIDENT_STATUS.PENDING
+                    );
+
+                }
+            ).length;
+
+
+        if (pendingResidentsElement) {
+
+            pendingResidentsElement.textContent =
+                pendingCount;
+
+        }
+
+
+        /* ---------------------------------------------
+           ACTIVE ACCOUNTS
+           
+           Currently, an approved resident is treated
+           as an active account because the system does
+           not yet have a separate active/inactive status.
+           --------------------------------------------- */
+
+        if (activeResidentsElement) {
+
+            activeResidentsElement.textContent =
+                verifiedCount;
+
+        }
 
     }
 
@@ -842,6 +997,10 @@ if (residentTableBody) {
             );
 
 
+        /* ---------------------------------------------
+           RESIDENT NOT FOUND
+           --------------------------------------------- */
+
         if (!resident) {
 
             alert(
@@ -853,6 +1012,10 @@ if (residentTableBody) {
         }
 
 
+        /* ---------------------------------------------
+           ALREADY APPROVED
+           --------------------------------------------- */
+
         if (
             resident.status ===
             RESIDENT_STATUS.APPROVED
@@ -862,6 +1025,10 @@ if (residentTableBody) {
 
         }
 
+
+        /* ---------------------------------------------
+           CONFIRM APPROVAL
+           --------------------------------------------- */
 
         const confirmed =
             confirm(
@@ -876,19 +1043,35 @@ if (residentTableBody) {
         }
 
 
+        /* ---------------------------------------------
+           UPDATE STATUS
+           --------------------------------------------- */
+
         resident.status =
             RESIDENT_STATUS.APPROVED;
 
+
+        /* ---------------------------------------------
+           SAVE
+           --------------------------------------------- */
 
         saveResidents(
             residents
         );
 
 
+        /* ---------------------------------------------
+           SUCCESS MESSAGE
+           --------------------------------------------- */
+
         alert(
             "Resident account approved successfully."
         );
 
+
+        /* ---------------------------------------------
+           REFRESH TABLE + SUMMARY
+           --------------------------------------------- */
 
         loadResidents();
 
@@ -896,7 +1079,7 @@ if (residentTableBody) {
 
 
     /* =====================================================
-       STATUS CLASS
+       RESIDENT STATUS CLASS
        ===================================================== */
 
     function getResidentStatusClass(
@@ -3798,7 +3981,6 @@ function displayRequestStatus(request) {
 loadResidentRequests();
 
 
-
 /* =========================================================
    9. RESIDENT PROFILE EVENTS
    ========================================================= */
@@ -4860,106 +5042,821 @@ if (adminRequestTableBody) {
    ADMIN DASHBOARD
    ========================================================= */
 
-const dashboardTotalRequests =
-    document.getElementById(
-        "dashboardTotalRequests"
-    );
+/*
+ * Load the Admin Dashboard.
+ *
+ * This function handles:
+ * 1. Request Summary
+ * 2. Recent Document Requests
+ *
+ * It uses the same "requests" data used by
+ * admin-requests.html.
+ */
+
+function loadAdminDashboard() {
+
+    /* ---------------------------------------------------------
+       GET DASHBOARD ELEMENTS
+       --------------------------------------------------------- */
+
+    const totalElement =
+        document.getElementById(
+            "dashboardTotalRequests"
+        );
+
+    const pendingElement =
+        document.getElementById(
+            "dashboardPendingRequests"
+        );
+
+    const processingElement =
+        document.getElementById(
+            "dashboardProcessingRequests"
+        );
+
+    const readyElement =
+        document.getElementById(
+            "dashboardReadyRequests"
+        );
+
+    const tableBody =
+        document.getElementById(
+            "dashboardRequestTableBody"
+        );
 
 
-if (dashboardTotalRequests) {
+    /*
+     * If this is not the Admin Dashboard,
+     * stop here.
+     */
+    if (
+        !totalElement &&
+        !pendingElement &&
+        !processingElement &&
+        !readyElement &&
+        !tableBody
+    ) {
+        return;
+    }
 
-    loadAdminDashboard();
 
+    /* ---------------------------------------------------------
+       GET REQUESTS
+       --------------------------------------------------------- */
 
-    function loadAdminDashboard() {
+    let requests = [];
 
-        const requests =
+    try {
+
+        requests =
             JSON.parse(
                 localStorage.getItem("requests")
             ) || [];
 
+    } catch (error) {
 
-        /* =================================================
-           REQUEST COUNTS
-           ================================================= */
+        console.error(
+            "Unable to read document requests:",
+            error
+        );
 
-        const total =
-            requests.length;
-
-
-        const pending =
-            requests.filter(
-                function (request) {
-
-                    return (
-                        request.status ===
-                        "Pending"
-                    );
-
-                }
-            ).length;
+        requests = [];
+    }
 
 
-        /*
-         * PROCESSING
-         *
-         * Approved requests are considered
-         * processing until they are ready
-         * for pickup.
-         */
+    /* ---------------------------------------------------------
+       REQUEST COUNTS
+       --------------------------------------------------------- */
 
-        const processing =
-            requests.filter(
-                function (request) {
-
-                    return (
-                        request.status ===
-                        "Approved"
-                    );
-
-                }
-            ).length;
+    const total =
+        requests.length;
 
 
-        const ready =
-            requests.filter(
-                function (request) {
+    const pending =
+        requests.filter(
+            function (request) {
 
-                    return (
-                        request.status ===
-                        "Ready for Pickup"
-                    );
+                return request.status ===
+                    "Pending";
 
-                }
-            ).length;
+            }
+        ).length;
 
 
-        /* =================================================
-           UPDATE DASHBOARD
-           ================================================= */
+    /*
+     * Approved requests are currently
+     * considered Processing.
+     */
+    const processing =
+        requests.filter(
+            function (request) {
 
-        document.getElementById(
-            "dashboardTotalRequests"
-        ).textContent = total;
+                return request.status ===
+                    "Approved";
 
-
-        document.getElementById(
-            "dashboardPendingRequests"
-        ).textContent = pending;
-
-
-        document.getElementById(
-            "dashboardProcessingRequests"
-        ).textContent = processing;
+            }
+        ).length;
 
 
-        document.getElementById(
-            "dashboardReadyRequests"
-        ).textContent = ready;
+    const ready =
+        requests.filter(
+            function (request) {
+
+                return request.status ===
+                    "Ready for Pickup";
+
+            }
+        ).length;
+
+
+    /* ---------------------------------------------------------
+       UPDATE SUMMARY
+       --------------------------------------------------------- */
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            total;
 
     }
 
+
+    if (pendingElement) {
+
+        pendingElement.textContent =
+            pending;
+
+    }
+
+
+    if (processingElement) {
+
+        processingElement.textContent =
+            processing;
+
+    }
+
+
+    if (readyElement) {
+
+        readyElement.textContent =
+            ready;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       UPDATE REQUEST TABLE
+       --------------------------------------------------------- */
+
+    if (!tableBody) {
+
+        return;
+
+    }
+
+
+    /*
+     * No requests
+     */
+    if (requests.length === 0) {
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty-state">
+
+                    No document requests yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    /* ---------------------------------------------------------
+       SORT REQUESTS
+       --------------------------------------------------------- */
+
+    requests.sort(
+        function (a, b) {
+
+            return (
+                new Date(
+                    b.dateRequested || 0
+                ) -
+                new Date(
+                    a.dateRequested || 0
+                )
+            );
+
+        }
+    );
+
+
+    /*
+     * Show only the five most recent requests
+     * on the dashboard.
+     *
+     * The complete list remains in
+     * admin-requests.html.
+     */
+    const recentRequests =
+        requests.slice(0, 5);
+
+
+    /* ---------------------------------------------------------
+       DOCUMENT NAME
+       --------------------------------------------------------- */
+
+    function getDashboardDocumentName(
+        documentType
+    ) {
+
+        const documentNames = {
+
+            clearance:
+                "Barangay Clearance",
+
+            residency:
+                "Certificate of Residency",
+
+            indigency:
+                "Certificate of Indigency",
+
+            business:
+                "Business Clearance"
+
+        };
+
+
+        return (
+            documentNames[documentType] ||
+            documentType ||
+            "Unknown Document"
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       STATUS CLASS
+       --------------------------------------------------------- */
+
+    function getDashboardStatusClass(
+        status
+    ) {
+
+        if (status === "Pending") {
+
+            return "status-pending";
+
+        }
+
+
+        if (
+            status === "Approved" ||
+            status === "Ready for Pickup" ||
+            status === "Released"
+        ) {
+
+            return "status-approved";
+
+        }
+
+
+        if (status === "Rejected") {
+
+            return "status-rejected";
+
+        }
+
+
+        return "status-default";
+
+    }
+
+
+    /* ---------------------------------------------------------
+       DISPLAY REQUESTS
+       --------------------------------------------------------- */
+
+    tableBody.innerHTML =
+        recentRequests.map(
+            function (request) {
+
+                const requestId =
+                    request.requestId ||
+                    "—";
+
+
+                const residentName =
+                    request.residentName ||
+                    "—";
+
+
+                const documentName =
+                    getDashboardDocumentName(
+                        request.documentType
+                    );
+
+
+                const dateRequested =
+                    request.dateRequested
+                        ? new Date(
+                            request.dateRequested
+                        ).toLocaleDateString(
+                            "en-PH",
+                            {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric"
+                            }
+                        )
+                        : "—";
+
+
+                const status =
+                    request.status ||
+                    "Pending";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <a
+                                href="admin-request-details.html?id=${encodeURIComponent(requestId)}"
+                                class="resident-name-link">
+
+                                ${requestId}
+
+                            </a>
+
+                        </td>
+
+
+                        <td>
+                            ${residentName}
+                        </td>
+
+
+                        <td>
+                            ${documentName}
+                        </td>
+
+
+                        <td>
+                            ${dateRequested}
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status-badge ${getDashboardStatusClass(status)}">
+
+                                ${status}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
 }
+
+
+/* =========================================================
+   INITIALIZE ADMIN DASHBOARD
+   ========================================================= */
+
+loadAdminDashboard();
+
+/* =========================================================
+   RESIDENT DASHBOARD
+   ========================================================= */
+
+/*
+ * Loads the resident's dashboard summary
+ * and recent document requests.
+ *
+ * IMPORTANT:
+ * This uses the same request filtering logic
+ * as the Track Request page.
+ */
+
+function loadResidentDashboard() {
+
+    /* ---------------------------------------------------------
+       GET DASHBOARD ELEMENTS
+       --------------------------------------------------------- */
+
+    const totalElement =
+        document.getElementById(
+            "residentTotalRequests"
+        );
+
+    const pendingElement =
+        document.getElementById(
+            "residentPendingRequests"
+        );
+
+    const readyElement =
+        document.getElementById(
+            "residentReadyRequests"
+        );
+
+    const completedElement =
+        document.getElementById(
+            "residentCompletedRequests"
+        );
+
+    const tableBody =
+        document.getElementById(
+            "residentDashboardRequestTableBody"
+        );
+
+
+    /*
+     * If this is not the Resident Dashboard,
+     * do nothing.
+     */
+
+    if (
+        !totalElement &&
+        !pendingElement &&
+        !readyElement &&
+        !completedElement &&
+        !tableBody
+    ) {
+        return;
+    }
+
+
+    /* ---------------------------------------------------------
+       GET LOGGED-IN RESIDENT
+       --------------------------------------------------------- */
+
+    const session =
+        getResidentSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "resident-login.html";
+
+        return;
+    }
+
+
+    /* ---------------------------------------------------------
+       GET ALL REQUESTS
+       --------------------------------------------------------- */
+
+    let requests = [];
+
+    try {
+
+        requests =
+            JSON.parse(
+                localStorage.getItem("requests")
+            ) || [];
+
+    } catch (error) {
+
+        console.error(
+            "Unable to read document requests:",
+            error
+        );
+
+        requests = [];
+    }
+
+
+    /* ---------------------------------------------------------
+       GET CURRENT RESIDENT'S REQUESTS
+       --------------------------------------------------------- */
+
+    const residentRequests =
+        requests.filter(
+            function (request) {
+
+                return Number(
+                    request.residentId
+                ) === Number(
+                    session.residentId
+                );
+
+            }
+        );
+
+
+    /* ---------------------------------------------------------
+       REQUEST SUMMARY
+       --------------------------------------------------------- */
+
+    const total =
+        residentRequests.length;
+
+
+    const pending =
+        residentRequests.filter(
+            function (request) {
+
+                return request.status ===
+                    "Pending";
+
+            }
+        ).length;
+
+
+    const ready =
+        residentRequests.filter(
+            function (request) {
+
+                return request.status ===
+                    "Ready for Pickup";
+
+            }
+        ).length;
+
+
+    const completed =
+        residentRequests.filter(
+            function (request) {
+
+                return request.status ===
+                    "Released";
+
+            }
+        ).length;
+
+
+    /* ---------------------------------------------------------
+       UPDATE SUMMARY
+       --------------------------------------------------------- */
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            total;
+
+    }
+
+
+    if (pendingElement) {
+
+        pendingElement.textContent =
+            pending;
+
+    }
+
+
+    if (readyElement) {
+
+        readyElement.textContent =
+            ready;
+
+    }
+
+
+    if (completedElement) {
+
+        completedElement.textContent =
+            completed;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       UPDATE RECENT REQUESTS
+       --------------------------------------------------------- */
+
+    if (!tableBody) {
+
+        return;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       NO REQUESTS
+       --------------------------------------------------------- */
+
+    if (residentRequests.length === 0) {
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="4"
+                    class="empty-state">
+
+                    No document requests yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    /* ---------------------------------------------------------
+       SORT - MOST RECENT FIRST
+       --------------------------------------------------------- */
+
+    residentRequests.sort(
+        function (a, b) {
+
+            return new Date(
+                b.dateRequested || 0
+            ) -
+            new Date(
+                a.dateRequested || 0
+            );
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       SHOW ONLY RECENT REQUESTS
+       --------------------------------------------------------- */
+
+    const recentRequests =
+        residentRequests.slice(0, 5);
+
+
+    /* ---------------------------------------------------------
+       DISPLAY REQUESTS
+       --------------------------------------------------------- */
+
+    tableBody.innerHTML =
+        recentRequests.map(
+            function (request) {
+
+                const documentName =
+                    getDocumentName(
+                        request.documentType
+                    );
+
+
+                const dateRequested =
+                    request.dateRequested
+                        ? new Date(
+                            request.dateRequested
+                        ).toLocaleDateString(
+                            "en-PH",
+                            {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric"
+                            }
+                        )
+                        : "—";
+
+
+                const status =
+                    request.status ||
+                    "Pending";
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="request-reference-button"
+                                data-request-id="${request.requestId}">
+
+                                ${request.requestId}
+
+                            </button>
+
+                        </td>
+
+
+                        <td>
+
+                            ${documentName}
+
+                        </td>
+
+
+                        <td>
+
+                            ${dateRequested}
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="request-status-badge">
+
+                                ${status}
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+
+    /* ---------------------------------------------------------
+       REQUEST CLICK
+       --------------------------------------------------------- */
+
+    const requestButtons =
+        tableBody.querySelectorAll(
+            ".request-reference-button"
+        );
+
+
+    requestButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const requestId =
+                        this.dataset.requestId;
+
+
+                    const selectedRequest =
+                        residentRequests.find(
+                            function (request) {
+
+                                return String(
+                                    request.requestId
+                                ) === String(
+                                    requestId
+                                );
+
+                            }
+                        );
+
+
+                    if (selectedRequest) {
+
+                        /*
+                         * Send the resident to
+                         * Track Request.
+                         *
+                         * The Track Request page
+                         * will load the request
+                         * using its existing logic.
+                         */
+
+                        window.location.href =
+                            "resident-track.html";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE RESIDENT DASHBOARD
+   ========================================================= */
+
+loadResidentDashboard();
 
 /* =========================================================
    12. PAGE ACCESS PROTECTION
