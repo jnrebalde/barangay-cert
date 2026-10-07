@@ -140,6 +140,84 @@
         </section>
     </main>
 
+    <!-- =========================================================
+     CUSTOM ALERT
+     ========================================================= -->
+
+<div
+    id="customAlert"
+    class="custom-alert-overlay"
+    style="display: none;"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="customAlertTitle"
+    aria-describedby="customAlertMessage"
+>
+
+    <div
+        class="custom-alert"
+        role="document"
+    >
+
+        <!-- CLOSE -->
+        <button
+            type="button"
+            id="customAlertClose"
+            class="custom-alert-close"
+            aria-label="Close alert"
+        >
+            ×
+        </button>
+
+
+        <!-- ICON -->
+        <div
+            id="customAlertIcon"
+            class="custom-alert-icon"
+            aria-hidden="true"
+        >
+            i
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="custom-alert-content">
+
+            <h2
+                id="customAlertTitle"
+                class="custom-alert-title"
+            >
+                Alert
+            </h2>
+
+
+            <p
+                id="customAlertMessage"
+                class="custom-alert-message"
+            >
+                This is an alert message.
+            </p>
+
+
+            <!-- ACTION -->
+            <div class="custom-alert-actions">
+
+                <button
+                    type="button"
+                    id="customAlertButton"
+                    class="custom-alert-button"
+                >
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script src="script.js"></script>
 
 </body>

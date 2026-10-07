@@ -48,6 +48,59 @@ function saveResidents(residents) {
 
 }
 
+/* =========================================================
+   DATA SYNCHRONIZATION
+   ========================================================= */
+
+function notifyDataChange(dataType) {
+
+    window.dispatchEvent(
+        new CustomEvent(
+            "barangayCertDataChanged",
+            {
+                detail: {
+                    type: dataType,
+                    timestamp: Date.now()
+                }
+            }
+        )
+    );
+
+}
+
+/* =========================================================
+   CROSS-TAB DATA SYNCHRONIZATION
+   ========================================================= */
+
+window.addEventListener(
+    "storage",
+    function (event) {
+
+        if (
+            event.key !== "requests" &&
+            event.key !== "residents"
+        ) {
+            return;
+        }
+
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "barangayCertDataChanged",
+                {
+                    detail: {
+                        type:
+                            event.key,
+                        timestamp:
+                            Date.now()
+                    }
+                }
+            )
+        );
+
+    }
+);
+
 
 /* =========================================================
    3. RESIDENT LOGIN
@@ -94,7 +147,8 @@ if (residentLoginForm) {
 
             if (!email || !password) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Please enter your email and password."
                 );
 
@@ -122,7 +176,8 @@ if (residentLoginForm) {
 
             if (!resident) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Invalid email or password."
                 );
 
@@ -138,7 +193,8 @@ if (residentLoginForm) {
                 RESIDENT_STATUS.APPROVED
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Your account is still pending admin approval."
                 );
 
@@ -251,7 +307,8 @@ if (adminLoginForm) {
 
             if (!username || !password) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Please enter your username and password."
                 );
 
@@ -265,7 +322,8 @@ if (adminLoginForm) {
                 password !== ADMIN_PASSWORD
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Invalid admin username or password."
                 );
 
@@ -390,7 +448,8 @@ if (registerForm) {
                 !confirmPassword
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Please complete all required fields."
                 );
 
@@ -406,7 +465,8 @@ if (registerForm) {
                 !terms.checked
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Please agree to the Terms and Conditions."
                 );
 
@@ -425,7 +485,8 @@ if (registerForm) {
                 !emailPattern.test(email)
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Please enter a valid email address."
                 );
 
@@ -440,7 +501,8 @@ if (registerForm) {
                 password.length < 8
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Password must be at least 8 characters."
                 );
 
@@ -453,7 +515,8 @@ if (registerForm) {
                 password !== confirmPassword
             ) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Passwords do not match."
                 );
 
@@ -483,7 +546,8 @@ if (registerForm) {
 
             if (existingResident) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "An account with this email already exists."
                 );
 
@@ -582,7 +646,8 @@ if (registerForm) {
             );
 
 
-            alert(
+            showAlert(
+                "Success",
                 "Registration submitted successfully. " +
                 "Your account is now pending admin approval."
             );
@@ -1003,7 +1068,8 @@ if (residentTableBody) {
 
         if (!resident) {
 
-            alert(
+            showAlert(
+                "Error",
                 "Resident account could not be found."
             );
 
@@ -1064,7 +1130,8 @@ if (residentTableBody) {
            SUCCESS MESSAGE
            --------------------------------------------- */
 
-        alert(
+        showAlert(
+            "Success",
             "Resident account approved successfully."
         );
 
@@ -1142,7 +1209,8 @@ if (adminResidentDetailPage) {
 
         if (!residentId) {
 
-            alert(
+            showAlert(
+                "Error",
                 "No resident account was selected."
             );
 
@@ -1173,7 +1241,8 @@ if (adminResidentDetailPage) {
 
         if (!resident) {
 
-            alert(
+            showAlert(
+                "Error",
                 "Resident account could not be found."
             );
 
@@ -1665,7 +1734,8 @@ function loadResidentProfile() {
 
     if (!resident) {
 
-        alert(
+        showAlert(
+            "Error",
             "Resident account could not be found."
         );
 
@@ -2157,6 +2227,7 @@ function validateResidentProfile() {
 
         }
     );
+    
 
 
     /* MOBILE */
@@ -2338,6 +2409,54 @@ function validateResidentProfile() {
 
     }
 
+    /* OCCUPATION */
+
+        const occupationField =
+        document.getElementById("occupation");
+
+    if (occupationField) {
+        occupationField.addEventListener(
+            "input",
+            function () {
+                this.value =
+                    this.value.replace(/[0-9]/g, "");
+            }
+        );
+    }
+
+    /* RELATIONSHIP*/
+    const relationshipField =
+    document.getElementById("relationship");
+
+    if (relationshipField) {
+
+        relationshipField.addEventListener(
+            "input",
+            function () {
+
+                this.value =
+                    this.value.replace(/[0-9]/g, "");
+
+            }
+        );
+
+    }
+
+    /* ID NUMBER */
+
+    const idNumberField =
+    document.getElementById("idNumber");
+
+    if (idNumberField) {
+        idNumberField.addEventListener(
+            "input",
+            function () {
+                this.value =
+                    this.value.replace(/\D/g, "");
+            }
+        );
+    }
+
 
     /* BUSINESS */
 
@@ -2413,7 +2532,8 @@ function validateResidentProfile() {
 
     if (!valid) {
 
-        alert(
+        showAlert(
+            "Error",
             "Please complete all required fields and correct the highlighted information."
         );
 
@@ -2423,6 +2543,127 @@ function validateResidentProfile() {
     return valid;
 
 }
+
+        /* =========================================================
+        AUTO-COMPUTE AGE FROM BIRTHDATE
+        ========================================================= */
+
+        function calculateAgeFromBirthdate() {
+
+            const birthdateField =
+                document.getElementById("birthdate");
+
+            const ageField =
+                document.getElementById("age");
+
+            if (!birthdateField || !ageField) {
+                return;
+            }
+
+            const birthdate =
+                birthdateField.value;
+
+            if (!birthdate) {
+                ageField.value = "";
+                return;
+            }
+
+            const birthDate =
+                new Date(birthdate + "T00:00:00");
+
+            const today =
+                new Date();
+
+            let age =
+                today.getFullYear() -
+                birthDate.getFullYear();
+
+            const monthDifference =
+                today.getMonth() -
+                birthDate.getMonth();
+
+            if (
+                monthDifference < 0 ||
+                (
+                    monthDifference === 0 &&
+                    today.getDate() < birthDate.getDate()
+                )
+            ) {
+                age--;
+            }
+
+            ageField.value =
+                age >= 0 ? age : "";
+        }
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const birthdateField =
+                    document.getElementById("birthdate");
+
+                if (birthdateField) {
+                    birthdateField.addEventListener(
+                        "change",
+                        calculateAgeFromBirthdate
+                    );
+
+                    calculateAgeFromBirthdate();
+                }
+
+            }
+        );
+    /* =========================================================
+        PROFILE INPUT VALIDATION
+        ========================================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const occupationField =
+                    document.getElementById("occupation");
+
+                const idNumberField =
+                    document.getElementById("idNumber");
+
+
+                /* Occupation - no numeric characters */
+                if (occupationField) {
+
+                    occupationField.addEventListener(
+                        "input",
+                        function () {
+
+                            this.value =
+                                this.value.replace(/[0-9]/g, "");
+
+                        }
+                    );
+
+                }
+
+
+                /* ID Number - numbers only */
+                if (idNumberField) {
+
+                    idNumberField.addEventListener(
+                        "input",
+                        function () {
+
+                            this.value =
+                                this.value.replace(/\D/g, "");
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+
 
 
 /* =========================================================
@@ -2475,7 +2716,8 @@ function saveResidentProfile() {
         residentIndex === -1
     ) {
 
-        alert(
+        showAlert(
+            "Error",
             "Resident account could not be found."
         );
 
@@ -2535,12 +2777,26 @@ function saveResidentProfile() {
         }
 
 
-        alert(
+        showAlert(
+            "Error",
             "That email address is already being used by another resident."
         );
 
         return;
 
+    }
+
+    const relationship =
+    document.getElementById("relationship").value.trim();
+
+    if (/[0-9]/.test(relationship)) {
+
+        showAlert(
+            "Error",
+            "Relationship should not contain numbers."
+        );
+
+        return;
     }
 
 
@@ -2753,6 +3009,9 @@ function saveResidentProfile() {
     saveResidents(
         residents
     );
+    notifyDataChange("residents");
+
+
 
 
     /* UPDATE SESSION */
@@ -2805,7 +3064,8 @@ function saveResidentProfile() {
     );
 
 
-    alert(
+    showAlert(
+        "Success",
         "Your profile has been updated successfully."
     );
 
@@ -2881,10 +3141,6 @@ if (documentType) {
 
 function loadResidentRequestProfile() {
 
-    /* ---------------------------------------------------------
-       GET REQUEST PAGE FIELDS
-       --------------------------------------------------------- */
-
     const fullNameField =
         document.getElementById("fullName");
 
@@ -2893,6 +3149,13 @@ function loadResidentRequestProfile() {
 
     const addressField =
         document.getElementById("address");
+    
+    const idTypeField =
+    document.getElementById("idType");
+
+    const idNumberField =
+        document.getElementById("idNumber");
+
 
 
     /* ---------------------------------------------------------
@@ -2904,9 +3167,7 @@ function loadResidentRequestProfile() {
         !mobileField ||
         !addressField
     ) {
-
         return;
-
     }
 
 
@@ -2916,7 +3177,6 @@ function loadResidentRequestProfile() {
 
     const session =
         getResidentSession();
-
 
     if (!session) {
 
@@ -2928,17 +3188,9 @@ function loadResidentRequestProfile() {
     }
 
 
-    /* ---------------------------------------------------------
-       GET RESIDENT ACCOUNTS
-       --------------------------------------------------------- */
-
     const residents =
         getResidents();
 
-
-    /* ---------------------------------------------------------
-       FIND CURRENT RESIDENT
-       --------------------------------------------------------- */
 
     const resident =
         residents.find(
@@ -2953,7 +3205,8 @@ function loadResidentRequestProfile() {
 
     if (!resident) {
 
-        alert(
+        showAlert(
+            "Error",
             "Resident account could not be found."
         );
 
@@ -2961,12 +3214,9 @@ function loadResidentRequestProfile() {
 
     }
 
-
+    
     /* ---------------------------------------------------------
        PROFILE DATA
-       
-       Profile information is saved inside:
-       resident.profile
        --------------------------------------------------------- */
 
     const profile =
@@ -2980,9 +3230,7 @@ function loadResidentRequestProfile() {
     const nameParts = [
 
         resident.firstName,
-
         profile.middleName,
-
         resident.lastName
 
     ].filter(
@@ -3004,39 +3252,54 @@ function loadResidentRequestProfile() {
        --------------------------------------------------------- */
 
     const mobile =
-        profile.mobile || "";
+        String(
+            profile.mobile || ""
+        ).trim();
 
 
     /* ---------------------------------------------------------
        COMPLETE ADDRESS
        --------------------------------------------------------- */
 
-    const addressParts = [
+    const addressFields = [
 
         profile.house,
-
         profile.street,
-
-        profile.purok,
-
         profile.barangay,
-
         profile.municipality,
-
         profile.province
 
-    ].filter(
-        function (value) {
+    ];
 
-            return value &&
-                String(value).trim() !== "";
 
-        }
-    );
+    const addressParts =
+        addressFields.filter(
+            function (value) {
+
+                return value &&
+                    String(value).trim() !== "" &&
+                    String(value).trim() !== "-";
+
+            }
+        );
 
 
     const completeAddress =
         addressParts.join(", ").trim();
+
+    /* ---------------------------------------------------------
+    PROFILE ID INFORMATION
+    --------------------------------------------------------- */
+
+    const idType =
+        String(
+            profile.idType || ""
+        ).trim();
+
+    const idNumber =
+        String(
+            profile.idNumber || ""
+        ).trim();
 
 
     /* ---------------------------------------------------------
@@ -3046,16 +3309,69 @@ function loadResidentRequestProfile() {
     fullNameField.value =
         fullName || "—";
 
-
     mobileField.value =
         mobile || "—";
-
 
     addressField.value =
         completeAddress || "—";
 
-}
+    /* ---------------------------------------------------------
+    REFLECT PROFILE ID IN DOCUMENT REQUEST FORMS
+    --------------------------------------------------------- */
 
+    const requestIdTypes = [
+        "clearanceIdType",
+        "residencyIdType",
+        "indigencyIdType"
+    ];
+
+    const requestIdNumbers = [
+        "clearanceIdNumber",
+        "residencyIdNumber",
+        "indigencyIdNumber"
+    ];
+
+
+    requestIdTypes.forEach(
+        function (fieldId) {
+
+            const field =
+                document.getElementById(fieldId);
+
+            if (!field) {
+                return;
+            }
+
+            field.value =
+                idType;
+
+            field.disabled =
+                true;
+
+        }
+    );
+
+
+    requestIdNumbers.forEach(
+        function (fieldId) {
+
+            const field =
+                document.getElementById(fieldId);
+
+            if (!field) {
+                return;
+            }
+
+            field.value =
+                idNumber;
+
+            field.readOnly =
+                true;
+
+        }
+    );
+
+}
 
 /* =========================================================
    RESIDENT DOCUMENT REQUEST - SUBMIT
@@ -3063,6 +3379,133 @@ function loadResidentRequestProfile() {
 
 const residentRequestForm =
     document.getElementById("residentRequestForm");
+    /* =========================================================
+   DOCUMENT REQUEST - ACCESSIBLE VALIDATION
+   ========================================================= */
+
+function clearRequestValidation() {
+
+    const fields =
+        document.querySelectorAll(
+            "#residentRequestForm .input-error"
+        );
+
+    fields.forEach(
+        function(field) {
+
+            field.classList.remove(
+                "input-error"
+            );
+
+            field.removeAttribute(
+                "aria-invalid"
+            );
+
+        }
+    );
+
+}
+
+
+function markRequestFieldError(
+    field
+) {
+
+    if (!field) {
+        return;
+    }
+
+    field.classList.add(
+        "input-error"
+    );
+
+    field.setAttribute(
+        "aria-invalid",
+        "true"
+    );
+
+}
+
+
+function focusFirstRequestError() {
+
+    const firstError =
+        document.querySelector(
+            "#residentRequestForm .input-error"
+        );
+
+    if (firstError) {
+
+        firstError.focus();
+
+    }
+
+}
+const requestForm =
+    document.getElementById(
+        "residentRequestForm"
+    );
+
+
+if (requestForm) {
+
+    requestForm.addEventListener(
+        "input",
+        function(event) {
+
+            const field =
+                event.target;
+
+            if (
+                field.classList &&
+                field.classList.contains(
+                    "input-error"
+                )
+            ) {
+
+                field.classList.remove(
+                    "input-error"
+                );
+
+                field.removeAttribute(
+                    "aria-invalid"
+                );
+
+            }
+
+        }
+    );
+
+
+    requestForm.addEventListener(
+        "change",
+        function(event) {
+
+            const field =
+                event.target;
+
+            if (
+                field.classList &&
+                field.classList.contains(
+                    "input-error"
+                )
+            ) {
+
+                field.classList.remove(
+                    "input-error"
+                );
+
+                field.removeAttribute(
+                    "aria-invalid"
+                );
+
+            }
+
+        }
+    );
+
+}
+
     loadResidentRequestProfile();
 
 if (residentRequestForm) {
@@ -3084,7 +3527,8 @@ if (residentRequestForm) {
 
             if (!session) {
 
-                alert(
+                showAlert(
+                    "Session Expired",
                     "Your session has expired. Please log in again."
                 );
 
@@ -3117,9 +3561,81 @@ if (residentRequestForm) {
 
             if (!resident) {
 
-                alert(
+                showAlert(
+                    "Error",
                     "Resident account could not be found."
                 );
+
+                return;
+
+            }
+
+            /* =================================================
+            VALIDATE RESIDENT PROFILE BEFORE REQUEST
+            ================================================= */
+
+            const profile =
+                resident.profile || {};
+
+            const mobile =
+                String(
+                    profile.mobile || ""
+                ).trim();
+
+            const mobileDigits =
+                mobile.replace(/\D/g, "");
+
+
+            const addressFields = [
+
+                profile.house,
+                profile.street,
+                profile.barangay,
+                profile.municipality,
+                profile.province
+
+            ];
+
+
+            const incompleteAddress =
+                addressFields.some(
+                    function (value) {
+
+                        const text =
+                            String(
+                                value || ""
+                            ).trim();
+
+                        return (
+                            text === "" ||
+                            text === "-"
+                        );
+
+                    }
+                );
+
+
+            const invalidMobile =
+                (
+                    mobile === "" ||
+                    mobile === "-"
+                );
+
+
+            if (
+                invalidMobile ||
+                incompleteAddress
+            ) {
+
+                showAlert(
+                    "Incomplete Profile",
+                    "Please complete your My Profile first.\n\n" +
+                    "A valid 11-digit mobile number, complete address, " +
+                    "submitting a document request."
+                );
+
+                window.location.href =
+                    "resident-profile.html";
 
                 return;
 
@@ -3138,9 +3654,21 @@ if (residentRequestForm) {
 
             if (!documentType) {
 
-                alert(
+                const documentTypeField =
+                    document.getElementById(
+                        "documentType"
+                    );
+
+                markRequestFieldError(
+                    documentTypeField
+                );
+
+                showAlert(
+                    "Error",
                     "Please select a document type."
                 );
+
+                focusFirstRequestError();
 
                 return;
 
@@ -3172,15 +3700,59 @@ if (residentRequestForm) {
                     ).value.trim();
 
 
-                if (
+               if (
                     !purpose ||
                     !idType ||
                     !idNumber
                 ) {
 
-                    alert(
+                    const purposeField =
+                        document.getElementById(
+                            "clearancePurpose"
+                        );
+
+                    const idTypeField =
+                        document.getElementById(
+                            "clearanceIdType"
+                        );
+
+                    const idNumberField =
+                        document.getElementById(
+                            "clearanceIdNumber"
+                        );
+
+
+                    if (!purpose) {
+
+                        markRequestFieldError(
+                            purposeField
+                        );
+
+                    }
+
+                    if (!idType) {
+
+                        markRequestFieldError(
+                            idTypeField
+                        );
+
+                    }
+
+                    if (!idNumber) {
+
+                        markRequestFieldError(
+                            idNumberField
+                        );
+
+                    }
+
+
+                    showAlert(
+                        "Error",
                         "Please complete all required Barangay Clearance information."
                     );
+
+                    focusFirstRequestError();
 
                     return;
 
@@ -3230,9 +3802,66 @@ if (residentRequestForm) {
                     !idNumber
                 ) {
 
-                    alert(
+                    const yearsField =
+                        document.getElementById(
+                            "residencyYears"
+                        );
+
+                    const purposeField =
+                        document.getElementById(
+                            "residencyPurpose"
+                        );
+
+                    const idTypeField =
+                        document.getElementById(
+                            "residencyIdType"
+                        );
+
+                    const idNumberField =
+                        document.getElementById(
+                            "residencyIdNumber"
+                        );
+
+
+                    if (!years) {
+
+                        markRequestFieldError(
+                            yearsField
+                        );
+
+                    }
+
+                    if (!purpose) {
+
+                        markRequestFieldError(
+                            purposeField
+                        );
+
+                    }
+
+                    if (!idType) {
+
+                        markRequestFieldError(
+                            idTypeField
+                        );
+
+                    }
+
+                    if (!idNumber) {
+
+                        markRequestFieldError(
+                            idNumberField
+                        );
+
+                    }
+
+
+                    showAlert(
+                        "Error",
                         "Please complete all required Certificate of Residency information."
                     );
+
+                    focusFirstRequestError();
 
                     return;
 
@@ -3291,9 +3920,79 @@ if (residentRequestForm) {
                     !idNumber
                 ) {
 
-                    alert(
+                    const reasonField =
+                        document.getElementById(
+                            "indigencyReason"
+                        );
+
+                    const employmentStatusField =
+                        document.getElementById(
+                            "employmentStatus"
+                        );
+
+                    const householdMembersField =
+                        document.getElementById(
+                            "householdMembers"
+                        );
+
+                    const idTypeField =
+                        document.getElementById(
+                            "indigencyIdType"
+                        );
+
+                    const idNumberField =
+                        document.getElementById(
+                            "indigencyIdNumber"
+                        );
+
+
+                    if (!reason) {
+
+                        markRequestFieldError(
+                            reasonField
+                        );
+
+                    }
+
+                    if (!employmentStatus) {
+
+                        markRequestFieldError(
+                            employmentStatusField
+                        );
+
+                    }
+
+                    if (!householdMembers) {
+
+                        markRequestFieldError(
+                            householdMembersField
+                        );
+
+                    }
+
+                    if (!idType) {
+
+                        markRequestFieldError(
+                            idTypeField
+                        );
+
+                    }
+
+                    if (!idNumber) {
+
+                        markRequestFieldError(
+                            idNumberField
+                        );
+
+                    }
+
+
+                    showAlert(
+                        "Error",
                         "Please complete all required Certificate of Indigency information."
                     );
+
+                    focusFirstRequestError();
 
                     return;
 
@@ -3371,9 +4070,66 @@ if (residentRequestForm) {
                     !businessAddress
                 ) {
 
-                    alert(
+                    const businessNameField =
+                        document.getElementById(
+                            "businessName"
+                        );
+
+                    const businessTypeField =
+                        document.getElementById(
+                            "businessType"
+                        );
+
+                    const businessNatureField =
+                        document.getElementById(
+                            "businessNature"
+                        );
+
+                    const businessAddressField =
+                        document.getElementById(
+                            "businessAddress"
+                        );
+
+
+                    if (!businessName) {
+
+                        markRequestFieldError(
+                            businessNameField
+                        );
+
+                    }
+
+                    if (!businessType) {
+
+                        markRequestFieldError(
+                            businessTypeField
+                        );
+
+                    }
+
+                    if (!businessNature) {
+
+                        markRequestFieldError(
+                            businessNatureField
+                        );
+
+                    }
+
+                    if (!businessAddress) {
+
+                        markRequestFieldError(
+                            businessAddressField
+                        );
+
+                    }
+
+
+                    showAlert(
+                        "Error",
                         "Please complete all required Business Clearance information."
                     );
+
+                    focusFirstRequestError();
 
                     return;
 
@@ -3501,18 +4257,20 @@ if (residentRequestForm) {
 
             requests.push(newRequest);
 
-
             localStorage.setItem(
                 "requests",
                 JSON.stringify(requests)
             );
+
+            notifyDataChange("requests");
 
 
             /* =================================================
                SUCCESS
                ================================================= */
 
-            alert(
+            showAlert(
+                "Success",
                 "Your document request has been submitted successfully."
             );
 
@@ -3998,6 +4756,22 @@ function displayRequestStatus(request) {
 
 loadResidentRequests();
 
+window.addEventListener(
+    "barangayCertDataChanged",
+    function (event) {
+
+        if (
+            !event.detail ||
+            event.detail.type !== "requests"
+        ) {
+            return;
+        }
+
+        loadResidentRequests();
+
+    }
+);
+
 
 /* =========================================================
    9. RESIDENT PROFILE EVENTS
@@ -4181,6 +4955,7 @@ function getAdminSession() {
 
 }
 
+
 /* =========================================================
    ADMIN - DOCUMENT REQUEST MANAGEMENT
    ========================================================= */
@@ -4192,7 +4967,21 @@ const adminRequestTableBody =
 if (adminRequestTableBody) {
 
     loadAdminRequests();
+    window.addEventListener(
+    "barangayCertDataChanged",
+    function (event) {
 
+        if (
+            !event.detail ||
+            event.detail.type !== "requests"
+        ) {
+            return;
+        }
+
+        loadAdminRequests();
+
+    }
+);
 
     /* =====================================================
        LOAD REQUESTS
@@ -4618,7 +5407,8 @@ if (adminRequestTableBody) {
 
         if (!request) {
 
-            alert(
+            showAlert(
+                "Error",
                 "Document request could not be found."
             );
 
@@ -4660,7 +5450,8 @@ if (adminRequestTableBody) {
             )
         ) {
 
-            alert(
+            showAlert(
+                "Error",
                 "This request cannot be moved to this status."
             );
 
@@ -4716,12 +5507,30 @@ if (adminRequestTableBody) {
         );
 
 
-        alert(
+        showAlert(
+            "Success",
             `Request ${request.requestId} is now ${newStatus}.`
         );
 
 
         loadAdminRequests();
+
+        window.addEventListener(
+            "barangayCertDataChanged",
+            function (event) {
+
+                if (
+                    !event.detail ||
+                    event.detail.type !== "requests"
+                ) {
+                    return;
+                }
+
+                loadAdminRequests();
+
+            }
+        );
+        
 
     }
 
@@ -4757,7 +5566,8 @@ if (adminRequestTableBody) {
 
         if (!request) {
 
-            alert(
+            showAlert(
+                "Error",
                 "Document request could not be found."
             );
 
@@ -4770,7 +5580,8 @@ if (adminRequestTableBody) {
             request.status !== "Pending"
         ) {
 
-            alert(
+            showAlert(
+                "Error",
                 "Only pending requests can be rejected."
             );
 
@@ -4798,7 +5609,8 @@ if (adminRequestTableBody) {
             reason.trim() === ""
         ) {
 
-            alert(
+            showAlert(
+                "Error",
                 "A rejection reason is required."
             );
 
@@ -4852,12 +5664,28 @@ if (adminRequestTableBody) {
         );
 
 
-        alert(
+        showAlert(
+            "Success",
             `Request ${request.requestId} has been rejected.`
         );
 
 
         loadAdminRequests();
+        window.addEventListener(
+        "barangayCertDataChanged",
+        function (event) {
+
+            if (
+                !event.detail ||
+                event.detail.type !== "requests"
+            ) {
+                return;
+            }
+
+            loadAdminRequests();
+
+        }
+    );
 
     }
 
@@ -5465,6 +6293,22 @@ function loadAdminDashboard() {
 
 loadAdminDashboard();
 
+window.addEventListener(
+    "barangayCertDataChanged",
+    function (event) {
+
+        if (
+            !event.detail ||
+            event.detail.type !== "requests"
+        ) {
+            return;
+        }
+
+        loadAdminDashboard();
+
+    }
+);
+
 /* =========================================================
    RESIDENT DASHBOARD
    ========================================================= */
@@ -5869,12 +6713,345 @@ function loadResidentDashboard() {
 
 }
 
+/* =========================================================
+   CUSTOM ALERT
+   ========================================================= */
+
+function showAlert(
+    title,
+    message,
+    buttonText = "OK",
+    type = ""
+) {
+
+    const modal =
+        document.getElementById(
+            "customAlert"
+        );
+
+    const titleField =
+        document.getElementById(
+            "customAlertTitle"
+        );
+
+    const messageField =
+        document.getElementById(
+            "customAlertMessage"
+        );
+
+    const button =
+        document.getElementById(
+            "customAlertButton"
+        );
+
+    const icon =
+        document.getElementById(
+            "customAlertIcon"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "customAlertClose"
+        );
+
+
+    /* ---------------------------------------------------------
+       FALLBACK
+       --------------------------------------------------------- */
+
+    if (
+        !modal ||
+        !titleField ||
+        !messageField ||
+        !button ||
+        !icon
+    ) {
+
+        alert(message);
+
+        return;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       AUTOMATIC ALERT TYPE
+       --------------------------------------------------------- */
+
+    if (!type) {
+
+        const normalizedTitle =
+            String(title)
+                .toLowerCase()
+                .trim();
+
+
+        if (
+            normalizedTitle.includes("success") ||
+            normalizedTitle.includes("successful") ||
+            normalizedTitle.includes("approved") ||
+            normalizedTitle.includes("updated") ||
+            normalizedTitle.includes("submitted")
+        ) {
+
+            type = "success";
+
+        }
+
+        else if (
+            normalizedTitle.includes("error") ||
+            normalizedTitle.includes("invalid") ||
+            normalizedTitle.includes("incomplete") ||
+            normalizedTitle.includes("failed") ||
+            normalizedTitle.includes("expired")
+        ) {
+
+            type = "error";
+
+        }
+
+        else if (
+            normalizedTitle.includes("warning") ||
+            normalizedTitle.includes("confirm") ||
+            normalizedTitle.includes("are you sure")
+        ) {
+
+            type = "warning";
+
+        }
+
+        else {
+
+            type = "info";
+
+        }
+
+    }
+
+
+   const alertCard =
+    modal.querySelector(
+        ".custom-alert"
+    );
+
+
+if (alertCard) {
+
+    alertCard.classList.remove(
+        "alert-error",
+        "alert-warning",
+        "alert-success",
+        "alert-info"
+    );
+
+    alertCard.classList.add(
+        "alert-" + type
+    );
+
+}
+
+
+    /* ---------------------------------------------------------
+       CONTENT
+       --------------------------------------------------------- */
+
+    titleField.textContent =
+        title;
+
+    messageField.textContent =
+        message;
+
+    button.textContent =
+        buttonText;
+
+
+    /* ---------------------------------------------------------
+       ICON
+       --------------------------------------------------------- */
+
+    if (type === "success") {
+
+        icon.textContent = "✓";
+        icon.setAttribute(
+            "aria-label",
+            "Success"
+        );
+
+    }
+
+    else if (type === "error") {
+
+        icon.textContent = "!";
+        icon.setAttribute(
+            "aria-label",
+            "Error"
+        );
+
+    }
+
+    else if (type === "warning") {
+
+        icon.textContent = "!";
+        icon.setAttribute(
+            "aria-label",
+            "Warning"
+        );
+
+    }
+
+    else {
+
+        icon.textContent = "i";
+        icon.setAttribute(
+            "aria-label",
+            "Information"
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       ACCESSIBILITY
+       --------------------------------------------------------- */
+
+    modal.setAttribute(
+        "role",
+        "alertdialog"
+    );
+
+    modal.setAttribute(
+        "aria-modal",
+        "true"
+    );
+
+    modal.setAttribute(
+        "aria-labelledby",
+        "customAlertTitle"
+    );
+
+    modal.setAttribute(
+        "aria-describedby",
+        "customAlertMessage"
+    );
+
+    
+
+
+    /* ---------------------------------------------------------
+       SHOW ALERT
+       --------------------------------------------------------- */
+
+    modal.style.display =
+        "flex";
+
+
+    /* ---------------------------------------------------------
+       CLOSE FUNCTION
+       --------------------------------------------------------- */
+
+    function closeAlert() {
+
+        modal.style.display =
+            "none";
+
+        document.removeEventListener(
+            "keydown",
+            handleAlertKeydown
+        );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       KEYBOARD SUPPORT
+       --------------------------------------------------------- */
+
+    function handleAlertKeydown(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeAlert();
+
+            return;
+
+        }
+
+
+        if (
+            event.key === "Enter" &&
+            document.activeElement === button
+        ) {
+
+            closeAlert();
+
+        }
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        handleAlertKeydown
+    );
+
+
+    /* ---------------------------------------------------------
+       BUTTON EVENTS
+       --------------------------------------------------------- */
+
+    button.onclick =
+        closeAlert;
+
+
+    if (closeButton) {
+
+        closeButton.onclick =
+            closeAlert;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       FOCUS
+       --------------------------------------------------------- */
+
+    if (closeButton) {
+
+        closeButton.focus();
+
+    }
+
+    else {
+
+        button.focus();
+
+    }
+
+}
 
 /* =========================================================
    INITIALIZE RESIDENT DASHBOARD
    ========================================================= */
 
 loadResidentDashboard();
+
+window.addEventListener(
+    "barangayCertDataChanged",
+    function (event) {
+
+        if (
+            !event.detail ||
+            event.detail.type !== "requests"
+        ) {
+            return;
+        }
+
+        loadResidentDashboard();
+
+    }
+);
 
 /* =========================================================
    12. PAGE ACCESS PROTECTION
@@ -5992,6 +7169,274 @@ function logout() {
         "home.html";
 
 }
+
+/* =========================================================
+   ACCESSIBILITY - KEYBOARD NAVIGATION
+   ========================================================= */
+
+(function initializeAccessibility() {
+
+    /* -----------------------------------------------------
+       CREATE SKIP TO CONTENT LINK
+       ----------------------------------------------------- */
+
+    if (
+        !document.querySelector(
+            ".skip-to-content"
+        )
+    ) {
+
+        const mainContent =
+            document.querySelector(
+                "main"
+            );
+
+        if (mainContent) {
+
+            if (!mainContent.id) {
+
+                mainContent.id =
+                    "main-content";
+
+            }
+
+            const skipLink =
+                document.createElement(
+                    "a"
+                );
+
+            skipLink.href =
+                "#" + mainContent.id;
+
+            skipLink.className =
+                "skip-to-content";
+
+            skipLink.textContent =
+                "Skip to main content";
+
+            document.body.prepend(
+                skipLink
+            );
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       LABEL SIDEBAR NAVIGATION
+       ----------------------------------------------------- */
+
+    const sidebarNavs =
+        document.querySelectorAll(
+            ".sidebar nav, .sidebar-nav"
+        );
+
+    sidebarNavs.forEach(
+        function(nav) {
+
+            if (
+                !nav.hasAttribute(
+                    "aria-label"
+                )
+            ) {
+
+                nav.setAttribute(
+                    "aria-label",
+                    "Main navigation"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       LABEL SIDEBARS
+       ----------------------------------------------------- */
+
+    const sidebars =
+        document.querySelectorAll(
+            ".sidebar"
+        );
+
+    sidebars.forEach(
+        function(sidebar) {
+
+            if (
+                !sidebar.hasAttribute(
+                    "aria-label"
+                )
+            ) {
+
+                sidebar.setAttribute(
+                    "aria-label",
+                    "Sidebar navigation"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       LABEL LOGOUT LINKS
+       ----------------------------------------------------- */
+
+    const logoutLinks =
+        document.querySelectorAll(
+            ".logout-link, .logout"
+        );
+
+    logoutLinks.forEach(
+        function(link) {
+
+            if (
+                !link.hasAttribute(
+                    "aria-label"
+                )
+            ) {
+
+                link.setAttribute(
+                    "aria-label",
+                    "Log out of BarangayCert"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       ADD ACCESSIBLE LABELS TO ICON-ONLY BUTTONS
+       ----------------------------------------------------- */
+
+    const buttons =
+        document.querySelectorAll(
+            "button"
+        );
+
+    buttons.forEach(
+        function(button) {
+
+            const visibleText =
+                button.textContent
+                    .trim();
+
+            const ariaLabel =
+                button.getAttribute(
+                    "aria-label"
+                );
+
+            if (
+                !visibleText &&
+                !ariaLabel
+            ) {
+
+                button.setAttribute(
+                    "aria-label",
+                    "Action"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       ACCESSIBLE FORM ERRORS
+       ----------------------------------------------------- */
+
+    const invalidFields =
+        document.querySelectorAll(
+            ".input-error"
+        );
+
+    invalidFields.forEach(
+        function(field) {
+
+            field.setAttribute(
+                "aria-invalid",
+                "true"
+            );
+
+        }
+    );
+
+    /* -----------------------------------------------------
+   WATCH VALIDATION STATES
+   ----------------------------------------------------- */
+
+const validationObserver =
+    new MutationObserver(
+        function(mutations) {
+
+            mutations.forEach(
+                function(mutation) {
+
+                    if (
+                        mutation.type !==
+                        "attributes"
+                    ) {
+                        return;
+                    }
+
+                    const field =
+                        mutation.target;
+
+                    if (
+                        field.classList &&
+                        field.classList.contains(
+                            "input-error"
+                        )
+                    ) {
+
+                        field.setAttribute(
+                            "aria-invalid",
+                            "true"
+                        );
+
+                    }
+                    else {
+
+                        field.removeAttribute(
+                            "aria-invalid"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+document
+    .querySelectorAll(
+        "input, select, textarea"
+    )
+    .forEach(
+        function(field) {
+
+            validationObserver.observe(
+                field,
+                {
+                    attributes: true,
+                    attributeFilter: [
+                        "class"
+                    ]
+                }
+            );
+
+        }
+    );
+
+})();
 
 
 /* =========================================================
