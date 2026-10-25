@@ -103,6 +103,30 @@ window.addEventListener(
 
 
 /* =========================================================
+   BACKEND REQUEST HELPERS
+   ========================================================= */
+
+async function getBackendRequests() {
+    const response = await fetch("/api/requests", { cache: "no-store" });
+    const result = await response.json();
+    if (!response.ok || !Array.isArray(result.requests)) {
+        throw new Error(result.message || "Unable to load document requests.");
+    }
+    return result.requests;
+}
+
+async function saveBackendRequestStatus(requestId, status, remarks = "", processedBy = "Administrator") {
+    const response = await fetch(`/api/requests/${encodeURIComponent(requestId)}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, remarks, processedBy })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || "Unable to update request status.");
+    return result.request;
+}
+
+/* =========================================================
    3. RESIDENT LOGIN
    ========================================================= */
 
@@ -3512,7 +3536,7 @@ if (residentRequestForm) {
 
     residentRequestForm.addEventListener(
         "submit",
-        function (event) {
+        async function (event) {
 
             event.preventDefault();
 
@@ -4166,103 +4190,43 @@ if (residentRequestForm) {
 
 
             /* =================================================
-               GET EXISTING REQUESTS
+               SAVE REQUEST THROUGH BACKEND API
                ================================================= */
 
-            const requests =
-                JSON.parse(
-                    localStorage.getItem("requests")
-                ) || [];
+            const profileAddress = [
+                profile.house, profile.street, profile.purok,
+                profile.barangay, profile.municipality, profile.province
+            ].filter((value) => value && String(value).trim() && String(value).trim() !== "-").join(", ");
+            const residentName = [resident.firstName, profile.middleName, resident.lastName]
+                .filter((value) => value && String(value).trim()).join(" ");
 
-
-            /* =================================================
-               CREATE REQUEST NUMBER
-               ================================================= */
-
-            const requestNumber =
-                "REQ-" +
-                new Date().getFullYear() +
-                "-" +
-                String(
-                    requests.length + 1
-                ).padStart(4, "0");
-
-
-            /* =================================================
-               CREATE REQUEST
-               ================================================= */
-
-            const newRequest = {
-
-                requestId:
-                    requestNumber,
-
-                residentId:
-                    resident.id,
-
-                residentEmail:
-                    resident.email,
-
-                residentName:
-                    [
-                        resident.firstName,
-                        resident.middleName,
-                        resident.lastName
-                    ]
-                        .filter(Boolean)
-                        .join(" "),
-
-                mobile:
-                    resident.mobile || "",
-
-                address:
-                    [
-                        resident.house,
-                        resident.street,
-                        resident.purok,
-                        resident.barangay,
-                        resident.municipality,
-                        resident.province
-                    ]
-                        .filter(Boolean)
-                        .join(", "),
-
-                documentType:
-                    documentType,
-
-                documentData:
-                    documentData,
-
-                status:
-                    "Pending",
-
-                dateRequested:
-                    new Date().toISOString(),
-
-                dateProcessed:
-                    null,
-
-                processedBy:
-                    null,
-
-                remarks:
-                    ""
-
+            const requestPayload = {
+                residentId: Number(resident.id),
+                residentEmail: String(resident.email || "").trim().toLowerCase(),
+                residentName,
+                mobile: mobileDigits,
+                address: profileAddress,
+                documentType,
+                documentData
             };
 
-
-            /* =================================================
-               SAVE REQUEST
-               ================================================= */
-
-            requests.push(newRequest);
-
-            localStorage.setItem(
-                "requests",
-                JSON.stringify(requests)
-            );
-
-            notifyDataChange("requests");
+            try {
+                const response = await fetch("/api/requests", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestPayload)
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    const validationMessages = result.errors ? Object.values(result.errors).join("\n") : "";
+                    throw new Error(validationMessages || result.message || "The server could not save your request.");
+                }
+                notifyDataChange("requests");
+            } catch (error) {
+                console.error("Document request submission failed:", error);
+                showAlert("Submission Failed", error.message || "Your request could not be saved to the server. Please try again.");
+                return;
+            }
 
 
             /* =================================================
@@ -4316,7 +4280,7 @@ if (residentRequestForm) {
    RESIDENT - TRACK REQUESTS
    ========================================================= */
 
-function loadResidentRequests() {
+async function loadResidentRequests() {
 
     const tableBody =
         document.getElementById(
@@ -4355,10 +4319,15 @@ function loadResidentRequests() {
        GET ALL REQUESTS
        ===================================================== */
 
-    const requests =
-        JSON.parse(
-            localStorage.getItem("requests")
-        ) || [];
+    let requests = [];
+    try {
+        requests = await getBackendRequests();
+        localStorage.setItem("requests", JSON.stringify(requests));
+    } catch (error) {
+        console.error("Unable to load requests from backend:", error);
+        tableBody.innerHTML = `<tr><td colspan="5">Unable to load requests. Please refresh or try again later.</td></tr>`;
+        return;
+    }
 
 
     /* =====================================================
@@ -4987,12 +4956,17 @@ if (adminRequestTableBody) {
        LOAD REQUESTS
        ===================================================== */
 
-    function loadAdminRequests() {
+    async function loadAdminRequests() {
 
-        const requests =
-            JSON.parse(
-                localStorage.getItem("requests")
-            ) || [];
+        let requests = [];
+        try {
+            requests = await getBackendRequests();
+            localStorage.setItem("requests", JSON.stringify(requests));
+        } catch (error) {
+            console.error("Unable to load requests from backend:", error);
+            adminRequestTableBody.innerHTML = `<tr><td colspan="6" class="empty-state">Unable to load requests. Please refresh or try again later.</td></tr>`;
+            return;
+        }
 
 
         /* SUMMARY */
@@ -5380,315 +5354,48 @@ if (adminRequestTableBody) {
        UPDATE REQUEST STATUS
        ===================================================== */
 
-    function updateDocumentRequestStatus(
-        requestId,
-        newStatus
-    ) {
+    async function updateDocumentRequestStatus(requestId, newStatus) {
+        let requests;
+        try { requests = await getBackendRequests(); }
+        catch (error) { showAlert("Error", "Unable to load the request from the server."); return; }
+        const request = requests.find((item) => String(item.requestId) === String(requestId));
+        if (!request) { showAlert("Error", "Document request could not be found."); return; }
+        if (!confirm(`Change ${request.requestId} to "${newStatus}"?`)) return;
 
-        const requests =
-            JSON.parse(
-                localStorage.getItem("requests")
-            ) || [];
-
-
-        const request =
-            requests.find(
-                function (item) {
-
-                    return String(
-                        item.requestId
-                    ) === String(
-                        requestId
-                    );
-
-                }
-            );
-
-
-        if (!request) {
-
-            showAlert(
-                "Error",
-                "Document request could not be found."
-            );
-
-            return;
-
-        }
-
-
-        /* =================================================
-           VALID STATUS TRANSITIONS
-           ================================================= */
-
-        const allowedTransitions = {
-
-            "Pending": [
-                "Approved"
-            ],
-
-            "Approved": [
-                "Ready for Pickup"
-            ],
-
-            "Ready for Pickup": [
-                "Released"
-            ]
-
-        };
-
-
-        const allowed =
-            allowedTransitions[
-                request.status
-            ] || [];
-
-
-        if (
-            !allowed.includes(
-                newStatus
-            )
-        ) {
-
-            showAlert(
-                "Error",
-                "This request cannot be moved to this status."
-            );
-
-            return;
-
-        }
-
-
-        /* CONFIRMATION */
-
-        const confirmed =
-            confirm(
-                `Change ${request.requestId} to "${newStatus}"?`
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        /* UPDATE */
-
-        request.status =
-            newStatus;
-
-
-        request.dateProcessed =
-            new Date().toISOString();
-
-
-        const adminSession =
-            getAdminSession();
-
-
-        request.processedBy =
-            adminSession
-                ? adminSession.username
-                : "Administrator";
-
-
-        request.remarks =
-            `Request status updated to ${newStatus}.`;
-
-
-        /* SAVE */
-
-        localStorage.setItem(
-            "requests",
-            JSON.stringify(requests)
-        );
-
-
-        showAlert(
-            "Success",
-            `Request ${request.requestId} is now ${newStatus}.`
-        );
-
-
-        loadAdminRequests();
-
-        window.addEventListener(
-            "barangayCertDataChanged",
-            function (event) {
-
-                if (
-                    !event.detail ||
-                    event.detail.type !== "requests"
-                ) {
-                    return;
-                }
-
-                loadAdminRequests();
-
-            }
-        );
-        
-
+        const adminSession = getAdminSession();
+        try {
+            await saveBackendRequestStatus(requestId, newStatus, `Request status updated to ${newStatus}.`, adminSession ? adminSession.username : "Administrator");
+            notifyDataChange("requests");
+            await loadAdminRequests();
+            showAlert("Success", `Request ${request.requestId} is now ${newStatus}.`);
+        } catch (error) { showAlert("Error", error.message || "Unable to save the request status."); }
     }
-
 
 
     /* =====================================================
        REJECT REQUEST
        ===================================================== */
 
-    function rejectDocumentRequest(
-        requestId
-    ) {
+    async function rejectDocumentRequest(requestId) {
+        let requests;
+        try { requests = await getBackendRequests(); }
+        catch (error) { showAlert("Error", "Unable to load the request from the server."); return; }
+        const request = requests.find((item) => String(item.requestId) === String(requestId));
+        if (!request) { showAlert("Error", "Document request could not be found."); return; }
+        if (request.status !== "Pending") { showAlert("Error", "Only pending requests can be rejected."); return; }
+        const reason = prompt("Enter the reason for rejecting this request:");
+        if (reason === null) return;
+        if (!reason.trim()) { showAlert("Error", "A rejection reason is required."); return; }
+        if (!confirm(`Reject ${request.requestId}?`)) return;
 
-        const requests =
-            JSON.parse(
-                localStorage.getItem("requests")
-            ) || [];
-
-
-        const request =
-            requests.find(
-                function (item) {
-
-                    return String(
-                        item.requestId
-                    ) === String(
-                        requestId
-                    );
-
-                }
-            );
-
-
-        if (!request) {
-
-            showAlert(
-                "Error",
-                "Document request could not be found."
-            );
-
-            return;
-
-        }
-
-
-        if (
-            request.status !== "Pending"
-        ) {
-
-            showAlert(
-                "Error",
-                "Only pending requests can be rejected."
-            );
-
-            return;
-
-        }
-
-
-        const reason =
-            prompt(
-                "Enter the reason for rejecting this request:"
-            );
-
-
-        if (
-            reason === null
-        ) {
-
-            return;
-
-        }
-
-
-        if (
-            reason.trim() === ""
-        ) {
-
-            showAlert(
-                "Error",
-                "A rejection reason is required."
-            );
-
-            return;
-
-        }
-
-
-        const confirmed =
-            confirm(
-                `Reject ${request.requestId}?`
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        /* UPDATE */
-
-        request.status =
-            "Rejected";
-
-
-        request.dateProcessed =
-            new Date().toISOString();
-
-
-        const adminSession =
-            getAdminSession();
-
-
-        request.processedBy =
-            adminSession
-                ? adminSession.username
-                : "Administrator";
-
-
-        request.remarks =
-            reason.trim();
-
-
-        /* SAVE */
-
-        localStorage.setItem(
-            "requests",
-            JSON.stringify(requests)
-        );
-
-
-        showAlert(
-            "Success",
-            `Request ${request.requestId} has been rejected.`
-        );
-
-
-        loadAdminRequests();
-        window.addEventListener(
-        "barangayCertDataChanged",
-        function (event) {
-
-            if (
-                !event.detail ||
-                event.detail.type !== "requests"
-            ) {
-                return;
-            }
-
-            loadAdminRequests();
-
-        }
-    );
-
+        const adminSession = getAdminSession();
+        try {
+            await saveBackendRequestStatus(requestId, "Rejected", reason.trim(), adminSession ? adminSession.username : "Administrator");
+            notifyDataChange("requests");
+            await loadAdminRequests();
+            showAlert("Success", `Request ${request.requestId} has been rejected.`);
+        } catch (error) { showAlert("Error", error.message || "Unable to reject the request."); }
     }
-
 
 
     /* =====================================================
@@ -5899,7 +5606,7 @@ if (adminRequestTableBody) {
  * admin-requests.html.
  */
 
-function loadAdminDashboard() {
+async function loadAdminDashboard() {
 
     /* ---------------------------------------------------------
        GET DASHBOARD ELEMENTS
@@ -5951,22 +5658,13 @@ function loadAdminDashboard() {
        --------------------------------------------------------- */
 
     let requests = [];
-
     try {
-
-        requests =
-            JSON.parse(
-                localStorage.getItem("requests")
-            ) || [];
-
+        requests = await getBackendRequests();
+        localStorage.setItem("requests", JSON.stringify(requests));
     } catch (error) {
-
-        console.error(
-            "Unable to read document requests:",
-            error
-        );
-
-        requests = [];
+        console.error("Unable to load dashboard requests from backend:", error);
+        if (tableBody) tableBody.innerHTML = `<tr><td colspan="5" class="empty-state">Unable to load document requests.</td></tr>`;
+        return;
     }
 
 
@@ -6322,7 +6020,7 @@ window.addEventListener(
  * as the Track Request page.
  */
 
-function loadResidentDashboard() {
+async function loadResidentDashboard() {
 
     /* ---------------------------------------------------------
        GET DASHBOARD ELEMENTS
@@ -6392,22 +6090,13 @@ function loadResidentDashboard() {
        --------------------------------------------------------- */
 
     let requests = [];
-
     try {
-
-        requests =
-            JSON.parse(
-                localStorage.getItem("requests")
-            ) || [];
-
+        requests = await getBackendRequests();
+        localStorage.setItem("requests", JSON.stringify(requests));
     } catch (error) {
-
-        console.error(
-            "Unable to read document requests:",
-            error
-        );
-
-        requests = [];
+        console.error("Unable to load resident dashboard requests from backend:", error);
+        if (tableBody) tableBody.innerHTML = `<tr><td colspan="4" class="empty-state">Unable to load document requests.</td></tr>`;
+        return;
     }
 
 

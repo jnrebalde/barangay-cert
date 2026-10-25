@@ -1,0 +1,42 @@
+[
+  {
+    "requestId": "REQ-2026-0001",
+    "residentId": 1792943574061,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Rebalde",
+    "mobile": "",
+    "address": "",
+    "documentType": "residency",
+    "documentData": {
+      "yearsOfResidency": 0,
+      "purpose": "jbhsbdsd",
+      "validIdType": "Driver's License",
+      "validIdNumber": "3434343"
+    },
+    "status": "Pending",
+    "dateRequested": "2026-10-25T16:01:48.982Z",
+    "dateProcessed": null,
+    "processedBy": null,
+    "remarks": ""
+  },
+  {
+    "requestId": "REQ-2026-0002",
+    "residentId": 1792943574061,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Rebalde",
+    "mobile": "",
+    "address": "",
+    "documentType": "residency",
+    "documentData": {
+      "yearsOfResidency": 0,
+      "purpose": "vgvg",
+      "validIdType": "Driver's License",
+      "validIdNumber": "3434343"
+    },
+    "status": "Approved",
+    "dateRequested": "2026-10-25T16:19:35.777Z",
+    "dateProcessed": "2026-10-25T16:30:47.477Z",
+    "processedBy": "admin",
+    "remarks": "Request status updated to Approved."
+  }
+]

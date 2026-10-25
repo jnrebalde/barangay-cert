@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "express": "^5.3.0"
+  },
+  "name": "barangay-cert",
+  "version": "1.0.0",
+  "description": "The Barangay Pandi Document Request System is a web-based system that allows residents to register, manage their profiles, submit document requests, and track the status of their requests.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jnrebalde/barangay-cert.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jnrebalde/barangay-cert/issues"
+  },
+  "homepage": "https://github.com/jnrebalde/barangay-cert#readme"
+}
