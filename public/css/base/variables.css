@@ -1,19 +1,3 @@
-/* Extracted from original style.css. Preserve source order. */
-/*
- * BarangayCert stylesheet entry point.
- *
- * The existing stylesheet is retained here to preserve cascade order and page layout.
- * Future extraction should move complete, verified selector groups into:
- *   base/variables.css       design tokens
- *   base/reset.css           reset and global defaults
- *   base/typography.css      typography
- *   layout/*.css             header, sidebar, responsive layout
- *   components/*.css         buttons, forms, tables, modals, alerts, badges
- *   pages/*.css              page-specific styling
- *
- * Avoid adding duplicate rules to the new files before the corresponding rules are
- * migrated out of this file. CSS extraction should be validated page-by-page.
- */
 /* =========================================================
    BARANGAY PANDI DOCUMENT REQUEST SYSTEM
    ========================================================= */

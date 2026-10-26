@@ -1,8 +1,4 @@
-/*
- * BarangayCert CSS entry point.
- * Import order intentionally preserves the original stylesheet cascade.
- * Keep extracted selectors in their source files; do not add page overrides here.
- */
+
 @import url("./base/variables.css");
 @import url("./base/reset.css");
 @import url("./pages/landing.css");

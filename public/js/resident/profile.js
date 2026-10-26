@@ -1,10 +1,6 @@
 /*
  * Resident profile feature module.
  *
- * Owns profile field access, loading, edit-mode behavior, business-field visibility,
- * and profile validation. It relies on shared application services and page markup
- * already used by the legacy frontend. Exports are attached to globalThis temporarily
- * to preserve classic-script and inline-handler compatibility.
  */
 (function (global) {
 function getProfileField(

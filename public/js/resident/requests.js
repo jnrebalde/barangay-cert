@@ -1,7 +1,6 @@
 /*
  * Resident document request views.
  * Owns request history, tracking, document labels, purposes, and status display.
- * Uses existing shared services and keeps a classic-script global interface.
  */
 (function (global) {
 async function loadResidentRequestHistory(resident) {

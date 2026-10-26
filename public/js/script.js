@@ -1,22 +1,4 @@
-/*
- * BarangayCert frontend entry script
- *
- * LEGACY INTEGRATION NOTE:
- * This file currently contains page-specific behaviors for resident and admin pages.
- * It is intentionally kept as a single classic script during the first safe pass:
- * multiple HTML pages use inline handlers and shared top-level declarations.
- *
- * Planned extraction order:
- * 1. core/api.js         - backend request wrappers and response/error handling
- * 2. core/auth.js        - resident/admin login and registration
- * 3. resident/*.js       - profile, dashboard, request submission/history
- * 4. admin/*.js          - dashboard, resident management, requests, reports/settings
- * 5. core/page-guards.js - session checks, page protection, logout
- *
- * Do not extract a block until its global references and HTML inline handlers have
- * been inventoried. Keep this file as the compatibility entry point until all pages
- * have been migrated and regression-tested.
- */
+
 /* =========================================================
    BARANGAYCERT - MAIN JAVASCRIPT
    ========================================================= */

@@ -1,6 +1,5 @@
 /*
- * Shared backend request helpers. These are client utilities, not authorization controls.
- * Server-side authentication and authorization must independently validate every action.
+ * Shared backend request helpers.
  */
 (function (global) {
 async function getBackendRequests() {
