@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | Admin</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <main class="dashboard-page">
+
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <h2>ADMIN PANEL</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html"> Dashboard</a>
+                <a href="admin-requests.html"> Document Requests </a>
+                <a href="admin-residents.html"> Residents </a>
+                <a href="admin-notifications.html"> Notifications </a>
+                <a href="admin-reports.html"> Reports </a>
+                <a href="admin-settings.html"> Settings</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
+                    Logout
+
+                </a>
+            </div>
+        </aside>
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <section class="dashboard-content">
+
+            <!-- PAGE HEADER -->
+
+            <header class="page-header">
+
+                <h1>Reports</h1>
+
+                <p>
+                    View document request activity and barangay service records.
+                </p>
+
+            </header>
+
+
+            <!-- =================================================
+                 REPORT FILTERS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Report Period</h2>
+
+                        <p>
+                            Select the period you want to review.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="report-filters">
+
+                    <div class="form-group">
+
+                        <label for="startDate">
+                            From
+                        </label>
+
+                        <input
+                            type="date"
+                            id="startDate"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="endDate">
+                            To
+                        </label>
+
+                        <input
+                            type="date"
+                            id="endDate"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="reportType">
+                            Report Type
+                        </label>
+
+                        <select id="reportType">
+
+                            <option value="requests">
+                                Document Requests
+                            </option>
+
+                            <option value="residents">
+                                Resident Accounts
+                            </option>
+
+                            <option value="processing">
+                                Request Processing
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="report-filter-action">
+
+                        <button
+                            type="button"
+                            id="generateReport"
+                            class="dashboard-button"
+                        >
+                            Generate Report
+                        </button>
+                        <button type="button" id="exportReportCsv" class="dashboard-button">
+                            Export CSV
+                        </button>
+                    </div>
+                    <p id="reportMessage" role="status" aria-live="polite"></p>
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 REQUEST SUMMARY
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Request Summary</h2>
+
+                        <p>
+                            Summary of document requests for the selected period.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+
+                        <h3><span id="reportTotalRequests">0</span></h3>
+
+                        <p>
+                            Total Requests
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3><span id="reportCompleted">0</span></h3>
+
+                        <p>
+                            Completed
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3><span id="reportPending">0</span></h3>
+
+                        <p>
+                            Pending
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3><span id="reportRejected">0</span></h3>
+
+                        <p>
+                            Rejected
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 REQUESTS BY DOCUMENT TYPE
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Requests by Document Type</h2>
+
+                        <p>
+                            Number of requests submitted for each document.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Document Type</th>
+
+                                <th>Total Requests</th>
+
+                                <th>Completed</th>
+
+                                <th>Pending</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="reportDocumentTypeRows">
+
+                            <tr>
+
+                                <td>
+                                    Barangay Clearance
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Certificate of Residency
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Certificate of Indigency
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Business Clearance
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                                <td>
+                                    0
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 REQUEST STATUS
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Requests by Status</h2>
+
+                        <p>
+                            Current distribution of document requests.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Status</th>
+
+                                <th>Total Requests</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="reportStatusRows">
+
+                            <tr>
+                                <td>Pending</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Processing</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Ready for Pickup</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Completed</td>
+                                <td>0</td>
+                            </tr>
+
+                            <tr>
+                                <td>Rejected</td>
+                                <td>0</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+<script src="/js/core/utils.js"></script>
+    <script src="/js/core/api.js"></script>
+    <script src="/js/resident/profile.js"></script>
+    <script src="/js/resident/requests.js"></script>
+    <script src="/js/resident/dashboard.js"></script>
+    <script src="/js/admin/dashboard.js"></script>
+    <script src="/js/admin/settings.js"></script>
+    <script src="/js/admin/reports.js"></script>
+    <script src="/js/script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   12. DASHBOARD
+   ========================================================= */
+
+.dashboard-actions {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 25px;
+}
+
+.dashboard-card {
+    padding: 25px;
+
+    background-color: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.dashboard-card h2 {
+    margin-top: 0;
+
+    color: var(--dark-green);
+
+    font-size: 20px;
+}
+
+.dashboard-card p {
+    color: var(--gray-text);
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.dashboard-button {
+    display: inline-block;
+
+    margin-top: 10px;
+    padding: 10px 16px;
+
+    background-color: var(--dark-green);
+
+    color: var(--white);
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.dashboard-button:hover {
+    background-color: var(--green);
+}
+
+.dashboard-button.secondary {
+    background-color: var(--white);
+
+    color: var(--dark-green);
+
+    border: 1px solid var(--dark-green);
+}
+
+.dashboard-button.secondary:hover {
+    background-color: var(--light-green);
+}
+
+.dashboard-section {
+    margin-top: 25px;
+
+    padding: 25px;
+
+    background-color: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    
+}
+
+.dashboard-section h2 {
+    margin-top: 0;
+
+    color: var(--dark-text);
+}
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.summary-card {
+    padding: 18px;
+
+    background-color: var(--soft-green);
+
+    border-left: 4px solid var(--green);
+    border-radius: 6px;
+}
+
+.summary-card h3 {
+    margin: 0;
+
+    color: var(--dark-green);
+
+    font-size: 28px;
+}
+
+.summary-card p {
+    margin-bottom: 0;
+
+    color: var(--gray-text);
+
+    font-size: 14px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header p {
+    color: var(--gray-text);
+
+    font-size: 14px;
+}
+
+.section-header a {
+    color: var(--dark-green);
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.table-container {
+    margin-top: 20px;
+
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+th {
+    padding: 12px;
+
+    background-color: var(--light-green);
+
+    color: var(--dark-green);
+
+    text-align: left;
+
+    font-size: 14px;
+}
+
+td {
+    padding: 14px 12px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--gray-text);
+
+    font-size: 14px;
+}
+

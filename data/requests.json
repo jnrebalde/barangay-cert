@@ -161,5 +161,43 @@
     "dateProcessed": null,
     "processedBy": null,
     "remarks": ""
+  },
+  {
+    "requestId": "REQ-2026-0008",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "clearance",
+    "documentData": {
+      "purpose": "sdsdsds",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Pending",
+    "dateRequested": "2026-10-27T13:39:45.802Z",
+    "dateProcessed": null,
+    "processedBy": null,
+    "remarks": ""
+  },
+  {
+    "requestId": "REQ-2026-0009",
+    "residentId": 1793194670980,
+    "residentEmail": "test3@gmail.com",
+    "residentName": "Test Test",
+    "mobile": "09188347343",
+    "address": "19, asasasa, Purok 1, Poblacion, Pandi, Bulacan",
+    "documentType": "clearance",
+    "documentData": {
+      "purpose": "sdsdsds",
+      "validIdType": "Driver's License",
+      "validIdNumber": "121212121"
+    },
+    "status": "Ready for Pickup",
+    "dateRequested": "2026-10-28T13:42:01.609Z",
+    "dateProcessed": "2026-10-28T13:42:39.655Z",
+    "processedBy": "admin",
+    "remarks": "Request status updated to Approved."
   }
 ]

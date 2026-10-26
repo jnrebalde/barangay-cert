@@ -5,12 +5,16 @@ const { randomBytes, scrypt, timingSafeEqual } = require("node:crypto");
 const { promisify } = require("node:util");
 const scryptAsync = promisify(scrypt);
 const session = require("express-session");
-const { readResidents, updateResidents } = require("./resident-store");
-const { readRequests, updateRequests } = require("./request-store");
-const { validateRequest } = require("./request-validation");
+const { readResidents, updateResidents } = require("./repositories/resident-store");
+const { readRequests, updateRequests } = require("./repositories/request-store");
+const { validateRequest } = require("./validators/request-validation");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+if (process.env.NODE_ENV === "production" && !process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET must be configured in production.");
+}
+const SESSION_SECRET = process.env.SESSION_SECRET || "barangaycert-local-development-secret-change-before-deployment";
 const DATA_DIR = path.join(__dirname, "data");
 const REQUESTS_FILE = path.join(DATA_DIR, "requests.json");
 const RESIDENTS_FILE = path.join(DATA_DIR, "residents.json");
@@ -20,23 +24,23 @@ const NOTIFICATIONS_FILE = path.join(DATA_DIR, "notifications.json");
 app.use(express.json({ limit: "1mb" }));
 app.use(session({
     name: "barangaycert.sid",
-    secret: process.env.SESSION_SECRET || "replace-this-development-secret-before-deployment",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production" }
 }));
 // Keep JSON storage and backend source files out of public static access.
 app.use((req, res, next) => {
-    if (/^\/(data|node_modules)(\/|$)/i.test(req.path) ||
-        /^\/(app|request-store|request-validation|resident-store)(\.js)?$/i.test(req.path)) {
+    if (/^\/(data|node_modules|repositories|services|validators)(\/|$)/i.test(req.path) ||
+        /^\/(app|package(?:-lock)?)(\.js|\.json)?$/i.test(req.path)) {
         return res.sendStatus(404);
     }
     next();
 });
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "home.html"));
+    res.sendFile(path.join(__dirname, "public", "home.html"));
 });
 
 let notificationQueue = Promise.resolve();
@@ -138,6 +142,13 @@ app.post("/api/admin/logout", (req, res) => {
 function requireAdmin(req, res, next) {
     if (!req.session?.adminAuthenticated) {
         return res.status(401).json({ message: "Admin login required." });
+    }
+    next();
+}
+
+function requireResident(req, res, next) {
+    if (req.session?.residentId === undefined || req.session?.residentId === null || req.session?.adminAuthenticated) {
+        return res.status(401).json({ message: "Resident login required." });
     }
     next();
 }
@@ -345,11 +356,17 @@ app.post("/api/auth/login", async (req, res) => {
             return res.status(403).json({ message: "Your account is still pending admin approval.", status: resident.status });
         }
 
-        req.session.residentId = resident.id;
-        req.session.residentEmail = resident.email;
-        if (rememberMe) req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000;
-        else req.session.cookie.maxAge = null;
-        return res.json({ message: "Login successful.", resident: publicResident(resident) });
+        req.session.regenerate((error) => {
+            if (error) {
+                console.error("Resident session creation failed:", error);
+                return res.status(500).json({ message: "Unable to start a resident session." });
+            }
+            req.session.residentId = resident.id;
+            req.session.residentEmail = resident.email;
+            if (rememberMe) req.session.cookie.maxAge = 7 * 24 * 60 * 60 * 1000;
+            else req.session.cookie.maxAge = null;
+            return res.json({ message: "Login successful.", resident: publicResident(resident) });
+        });
     } catch (error) {
         console.error("Resident login failed:", error);
         return res.status(500).json({ message: "Unable to log in right now. Please try again." });
@@ -523,8 +540,12 @@ app.get("/api/health", async (req, res) => {
 
 // The frontend expects { requests: [...] }; keep exactly one list endpoint.
 app.get("/api/requests", async (req, res) => {
+    if (!req.session?.adminAuthenticated && (req.session?.residentId === undefined || req.session?.residentId === null)) {
+        return res.status(401).json({ message: "Please sign in to view document requests." });
+    }
     try {
-        const requests = await readRequests();
+        let requests = await readRequests();
+        if (!req.session.adminAuthenticated) requests = requests.filter((item) => String(item.residentId) === String(req.session.residentId));
         requests.sort((a, b) => new Date(b.dateRequested || 0) - new Date(a.dateRequested || 0));
         res.set("Cache-Control", "no-store");
         return res.json({ requests });
@@ -535,10 +556,16 @@ app.get("/api/requests", async (req, res) => {
 });
 
 app.get("/api/requests/:requestId", async (req, res) => {
+    if (!req.session?.adminAuthenticated && (req.session?.residentId === undefined || req.session?.residentId === null)) {
+        return res.status(401).json({ message: "Please sign in to view this document request." });
+    }
     try {
         const requests = await readRequests();
         const request = requests.find((item) => String(item.requestId) === String(req.params.requestId));
         if (!request) return res.status(404).json({ message: "Document request not found." });
+        if (!req.session.adminAuthenticated && String(request.residentId) !== String(req.session.residentId)) {
+            return res.status(404).json({ message: "Document request not found." });
+        }
         res.set("Cache-Control", "no-store");
         return res.json({ request });
     } catch (error) {
@@ -547,14 +574,19 @@ app.get("/api/requests/:requestId", async (req, res) => {
     }
 });
 
-app.post("/api/requests", async (req, res) => {
-    const errors = validateRequest(req.body);
+app.post("/api/requests", requireResident, async (req, res) => {
+    const residents = await readResidents();
+    const resident = residents.find((item) => String(item.id) === String(req.session.residentId) && item.status === "Approved");
+    if (!resident) return res.status(401).json({ message: "Approved resident account required." });
+    const profile = resident.profile || {};
+    const trustedBody = { ...req.body, residentId: resident.id, residentEmail: resident.email, residentName: `${resident.firstName || ""} ${resident.lastName || ""}`.trim(), mobile: String(profile.mobile || ""), address: [profile.house, profile.street, profile.purok, profile.barangay || "Poblacion", profile.municipality || "Pandi", profile.province || "Bulacan"].filter(Boolean).join(", ") };
+    const errors = validateRequest(trustedBody);
     if (Object.keys(errors).length) {
         return res.status(400).json({ message: "Please correct the highlighted information.", errors });
     }
 
     try {
-        const body = req.body;
+        const body = trustedBody;
         let request;
 
         // The request-store queue serializes writes, so the next number is
@@ -614,8 +646,9 @@ app.post("/api/requests", async (req, res) => {
     }
 });
 
-app.patch("/api/requests/:requestId/status", async (req, res) => {
-    const { status, remarks = "", processedBy = "Administrator" } = req.body || {};
+app.patch("/api/requests/:requestId/status", requireAdmin, async (req, res) => {
+    const { status, remarks = "" } = req.body || {};
+    const processedBy = req.session.adminUsername || "Administrator";
     const allowedStatuses = ["Under Review", "Approved", "Ready for Pickup", "Released", "Rejected"];
 
     if (!allowedStatuses.includes(status)) {

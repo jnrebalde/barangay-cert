@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - Barangay Pandi</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+    <div class="resident-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <h2>RESIDENT PANEL</h2>
+
+            <nav>
+                <a href="resident-dashboard.html" class="active">Dashboard</a>
+                <a href="resident-request.html">Request Document</a>
+                <a href="resident-track.html">Track Request</a>
+                <a href="resident-notifications.html">Notifications</a>
+                <a href="resident-profile.html">My Profile</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
+                    Logout
+
+                </a>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+
+        <main class="resident-content">
+
+            <!-- PAGE HEADER -->
+
+            <section class="page-header">
+
+                <h1>Welcome, Resident!</h1>
+
+                <p>
+                    Manage your barangay document requests and account.
+                </p>
+
+            </section>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <section class="dashboard-actions">
+
+                <div class="dashboard-card">
+
+                    <h2>Request a Document</h2>
+
+                    <p>
+                        Submit a request for a barangay document online.
+                    </p>
+
+                    <a href="resident-request.html" class="dashboard-button">
+                        Request Document
+                    </a>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h2>Track Your Request</h2>
+
+                    <p>
+                        Check the current status of your document requests.
+                    </p>
+
+                    <a href="resident-track.html" class="dashboard-button secondary">
+                        Track Request
+                    </a>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h2>My Profile</h2>
+
+                    <p>
+                        View and update your resident account information.
+                    </p>
+
+                    <a href="resident-profile.html" class="dashboard-button secondary">
+                        View Profile
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- REQUEST SUMMARY -->
+
+            <section class="dashboard-section">
+
+                <h2>Request Summary</h2>
+
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+                        <h3 id="residentTotalRequests">0</h3>
+                        <p>Total Requests</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3 id="residentPendingRequests">0</h3>
+                        <p>Pending</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3 id="residentReadyRequests">0</h3>
+                        <p>Ready for Pickup</p>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3 id="residentCompletedRequests">0</h3>
+                        <p>Completed</p>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- RECENT REQUESTS -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Recent Requests</h2>
+
+                        <p>
+                            Your latest document requests will appear here.
+                        </p>
+                    </div>
+
+                    <a href="resident-track.html">
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Document</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="residentDashboardRequestTableBody">
+
+                            <tr>
+
+                                <td colspan="4">
+                                    Loading requests...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+<script src="/js/core/utils.js"></script>
+    <script src="/js/core/api.js"></script>
+    <script src="/js/resident/profile.js"></script>
+    <script src="/js/resident/requests.js"></script>
+    <script src="/js/resident/dashboard.js"></script>
+    <script src="/js/admin/dashboard.js"></script>
+    <script src="/js/admin/settings.js"></script>
+    <script src="/js/admin/reports.js"></script>
+    <script src="/js/script.js"></script>
+
+</body>
+
+</html>

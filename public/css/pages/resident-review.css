@@ -1,0 +1,96 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   9. REVIEW REQUEST
+   ========================================================= */
+
+.review-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.review-row:last-child {
+    border-bottom: none;
+}
+
+.review-row strong {
+    color: var(--text);
+}
+
+.review-row span {
+    color: var(--gray-text);
+
+    text-align: right;
+}
+
+.content-card p {
+    color: var(--gray-text);
+
+    line-height: 1.6;
+}
+
+.content-card ul {
+    margin-top: 15px;
+
+    padding-left: 22px;
+
+    color: var(--gray-text);
+
+    line-height: 1.8;
+}
+
+.review-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 5px;
+    margin-bottom: 40px;
+}
+
+.back-button {
+    display: inline-block;
+
+    padding: 12px 24px;
+
+    background-color: var(--white);
+
+    color: var(--dark-green);
+
+    border: 2px solid var(--dark-green);
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.back-button:hover {
+    background-color: var(--light-green);
+}
+
+.submit-button {
+    padding: 12px 28px;
+
+    background-color: var(--dark-green);
+
+    color: var(--white);
+
+    border: 2px solid var(--dark-green);
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: var(--green);
+
+    border-color: var(--green);
+}
+

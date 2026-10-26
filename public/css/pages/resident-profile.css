@@ -1,0 +1,118 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   7. PROFILE
+   ========================================================= */
+
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+
+.edit-button,
+.save-button,
+.cancel-button {
+    padding: 11px 20px;
+
+    border-radius: 6px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.edit-button,
+.save-button {
+    background-color: var(--dark-green);
+
+    color: var(--white);
+
+    border: 1px solid var(--dark-green);
+}
+
+
+.edit-button:hover,
+.save-button:hover {
+    background-color: var(--green);
+
+    border-color: var(--green);
+}
+
+
+.cancel-button {
+    background-color: var(--white);
+
+    color: var(--dark-green);
+
+    border: 1px solid var(--dark-green);
+}
+
+
+.cancel-button:hover {
+    background-color: var(--light-green);
+}
+
+
+/* READ-ONLY PROFILE FIELDS */
+
+.profile-section input:disabled,
+.profile-section select:disabled {
+    background-color: #F8FAF9;
+
+    color: var(--gray-text);
+
+    cursor: not-allowed;
+
+    border-color: var(--border);
+}
+
+
+/* EDITABLE FIELDS */
+
+.profile-section input:not(:disabled),
+.profile-section select:not(:disabled) {
+    background-color: var(--white);
+}
+
+
+/* INVALID FIELD */
+
+.profile-section input.input-error,
+.profile-section select.input-error {
+    border-color: #D92D20;
+
+    box-shadow: 0 0 0 2px rgba(217, 45, 32, 0.08);
+}
+
+/* =========================================================
+   ACCESSIBILITY - INVALID FIELDS
+   ========================================================= */
+
+.input-error {
+
+    border-color: #C5304B !important;
+
+    background-color: #FFF7F8;
+
+}
+
+
+.input-error:focus-visible {
+
+    outline-color: #C5304B;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(197, 48, 75, 0.18);
+
+}
+

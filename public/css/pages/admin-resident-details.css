@@ -1,0 +1,264 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   16. ADMIN RESIDENT DETAILS
+   ========================================================= */
+
+.resident-name-link {
+    color: var(--dark-green);
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.resident-name-link:hover {
+    color: var(--green);
+
+    text-decoration: underline;
+}
+
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    margin: 10px 0 6px;
+
+    color: var(--dark-text);
+
+    font-size: 30px;
+}
+
+.page-header p {
+    margin: 0;
+
+    color: var(--gray-text);
+
+    font-size: 14px;
+}
+
+
+.back-link {
+    color: var(--dark-green);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: var(--green);
+
+    text-decoration: underline;
+}
+
+
+/* DETAILS SECTION */
+
+.details-section {
+    margin-bottom: 25px;
+
+    padding: 25px;
+
+    background-color: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    box-shadow: var(--shadow);
+}
+
+
+.details-section-header {
+    margin-bottom: 20px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+.details-section-header h2 {
+    margin: 0;
+
+    color: var(--dark-text);
+
+    font-size: 18px;
+}
+
+
+/* DETAILS GRID */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px 30px;
+}
+
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+.detail-label {
+    color: var(--gray-text);
+
+    font-size: 13px;
+}
+
+
+.detail-value {
+    color: var(--dark-text);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    word-break: break-word;
+}
+
+
+/* STATUS */
+
+.status-approved {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    background-color: var(--light-green);
+
+    color: var(--dark-green);
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.status-pending {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    background-color: #FFF4D6;
+
+    color: #946200;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+}
+
+/* =========================================================
+   ADMIN RESIDENT MANAGEMENT
+   ========================================================= */
+
+.status-badge {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background-color: #FFF4E5;
+    color: #B54708;
+}
+
+.status-approved {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+}
+
+.status-default {
+    background-color: #F2F4F7;
+    color: var(--gray-text);
+}
+
+
+/* APPROVE BUTTON */
+
+.resident-action {
+    padding: 8px 14px;
+
+    border-radius: 6px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.approve-button {
+    background-color: var(--dark-green);
+
+    color: var(--white);
+
+    border: 1px solid var(--dark-green);
+}
+
+.approve-button:hover {
+    background-color: var(--green);
+}
+
+
+/* APPROVED LABEL */
+
+.approved-label {
+    color: var(--dark-green);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* EMPTY TABLE */
+
+.empty-state {
+    padding: 35px 20px;
+
+    color: var(--gray-text);
+
+    text-align: center;
+
+    font-size: 14px;
+}
+

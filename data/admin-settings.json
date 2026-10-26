@@ -2,9 +2,9 @@
   "username": "admin",
   "name": "Barangay Administrator",
   "email": "admin@barangaypandi.gov.ph",
-  "passwordHash": "53e62c537ff98e78c53c24ae2f3545b76a74d77df5cdab6d4de5baf15064a8b6902cf862f777e65411212bc66436dbbd00228743008f40881da8327253c49839",
-  "passwordSalt": "a365c9761a9963526b9caa8fd9b45f71",
+  "passwordHash": "387db82c70ad19a95d945ca357a4463523918788dc66de59562e3d13ff627c2aa3869c53efca88115eaa6fc3bf3bf2319a22aedf193a113f7eff382b6e07846d",
+  "passwordSalt": "8616aabf935d3c6ac31d86623c610e50",
   "createdAt": "2026-10-26T15:14:57.592Z",
   "updatedAt": "2026-10-26T15:15:23.246Z",
-  "passwordUpdatedAt": "2026-10-26T15:17:11.297Z"
+  "passwordUpdatedAt": "2026-10-28T13:39:41.901Z"
 }

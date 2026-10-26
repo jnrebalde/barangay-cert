@@ -1,0 +1,96 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   5. SHARED RESIDENT PORTAL LAYOUT
+   ========================================================= */
+
+.resident-layout {
+    min-height: 100vh;
+
+    display: flex;
+
+    background-color: var(--page-bg);
+}
+
+/* ONE SHARED OUTER SPACING RULE */
+
+.resident-content {
+    flex: 1;
+    min-width: 0;
+
+    padding: 40px 45px 60px;
+
+    box-sizing: border-box;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+
+    flex-shrink: 0;
+
+    padding: 25px 20px;
+
+    background-color: var(--dark-green);
+
+    color: var(--white);
+}
+
+.sidebar h1,
+.sidebar h2 {
+    margin: 0 0 35px;
+
+    color: var(--white);
+
+    font-size: 20px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.sidebar nav a {
+    display: block;
+
+    padding: 12px 14px;
+
+    color: var(--white);
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background-color: var(--green);
+
+    color: var(--white);
+}
+
+.logout {
+    display: block;
+
+    padding: 12px 14px;
+
+    color: var(--white);
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+}
+
+.logout:hover {
+    background-color: var(--green);
+}
+

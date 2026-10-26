@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Residents | Admin</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <main class="dashboard-page">
+
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+
+       <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <h2>ADMIN PANEL</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html"> Dashboard</a>
+                <a href="admin-requests.html"> Document Requests </a>
+                <a href="admin-residents.html"> Residents </a>
+                <a href="admin-notifications.html"> Notifications </a>
+                <a href="admin-reports.html"> Reports </a>
+                <a href="admin-settings.html"> Settings</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
+                    Logout
+
+                </a>
+            </div>
+        </aside>
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <section class="dashboard-content">
+
+            <!-- PAGE HEADER -->
+
+            <header class="page-header">
+
+                <h1>Residents</h1>
+
+                <p>
+                    View and manage registered barangay residents.
+                </p>
+
+            </header>
+
+
+            <!-- =================================================
+                 RESIDENT SUMMARY
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+
+                        <h3 id="totalResidents">0</h3>
+
+                        <p>
+                            Total Residents
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3 id="verifiedResidents">0</h3>
+
+                        <p>
+                            Verified Residents
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3 id="pendingResidents">0</h3>
+
+                        <p>
+                            Pending Verification
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3 id="activeResidents">0</h3>
+
+                        <p>
+                            Active Accounts
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RESIDENT TABLE
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Registered Residents</h2>
+
+                        <p>
+                            Resident accounts registered in the system.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Resident ID</th>
+
+                                <th>Full Name</th>
+
+                                <th>Email</th>
+
+                                <th>Registration Date</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody id="residentTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+    <!-- =========================================================
+     CUSTOM ALERT
+     ========================================================= -->
+
+<div
+    id="customAlert"
+    class="custom-alert-overlay"
+    style="display: none;"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="customAlertTitle"
+    aria-describedby="customAlertMessage"
+>
+
+    <div
+        class="custom-alert"
+        role="document"
+    >
+
+        <!-- CLOSE -->
+        <button
+            type="button"
+            id="customAlertClose"
+            class="custom-alert-close"
+            aria-label="Close alert"
+        >
+            ×
+        </button>
+
+
+        <!-- ICON -->
+        <div
+            id="customAlertIcon"
+            class="custom-alert-icon"
+            aria-hidden="true"
+        >
+            i
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="custom-alert-content">
+
+            <h2
+                id="customAlertTitle"
+                class="custom-alert-title"
+            >
+                Alert
+            </h2>
+
+
+            <p
+                id="customAlertMessage"
+                class="custom-alert-message"
+            >
+                This is an alert message.
+            </p>
+
+
+            <!-- ACTION -->
+            <div class="custom-alert-actions">
+
+                <button
+                    type="button"
+                    id="customAlertButton"
+                    class="custom-alert-button"
+                >
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    
+<script src="/js/core/utils.js"></script>
+    <script src="/js/core/api.js"></script>
+    <script src="/js/resident/profile.js"></script>
+    <script src="/js/resident/requests.js"></script>
+    <script src="/js/resident/dashboard.js"></script>
+    <script src="/js/admin/dashboard.js"></script>
+    <script src="/js/admin/settings.js"></script>
+    <script src="/js/admin/reports.js"></script>
+    <script src="/js/script.js"></script>
+
+</body>
+
+</html>

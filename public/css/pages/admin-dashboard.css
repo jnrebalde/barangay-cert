@@ -1,0 +1,474 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   14. ADMIN DASHBOARD
+   ========================================================= */
+
+/* =========================================================
+   ADMIN PAGE LAYOUT
+   ========================================================= */
+
+.dashboard-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    background-color: var(--light-green);
+}
+
+/* =========================================================
+   ADMIN SIDEBAR
+   ========================================================= */
+
+.dashboard-page .sidebar {
+    width: 230px;
+
+    min-height: 100vh;
+
+    padding: 30px 20px;
+
+    background-color: var(--dark-green);
+
+    color: var(--white);
+}
+
+.sidebar-brand {
+    padding: 0 10px 25px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.sidebar-brand h2 {
+    margin: 0;
+
+    color: var(--white);
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   SIDEBAR NAVIGATION
+   ========================================================= */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    margin-top: 25px;
+}
+
+.sidebar-nav a {
+    display: block;
+
+    padding: 11px 14px;
+
+    color: var(--light-green);
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    background-color: var(--green);
+
+    color: var(--white);
+}
+
+/* =========================================================
+   SIDEBAR LOGOUT
+   ========================================================= */
+
+.sidebar-bottom {
+    margin-top: 30px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.logout-link {
+    display: block;
+
+    padding: 11px 14px;
+
+    color: var(--white);
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.logout-link:hover {
+    background-color: var(--green);
+}
+
+/* =========================================================
+   ADMIN MAIN CONTENT
+   ========================================================= */
+
+.dashboard-content {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 35px 40px;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    margin: 0;
+
+    color: var(--dark-text);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.page-header p {
+    margin-top: 8px;
+
+    color: var(--gray-text);
+
+    font-size: 14px;
+}
+
+/* =========================================================
+   ADMIN ACTIVITY
+   ========================================================= */
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-item {
+    padding: 14px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item strong {
+    color: var(--dark-text);
+
+    font-size: 14px;
+}
+
+.activity-item p {
+    margin: 5px 0 0;
+
+    color: var(--gray-text);
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   ADMIN RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .dashboard-page {
+        flex-direction: column;
+    }
+
+    .dashboard-page .sidebar {
+        width: 100%;
+
+        min-height: auto;
+
+        padding: 20px;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        margin-top: 15px;
+    }
+
+    .sidebar-bottom {
+        margin-top: 15px;
+    }
+
+    .dashboard-content {
+        padding: 30px 25px;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .dashboard-content {
+        padding: 25px 20px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+}
+
+/* =========================================================
+   ADMIN REQUEST DETAILS
+   ========================================================= */
+
+.back-link {
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    color: var(--dark-green);
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   STATUS BADGE
+   ========================================================= */
+
+.status-badge {
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-badge.pending {
+    background-color: var(--warning-light);
+
+    color: var(--warning);
+}
+
+/* =========================================================
+   REQUEST DETAILS
+   ========================================================= */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px 30px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.detail-item span {
+    color: var(--gray-text);
+
+    font-size: 13px;
+}
+
+.detail-item strong {
+    color: var(--dark-text);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+.detail-full {
+    grid-column: 1 / -1;
+}
+
+/* =========================================================
+   REQUIREMENTS
+   ========================================================= */
+
+.requirement-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.requirement-item {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.requirement-item:first-child {
+    padding-top: 0;
+}
+
+.requirement-item:last-child {
+    padding-bottom: 0;
+
+    border-bottom: none;
+}
+
+.requirement-item strong {
+    color: var(--dark-text);
+
+    font-size: 14px;
+}
+
+.requirement-item p {
+    margin: 5px 0 0;
+
+    color: var(--gray-text);
+
+    font-size: 13px;
+}
+
+/* REQUIREMENT STATUS */
+
+.requirement-status {
+    flex-shrink: 0;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.requirement-status.submitted {
+    background-color: var(--soft-green);
+
+    color: var(--dark-green);
+}
+
+/* =========================================================
+   PROCESSING FORM
+   ========================================================= */
+
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    background-color: var(--white);
+
+    color: var(--dark-text);
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+
+    border-color: var(--dark-green);
+
+    box-shadow: 0 0 0 3px rgba(23, 107, 69, 0.08);
+}
+
+.form-group textarea {
+    resize: vertical;
+
+    min-height: 120px;
+
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-full {
+        grid-column: auto;
+    }
+
+    .requirement-item {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .form-actions {
+        justify-content: stretch;
+
+        flex-direction: column;
+    }
+
+    .form-actions .dashboard-button {
+        width: 100%;
+
+            text-align: center;
+    }
+
+}

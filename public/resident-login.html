@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Barangay Document Request System</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <!-- LEFT SIDE -->
+
+        <section class="login-left">
+
+            <div class="login-box">
+
+                <div class="brand">
+
+                    <img
+                        src="https://pandi.bulacan.gov.ph/wp-content/uploads/2024/10/Poblacion-768x765.png"
+                        alt="Barangay Poblacion Logo"
+                    >
+
+                    <span>Barangay Pandi</span>
+
+                </div>
+
+
+                <h1>Welcome Back</h1>
+
+                <p class="subtitle">
+                    Login to access your barangay document requests.
+                </p>
+
+                <form id="residentLoginForm">
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email address"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="login-options">
+
+                        <label>
+                            <input type="checkbox">
+                            Remember me
+                        </label>
+
+                        <a href="#">
+                            Forgot Password?
+                        </a>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+                        Login
+                    </button>
+
+                </form>
+
+
+                <p class="register-link">
+
+                    Don't have an account?
+
+                    <a href="register.html">
+                        Create an account
+                    </a>
+
+                </p>
+
+
+                <a
+                    href="home.html"
+                    class="back-home"
+                >
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="login-right">
+
+            <div class="welcome-content">
+
+                <h2>
+                    Barangay Document Request System
+                </h2>
+
+                <p>
+                    Access your account to request barangay
+                    documents and monitor the status of your requests.
+                </p>
+
+
+                <div class="login-features">
+
+                    <div class="feature">
+
+                        <span>✓</span>
+
+                        <div>
+                            <strong>Request Documents</strong>
+
+                            <p>
+                                Submit your barangay document requests online.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <span>✓</span>
+
+                        <div>
+                            <strong>Track Requests</strong>
+
+                            <p>
+                                Check the current status of your requests.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <span>✓</span>
+
+                        <div>
+                            <strong>Manage Your Profile</strong>
+
+                            <p>
+                                Keep your resident information updated.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+    <!-- =========================================================
+     CUSTOM ALERT
+     ========================================================= -->
+
+<div
+    id="customAlert"
+    class="custom-alert-overlay"
+    style="display: none;"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="customAlertTitle"
+    aria-describedby="customAlertMessage"
+>
+
+    <div
+        class="custom-alert"
+        role="document"
+    >
+
+        <!-- CLOSE -->
+        <button
+            type="button"
+            id="customAlertClose"
+            class="custom-alert-close"
+            aria-label="Close alert"
+        >
+            ×
+        </button>
+
+
+        <!-- ICON -->
+        <div
+            id="customAlertIcon"
+            class="custom-alert-icon"
+            aria-hidden="true"
+        >
+            i
+        </div>
+
+
+        <!-- CONTENT -->
+        <div class="custom-alert-content">
+
+            <h2
+                id="customAlertTitle"
+                class="custom-alert-title"
+            >
+                Alert
+            </h2>
+
+
+            <p
+                id="customAlertMessage"
+                class="custom-alert-message"
+            >
+                This is an alert message.
+            </p>
+
+
+            <!-- ACTION -->
+            <div class="custom-alert-actions">
+
+                <button
+                    type="button"
+                    id="customAlertButton"
+                    class="custom-alert-button"
+                >
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/js/core/utils.js"></script>
+    <script src="/js/core/api.js"></script>
+    <script src="/js/resident/profile.js"></script>
+    <script src="/js/resident/requests.js"></script>
+    <script src="/js/resident/dashboard.js"></script>
+    <script src="/js/admin/dashboard.js"></script>
+    <script src="/js/admin/settings.js"></script>
+    <script src="/js/admin/reports.js"></script>
+    <script src="/js/script.js"></script>
+
+</body>
+
+</html>

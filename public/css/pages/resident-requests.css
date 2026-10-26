@@ -1,0 +1,100 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   8. REQUEST DOCUMENT
+   ========================================================= */
+
+.request-section {
+    width: 100%;
+    max-width: 950px;
+}
+
+.document-form {
+    display: none;
+}
+
+.document-requirements {
+    margin-top: 25px;
+
+    padding: 20px 22px;
+
+    background-color: var(--soft-green);
+
+    border: 1px solid var(--soft-border);
+    border-left: 4px solid var(--green);
+    border-radius: 7px;
+}
+
+.document-requirements h3 {
+    margin: 0 0 12px;
+
+    color: var(--dark-green);
+
+    font-size: 16px;
+}
+
+.requirements-list {
+    margin: 0;
+
+    padding-left: 20px;
+}
+
+.requirements-list li {
+    margin-bottom: 8px;
+
+    color: var(--text);
+
+    font-size: 14px;
+}
+
+.requirement-note {
+    margin: 12px 0 0;
+
+    color: var(--gray-text);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.release-method {
+    padding: 14px 16px;
+
+    background-color: var(--soft-green);
+
+    border: 1px solid var(--soft-border);
+    border-radius: 7px;
+
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.request-actions {
+    width: 100%;
+    max-width: 950px;
+
+    margin-top: 5px;
+    margin-bottom: 40px;
+}
+
+.submit-request-button {
+    padding: 12px 24px;
+
+    background-color: var(--dark-green);
+
+    color: var(--white);
+
+    border: 2px solid var(--dark-green);
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.submit-request-button:hover {
+    background-color: var(--green);
+
+    border-color: var(--green);
+}
+

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications | Admin</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <main class="dashboard-page">
+
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <h2>ADMIN PANEL</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html"> Dashboard</a>
+                <a href="admin-requests.html"> Document Requests </a>
+                <a href="admin-residents.html"> Residents </a>
+                <a href="admin-notifications.html"> Notifications </a>
+                <a href="admin-reports.html"> Reports </a>
+                <a href="admin-settings.html"> Settings</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a
+                    href="#"
+                    class="logout-link"
+                    onclick="logout(); return false;">
+
+                    Logout
+
+                </a>
+            </div>
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+             ===================================================== -->
+
+        <section class="dashboard-content">
+
+            <!-- PAGE HEADER -->
+
+            <header class="page-header">
+
+                <h1>Notifications</h1>
+
+                <p>
+                    Review system activities and items that require attention.
+                </p>
+
+            </header>
+
+
+            <!-- =================================================
+                 NOTIFICATION SUMMARY
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+
+                        <h3>0</h3>
+
+                        <p>
+                            New Requests
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3>0</h3>
+
+                        <p>
+                            For Verification
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3>0</h3>
+
+                        <p>
+                            For Pickup
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <h3>0</h3>
+
+                        <p>
+                            Unread
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 NOTIFICATION LIST
+                 ================================================= -->
+
+            <section class="dashboard-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>Recent Notifications</h2>
+
+                        <p>
+                            Latest system activities and alerts.
+                        </p>
+
+                    </div>
+
+                    <a href="#">
+                        Mark All as Read
+                    </a>
+
+                </div>
+
+
+                <div class="admin-notification-list">
+
+                    <!-- EMPTY STATE -->
+
+                    <div class="admin-notification-empty">
+
+                        <strong>
+                            No new notifications
+                        </strong>
+
+                        <p>
+                            New requests and system activities will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+<script src="/js/core/utils.js"></script>
+    <script src="/js/core/api.js"></script>
+    <script src="/js/resident/profile.js"></script>
+    <script src="/js/resident/requests.js"></script>
+    <script src="/js/resident/dashboard.js"></script>
+    <script src="/js/admin/dashboard.js"></script>
+    <script src="/js/admin/settings.js"></script>
+    <script src="/js/admin/reports.js"></script>
+    <script src="/js/script.js"></script>
+<script src="/js/notifications.js"></script>
+
+</body>
+
+</html>

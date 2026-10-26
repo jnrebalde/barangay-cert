@@ -1,0 +1,23 @@
+/*
+ * BarangayCert CSS entry point.
+ * Import order intentionally preserves the original stylesheet cascade.
+ * Keep extracted selectors in their source files; do not add page overrides here.
+ */
+@import url("./base/variables.css");
+@import url("./base/reset.css");
+@import url("./pages/landing.css");
+@import url("./pages/auth.css");
+@import url("./layout/resident-layout.css");
+@import url("./components/resident-elements.css");
+@import url("./pages/resident-profile.css");
+@import url("./pages/resident-requests.css");
+@import url("./pages/resident-review.css");
+@import url("./pages/resident-tracking.css");
+@import url("./pages/resident-notifications.css");
+@import url("./pages/resident-dashboard.css");
+@import url("./pages/admin-auth.css");
+@import url("./pages/admin-dashboard.css");
+@import url("./pages/admin-resident-details.css");
+@import url("./pages/admin-notifications.css");
+@import url("./pages/admin-reports.css");
+@import url("./pages/admin-settings.css");

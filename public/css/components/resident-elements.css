@@ -1,0 +1,126 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   6. SHARED RESIDENT PAGE ELEMENTS
+   ========================================================= */
+
+.page-header,
+.profile-header,
+.request-header,
+.review-header {
+    margin-bottom: 25px;
+}
+
+.page-header h1,
+.profile-header h1,
+.request-header h1,
+.review-header h1 {
+    margin: 0;
+
+    color: var(--dark-text);
+
+    font-size: 32px;
+}
+
+.page-header p,
+.profile-header p,
+.request-header p,
+.review-header p {
+    margin: 8px 0 0;
+
+    color: var(--gray-text);
+
+    font-size: 15px;
+}
+
+/* SHARED WHITE CONTAINER */
+
+.content-card,
+.profile-section,
+.request-section {
+    margin-bottom: 25px;
+
+    padding: 25px 30px;
+
+    background-color: var(--white);
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-card);
+}
+
+.content-card h2,
+.profile-section h2,
+.request-section h2 {
+    margin: 0 0 20px;
+
+    color: var(--dark-green);
+
+    font-size: 20px;
+}
+
+/* SHARED FORM ROWS */
+
+.resident-content .form-row {
+    display: flex;
+
+    gap: 20px;
+
+    margin-bottom: 15px;
+}
+
+.resident-content .form-row:last-child {
+    margin-bottom: 0;
+}
+
+.resident-content .form-group {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.resident-content .form-group label {
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.resident-content .form-group input,
+.resident-content .form-group select,
+.resident-content .form-group textarea {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    background-color: var(--white);
+
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+
+    color: var(--dark-text);
+    font-size: 14px;
+}
+
+.resident-content .form-group input:focus,
+.resident-content .form-group select:focus,
+.resident-content .form-group textarea:focus {
+    outline: none;
+
+    border-color: var(--green);
+}
+
+.resident-content .form-group input::placeholder,
+.resident-content .form-group textarea::placeholder {
+    color: var(--placeholder);
+}
+
+.resident-content .form-group input[readonly] {
+    background-color: var(--soft-green);
+
+    color: var(--gray-text);
+}
+

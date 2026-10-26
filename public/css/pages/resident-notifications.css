@@ -1,0 +1,113 @@
+/* Extracted from original style.css. Preserve source order. */
+/* =========================================================
+   11. NOTIFICATIONS
+   ========================================================= */
+
+.notification-card {
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.notification-header {
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--border);
+}
+
+.notification-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.notification-header-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-green);
+    border-radius: 6px;
+    font-size: 18px;
+}
+
+.notification-title h2 {
+    margin: 0;
+    color: var(--dark-text);
+    font-size: 19px;
+}
+
+.notification-title p {
+    margin: 3px 0 0;
+    color: var(--gray-text);
+    font-size: 13px;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--border);
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-icon {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.notification-icon.completed {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+}
+
+.notification-icon.ready {
+    background-color: var(--danger-light);
+    color: var(--danger);
+}
+
+.notification-icon.processing {
+    background-color: var(--info-light);
+    color: var(--green);
+}
+
+.notification-icon.submitted {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+}
+
+.notification-text p {
+    margin: 0;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.notification-text strong {
+    color: var(--dark-text);
+}
+
+.notification-text span {
+    display: block;
+    margin-top: 4px;
+    color: var(--gray-text);
+    font-size: 12px;
+}
+
