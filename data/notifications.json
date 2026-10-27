@@ -1,0 +1,97 @@
+[
+  {
+    "id": "NTF-1793029327789-19267398",
+    "createdAt": "2026-10-26T15:42:07.789Z",
+    "read": false,
+    "audience": "admin",
+    "type": "new_request",
+    "title": "New document request",
+    "message": "Joan Gaudan Rebalde submitted a clearance request (REQ-2026-0005).",
+    "requestId": "REQ-2026-0005",
+    "residentId": 1793022285394,
+    "link": "admin-requests.html"
+  },
+  {
+    "id": "NTF-1793029327789-1a61e163",
+    "createdAt": "2026-10-26T15:42:07.789Z",
+    "read": false,
+    "audience": "resident",
+    "residentId": 1793022285394,
+    "type": "request_submitted",
+    "title": "Request submitted",
+    "message": "Your clearance request (REQ-2026-0005) has been submitted and is pending review.",
+    "requestId": "REQ-2026-0005",
+    "link": "resident-track.html"
+  },
+  {
+    "id": "NTF-1793029409805-72496ea2",
+    "createdAt": "2026-10-26T15:43:29.805Z",
+    "read": false,
+    "audience": "admin",
+    "type": "new_request",
+    "title": "New document request",
+    "message": "Joan Gaudan Rebalde submitted a residency request (REQ-2026-0006).",
+    "requestId": "REQ-2026-0006",
+    "residentId": 1793022285394,
+    "link": "admin-requests.html"
+  },
+  {
+    "id": "NTF-1793029409807-d907fda8",
+    "createdAt": "2026-10-26T15:43:29.807Z",
+    "read": false,
+    "audience": "resident",
+    "residentId": 1793022285394,
+    "type": "request_submitted",
+    "title": "Request submitted",
+    "message": "Your residency request (REQ-2026-0006) has been submitted and is pending review.",
+    "requestId": "REQ-2026-0006",
+    "link": "resident-track.html"
+  },
+  {
+    "id": "NTF-1793029690953-26c93a90",
+    "createdAt": "2026-10-26T15:48:10.953Z",
+    "read": false,
+    "audience": "admin",
+    "type": "new_request",
+    "title": "New document request",
+    "message": "Joan Gaudan Rebalde submitted a clearance request (REQ-2026-0007).",
+    "requestId": "REQ-2026-0007",
+    "residentId": 1793022285394,
+    "link": "admin-requests.html"
+  },
+  {
+    "id": "NTF-1793029690954-bfb65e29",
+    "createdAt": "2026-10-26T15:48:10.954Z",
+    "read": false,
+    "audience": "resident",
+    "residentId": 1793022285394,
+    "type": "request_submitted",
+    "title": "Request submitted",
+    "message": "Your clearance request (REQ-2026-0007) has been submitted and is pending review.",
+    "requestId": "REQ-2026-0007",
+    "link": "resident-track.html"
+  },
+  {
+    "id": "NTF-1793087399844-32b0cdaf",
+    "createdAt": "2026-10-27T07:49:59.844Z",
+    "read": false,
+    "audience": "admin",
+    "type": "resident_registered",
+    "title": "New resident registration",
+    "message": "Test Test registered and is awaiting verification.",
+    "residentId": 1793087399842,
+    "residentName": "Test Test",
+    "link": "admin-residents.html"
+  },
+  {
+    "id": "NTF-1793087436567-1c276e32",
+    "createdAt": "2026-10-27T07:50:36.567Z",
+    "read": false,
+    "audience": "resident",
+    "residentId": 1793087399842,
+    "type": "account_status",
+    "title": "Account approved",
+    "message": "Your resident account has been approved. You can now submit document requests.",
+    "link": "resident-dashboard.html"
+  }
+]

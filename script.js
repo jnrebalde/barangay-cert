@@ -127,163 +127,59 @@ async function saveBackendRequestStatus(requestId, status, remarks = "", process
 }
 
 /* =========================================================
-   3. RESIDENT LOGIN
+   3. RESIDENT LOGIN (BACKEND)
    ========================================================= */
 
-const residentLoginForm =
-    document.getElementById("residentLoginForm");
-
+const residentLoginForm = document.querySelector(".login-box form");
 
 if (residentLoginForm) {
-
-    residentLoginForm.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                document
-                    .getElementById("password")
-                    .value;
-
-
-            const rememberCheckbox =
-                residentLoginForm.querySelector(
-                    'input[type="checkbox"]'
-                );
-
-
-            const rememberMe =
-                rememberCheckbox
-                    ? rememberCheckbox.checked
-                    : false;
-
-
-            if (!email || !password) {
-
-                showAlert(
-                    "Error",
-                    "Please enter your email and password."
-                );
-
-                return;
-
-            }
-
-
-            const residents =
-                getResidents();
-
-
-            const resident =
-                residents.find(
-                    function (account) {
-
-                        return (
-                            account.email === email &&
-                            account.password === password
-                        );
-
-                    }
-                );
-
-
-            if (!resident) {
-
-                showAlert(
-                    "Error",
-                    "Invalid email or password."
-                );
-
-                return;
-
-            }
-
-
-            /* ACCOUNT APPROVAL */
-
-            if (
-                resident.status !==
-                RESIDENT_STATUS.APPROVED
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Your account is still pending admin approval."
-                );
-
-                return;
-
-            }
-
-
-            /* CREATE SESSION */
-
-            const residentSession = {
-
-                residentId:
-                    resident.id,
-
-                email:
-                    resident.email,
-
-                firstName:
-                    resident.firstName,
-
-                lastName:
-                    resident.lastName,
-
-                loggedIn:
-                    true
-
-            };
-
-
-            if (rememberMe) {
-
-                localStorage.setItem(
-                    "residentSession",
-                    JSON.stringify(
-                        residentSession
-                    )
-                );
-
-                sessionStorage.removeItem(
-                    "residentSession"
-                );
-
-            } else {
-
-                sessionStorage.setItem(
-                    "residentSession",
-                    JSON.stringify(
-                        residentSession
-                    )
-                );
-
-                localStorage.removeItem(
-                    "residentSession"
-                );
-
-            }
-
-
-            window.location.href =
-                "resident-dashboard.html";
-
+    residentLoginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const email = document.getElementById("email")?.value.trim().toLowerCase() || "";
+        const password = document.getElementById("password")?.value || "";
+        const rememberCheckbox = residentLoginForm.querySelector('input[type="checkbox"]');
+        if (!email || !password) {
+            showAlert("Error", "Please enter your email and password.");
+            return;
         }
-    );
-
+        const submitButton = residentLoginForm.querySelector('button[type="submit"]');
+        if (submitButton) submitButton.disabled = true;
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify({ email, password, rememberMe: Boolean(rememberCheckbox?.checked) })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                showAlert("Login Failed", result.message || "Unable to log in.");
+                return;
+            }
+            const resident = result.resident;
+            const residentSession = {
+                residentId: resident.id, email: resident.email,
+                firstName: resident.firstName, lastName: resident.lastName, loggedIn: true
+            };
+            if (rememberCheckbox?.checked) {
+                localStorage.setItem("residentSession", JSON.stringify(residentSession));
+                sessionStorage.removeItem("residentSession");
+            } else {
+                sessionStorage.setItem("residentSession", JSON.stringify(residentSession));
+                localStorage.removeItem("residentSession");
+            }
+            const residents = getResidents();
+            const index = residents.findIndex((item) => String(item.id) === String(resident.id));
+            if (index >= 0) residents[index] = { ...residents[index], ...resident };
+            else residents.push(resident);
+            saveResidents(residents);
+            window.location.href = "resident-dashboard.html";
+        } catch (error) {
+            console.error("Resident login error:", error);
+            showAlert("Connection Error", "Could not connect to the server. Make sure BarangayCert is running and try again.");
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
 }
 
 
@@ -296,393 +192,95 @@ const adminLoginForm =
 
 
 if (adminLoginForm) {
-
-    adminLoginForm.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const username =
-                document
-                    .getElementById("adminUsername")
-                    .value
-                    .trim();
-
-
-            const password =
-                document
-                    .getElementById("adminPassword")
-                    .value;
-
-
-            const rememberCheckbox =
-                document.getElementById(
-                    "rememberAdmin"
-                );
-
-
-            const rememberMe =
-                rememberCheckbox
-                    ? rememberCheckbox.checked
-                    : false;
-
-
-            if (!username || !password) {
-
-                showAlert(
-                    "Error",
-                    "Please enter your username and password."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                username !== ADMIN_USERNAME ||
-                password !== ADMIN_PASSWORD
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Invalid admin username or password."
-                );
-
-                return;
-
-            }
-
-
-            const adminSession = {
-
-                username:
-                    username,
-
-                loggedIn:
-                    true
-
-            };
-
-
-            if (rememberMe) {
-
-                localStorage.setItem(
-                    "adminSession",
-                    JSON.stringify(
-                        adminSession
-                    )
-                );
-
-                sessionStorage.removeItem(
-                    "adminSession"
-                );
-
-            } else {
-
-                sessionStorage.setItem(
-                    "adminSession",
-                    JSON.stringify(
-                        adminSession
-                    )
-                );
-
-                localStorage.removeItem(
-                    "adminSession"
-                );
-
-            }
-
-
-            window.location.href =
-                "admin-dashboard.html";
-
+    adminLoginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const username = document.getElementById("adminUsername")?.value.trim() || "";
+        const password = document.getElementById("adminPassword")?.value || "";
+        const rememberMe = document.getElementById("rememberAdmin")?.checked || false;
+        if (!username || !password) {
+            showAlert("Error", "Please enter your username and password.");
+            return;
         }
-    );
-
+        try {
+            const response = await fetch("/api/admin/login", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ username, password })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                showAlert("Error", result.message || "Invalid admin username or password.");
+                return;
+            }
+            const adminSession = { username, loggedIn: true };
+            const storage = rememberMe ? localStorage : sessionStorage;
+            const otherStorage = rememberMe ? sessionStorage : localStorage;
+            storage.setItem("adminSession", JSON.stringify(adminSession));
+            otherStorage.removeItem("adminSession");
+            window.location.href = "admin-dashboard.html";
+        } catch (error) {
+            console.error("Admin login error:", error);
+            showAlert("Connection Error", "Could not connect to the server. Make sure BarangayCert is running.");
+        }
+    });
 }
 
 
 /* =========================================================
-   5. RESIDENT REGISTRATION
+   5. RESIDENT REGISTRATION (BACKEND)
    ========================================================= */
 
-const registerForm =
-    document.querySelector(
-        ".register-box form"
-    );
-
+const registerForm = document.querySelector(".register-box form");
 
 if (registerForm) {
-
-    registerForm.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-
-            const firstName =
-                document
-                    .getElementById("firstName")
-                    .value
-                    .trim();
-
-
-            const lastName =
-                document
-                    .getElementById("lastName")
-                    .value
-                    .trim();
-
-
-            const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim()
-                    .toLowerCase();
-
-
-            const password =
-                document
-                    .getElementById("password")
-                    .value;
-
-
-            const confirmPassword =
-                document
-                    .getElementById("confirmPassword")
-                    .value;
-
-
-            const terms =
-                document.getElementById("terms");
-
-
-            /* REQUIRED */
-
-            if (
-                !firstName ||
-                !lastName ||
-                !email ||
-                !password ||
-                !confirmPassword
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Please complete all required fields."
-                );
-
-                return;
-
-            }
-
-
-            /* TERMS */
-
-            if (
-                terms &&
-                !terms.checked
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Please agree to the Terms and Conditions."
-                );
-
-                return;
-
-            }
-
-
-            /* EMAIL */
-
-            const emailPattern =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-            if (
-                !emailPattern.test(email)
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Please enter a valid email address."
-                );
-
-                return;
-
-            }
-
-
-            /* PASSWORD */
-
-            if (
-                password.length < 8
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Password must be at least 8 characters."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                password !== confirmPassword
-            ) {
-
-                showAlert(
-                    "Error",
-                    "Passwords do not match."
-                );
-
-                return;
-
-            }
-
-
-            const residents =
-                getResidents();
-
-
-            /* DUPLICATE EMAIL */
-
-            const existingResident =
-                residents.find(
-                    function (resident) {
-
-                        return (
-                            resident.email ===
-                            email
-                        );
-
-                    }
-                );
-
-
-            if (existingResident) {
-
-                showAlert(
-                    "Error",
-                    "An account with this email already exists."
-                );
-
-                return;
-
-            }
-
-
-            /*
-             * ACCOUNT ONLY
-             *
-             * Registration does NOT contain
-             * the full resident profile.
-             */
-
-            const resident = {
-
-                id:
-                    Date.now(),
-
-                firstName:
-                    firstName,
-
-                lastName:
-                    lastName,
-
-                email:
-                    email,
-
-                password:
-                    password,
-
-                status:
-                    RESIDENT_STATUS.PENDING,
-
-                createdAt:
-                    new Date().toISOString(),
-
-                /*
-                 * Profile starts empty.
-                 * The resident completes this
-                 * after logging in.
-                 */
-
-                profile: {
-
-                    middleName: "",
-                    birthdate: "",
-                    age: "",
-                    gender: "",
-                    civilStatus: "",
-                    birthplace: "",
-                    nationality: "",
-
-                    house: "",
-                    street: "",
-                    purok: "",
-
-                    barangay: "Poblacion",
-                    municipality: "Pandi",
-                    province: "Bulacan",
-
-                    residencyYears: "",
-                    residentStatus: "",
-
-                    mobile: "",
-
-                    voterStatus: "",
-                    householdHead: "",
-                    familyMembers: "",
-
-                    employment: "",
-                    occupation: "",
-                    businessName: "",
-                    businessAddress: "",
-
-                    idType: "",
-                    idNumber: "",
-
-                    emergencyName: "",
-                    emergencyNumber: "",
-                    relationship: ""
-
-                }
-
-            };
-
-
-            residents.push(
-                resident
-            );
-
-
-            saveResidents(
-                residents
-            );
-
-
-            showAlert(
-                "Success",
-                "Registration submitted successfully. " +
-                "Your account is now pending admin approval."
-            );
-
-
-            window.location.href =
-                "resident-login.html";
-
+    registerForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const firstName = document.getElementById("firstName")?.value.trim() || "";
+        const lastName = document.getElementById("lastName")?.value.trim() || "";
+        const email = document.getElementById("email")?.value.trim().toLowerCase() || "";
+        const password = document.getElementById("password")?.value || "";
+        const confirmPassword = document.getElementById("confirmPassword")?.value || "";
+        const terms = document.getElementById("terms");
+        if (!firstName || !lastName || !email || !password || !confirmPassword) {
+            showAlert("Error", "Please complete all required fields."); return;
         }
-    );
-
+        if (terms && !terms.checked) {
+            showAlert("Error", "Please agree to the Terms and Conditions."); return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showAlert("Error", "Please enter a valid email address."); return;
+        }
+        if (password.length < 8) {
+            showAlert("Error", "Password must be at least 8 characters."); return;
+        }
+        if (password !== confirmPassword) {
+            showAlert("Error", "Passwords do not match."); return;
+        }
+        const submitButton = registerForm.querySelector('button[type="submit"]');
+        if (submitButton) submitButton.disabled = true;
+        try {
+            const response = await fetch("/api/auth/register", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ firstName, lastName, email, password })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                showAlert("Registration Failed", result.message || "Unable to create your account."); return;
+            }
+            // Compatibility cache only. The backend stores the actual account and password hash.
+            const residents = getResidents();
+            if (!residents.some((item) => String(item.email).toLowerCase() === email)) {
+                residents.push(result.resident);
+                saveResidents(residents);
+            }
+            showAlert("Success", result.message || "Registration submitted. Your account is pending admin approval.");
+            window.location.href = "resident-login.html";
+        } catch (error) {
+            console.error("Resident registration error:", error);
+            showAlert("Connection Error", "Could not connect to the server. Make sure BarangayCert is running and try again.");
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
 }
 
 
@@ -705,203 +303,51 @@ if (residentTableBody) {
     loadResidents();
 
 
-    function loadResidents() {
+    async function loadResidents() {
+        try {
+            const response = await fetch("/api/admin/residents", {
+                credentials: "same-origin", cache: "no-store"
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || "Unable to load residents.");
+            const residents = Array.isArray(result.residents) ? result.residents : [];
+            // Keep a browser cache for legacy pages, but the server is the source of truth.
+            saveResidents(residents);
+            updateResidentSummary(residents);
 
-        const residents =
-            getResidents();
+            if (residents.length === 0) {
+                residentTableBody.innerHTML = `<tr><td colspan="6" class="empty-state">No resident accounts registered yet.</td></tr>`;
+                return;
+            }
 
-
-        /* =================================================
-           UPDATE RESIDENT SUMMARY
-           ================================================= */
-
-        updateResidentSummary(residents);
-
-
-        /* =================================================
-           NO RESIDENTS
-           ================================================= */
-
-        if (
-            residents.length === 0
-        ) {
-
-            residentTableBody.innerHTML = `
-
-                <tr>
-
-                    <td
-                        colspan="6"
-                        class="empty-state">
-
-                        No resident accounts
-                        registered yet.
-
-                    </td>
-
-                </tr>
-
-            `;
-
-            return;
-
+            residentTableBody.innerHTML = residents.map((resident) => {
+                const fullName = `${resident.firstName || ""} ${resident.lastName || ""}`.trim();
+                const registrationDate = resident.createdAt
+                    ? new Date(resident.createdAt).toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "numeric" })
+                    : "-";
+                const action = resident.status === RESIDENT_STATUS.PENDING
+                    ? `<button type="button" class="resident-action approve-button" data-id="${String(resident.id)}">Approve</button>`
+                    : `<span class="approved-label">Approved</span>`;
+                return `<tr>
+                    <td>${resident.id}</td>
+                    <td><a href="admin-residents-details.html?id=${encodeURIComponent(resident.id)}" class="resident-name-link">${escapeHtml(fullName)}</a></td>
+                    <td>${escapeHtml(resident.email || "-")}</td>
+                    <td>${registrationDate}</td>
+                    <td><span class="status-badge ${getResidentStatusClass(resident.status)}">${escapeHtml(resident.status || RESIDENT_STATUS.PENDING)}</span></td>
+                    <td>${action}</td>
+                </tr>`;
+            }).join("");
+            setupApprovalButtons();
+        } catch (error) {
+            console.error("Loading residents failed:", error);
+            residentTableBody.innerHTML = `<tr><td colspan="6" class="empty-state">${escapeHtml(error.message || "Unable to load residents. Please log in again.")}</td></tr>`;
         }
+    }
 
-
-        /* =================================================
-           DISPLAY RESIDENTS
-           ================================================= */
-
-        residentTableBody.innerHTML =
-            residents
-                .map(
-                    function (resident) {
-
-                        /* ---------------------------------
-                           FULL NAME
-                           --------------------------------- */
-
-                        const fullName =
-                            `${resident.firstName || ""}
-                            ${resident.lastName || ""}`
-                                .trim();
-
-
-                        /* ---------------------------------
-                           REGISTRATION DATE
-                           --------------------------------- */
-
-                        const registrationDate =
-                            resident.createdAt
-                                ? new Date(
-                                    resident.createdAt
-                                ).toLocaleDateString(
-                                    "en-PH",
-                                    {
-                                        year:
-                                            "numeric",
-
-                                        month:
-                                            "short",
-
-                                        day:
-                                            "numeric"
-                                    }
-                                )
-                                : "-";
-
-
-                        /* ---------------------------------
-                           ACTION
-                           --------------------------------- */
-
-                        let action;
-
-
-                        if (
-                            resident.status ===
-                            RESIDENT_STATUS.PENDING
-                        ) {
-
-                            action = `
-
-                                <button
-                                    type="button"
-                                    class="resident-action approve-button"
-                                    data-id="${resident.id}">
-
-                                    Approve
-
-                                </button>
-
-                            `;
-
-                        } else {
-
-                            action = `
-
-                                <span
-                                    class="approved-label">
-
-                                    Approved
-
-                                </span>
-
-                            `;
-
-                        }
-
-
-                        /* ---------------------------------
-                           RESIDENT ROW
-                           --------------------------------- */
-
-                        return `
-
-                            <tr>
-
-                                <td>
-                                    ${resident.id}
-                                </td>
-
-
-                                <td>
-
-                                    <a
-                                        href="admin-residents-details.html?id=${encodeURIComponent(resident.id)}"
-                                        class="resident-name-link">
-
-                                        ${fullName}
-
-                                    </a>
-
-                                </td>
-
-
-                                <td>
-                                    ${resident.email || "-"}
-                                </td>
-
-
-                                <td>
-                                    ${registrationDate}
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="status-badge
-                                        ${getResidentStatusClass(
-                                            resident.status
-                                        )}">
-
-                                        ${resident.status}
-
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-                                    ${action}
-                                </td>
-
-                            </tr>
-
-                        `;
-
-                    }
-                )
-                .join("");
-
-
-        /* =================================================
-           SETUP APPROVAL BUTTONS
-           ================================================= */
-
-        setupApprovalButtons();
-
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        }[character]));
     }
 
 
@@ -1065,107 +511,33 @@ if (residentTableBody) {
        APPROVE RESIDENT
        ===================================================== */
 
-    function approveResident(
-        residentId
-    ) {
-
-        const residents =
-            getResidents();
-
-
-        const resident =
-            residents.find(
-                function (account) {
-
-                    return (
-                        String(account.id) ===
-                        String(residentId)
-                    );
-
-                }
-            );
-
-
-        /* ---------------------------------------------
-           RESIDENT NOT FOUND
-           --------------------------------------------- */
-
+    async function approveResident(residentId) {
+        const residents = getResidents();
+        const resident = residents.find((account) => String(account.id) === String(residentId));
         if (!resident) {
-
-            showAlert(
-                "Error",
-                "Resident account could not be found."
-            );
-
+            showAlert("Error", "Resident account could not be found. Refresh the page and try again.");
+            await loadResidents();
             return;
-
         }
+        if (resident.status === RESIDENT_STATUS.APPROVED) return;
+        if (!confirm(`Approve ${resident.firstName || ""} ${resident.lastName || ""}'s account?`)) return;
 
-
-        /* ---------------------------------------------
-           ALREADY APPROVED
-           --------------------------------------------- */
-
-        if (
-            resident.status ===
-            RESIDENT_STATUS.APPROVED
-        ) {
-
-            return;
-
+        const button = document.querySelector(`.approve-button[data-id="${CSS.escape(String(residentId))}"]`);
+        if (button) button.disabled = true;
+        try {
+            const response = await fetch(`/api/admin/residents/${encodeURIComponent(residentId)}/status`, {
+                method: "PATCH", headers: { "Content-Type": "application/json" },
+                credentials: "same-origin", body: JSON.stringify({ status: RESIDENT_STATUS.APPROVED })
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || "Resident approval failed.");
+            showAlert("Success", result.message || "Resident account approved successfully.");
+            await loadResidents();
+        } catch (error) {
+            console.error("Resident approval failed:", error);
+            showAlert("Approval Failed", error.message || "Unable to approve resident. Please try again.");
+            if (button) button.disabled = false;
         }
-
-
-        /* ---------------------------------------------
-           CONFIRM APPROVAL
-           --------------------------------------------- */
-
-        const confirmed =
-            confirm(
-                `Approve ${resident.firstName} ${resident.lastName}'s account?`
-            );
-
-
-        if (!confirmed) {
-
-            return;
-
-        }
-
-
-        /* ---------------------------------------------
-           UPDATE STATUS
-           --------------------------------------------- */
-
-        resident.status =
-            RESIDENT_STATUS.APPROVED;
-
-
-        /* ---------------------------------------------
-           SAVE
-           --------------------------------------------- */
-
-        saveResidents(
-            residents
-        );
-
-
-        /* ---------------------------------------------
-           SUCCESS MESSAGE
-           --------------------------------------------- */
-
-        showAlert(
-            "Success",
-            "Resident account approved successfully."
-        );
-
-
-        /* ---------------------------------------------
-           REFRESH TABLE + SUMMARY
-           --------------------------------------------- */
-
-        loadResidents();
-
     }
 
 
@@ -1201,6 +573,69 @@ if (residentTableBody) {
 
     }
 
+}
+
+
+/* =========================================================
+   ADMIN - RESIDENT REQUEST HISTORY
+   ========================================================= */
+
+async function loadResidentRequestHistory(resident) {
+    const tbody = document.getElementById("residentRequestHistory");
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Loading request history...</td></tr>';
+
+    try {
+        const requests = await getBackendRequests();
+        const residentId = String(resident.id ?? "");
+        const residentEmail = String(resident.email ?? "").trim().toLowerCase();
+
+        const history = requests.filter((request) => {
+            const requestResidentId = String(request.residentId ?? "");
+            const requestEmail = String(request.residentEmail ?? request.email ?? "").trim().toLowerCase();
+
+            return (residentId && requestResidentId && requestResidentId === residentId)
+                || (residentEmail && requestEmail && requestEmail === residentEmail);
+        }).sort((a, b) => new Date(b.dateRequested || 0) - new Date(a.dateRequested || 0));
+
+        if (!history.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No document requests found for this resident.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = history.map((request) => {
+            const requestId = String(request.requestId || request.requestReference || "—");
+            const documentName = typeof getAdminDocumentName === "function"
+                ? getAdminDocumentName(request.documentType)
+                : (request.documentType || "Unknown");
+            const dateRequested = request.dateRequested
+                ? new Date(request.dateRequested).toLocaleDateString("en-PH", {
+                    year: "numeric", month: "short", day: "numeric"
+                })
+                : "—";
+            const status = String(request.status || "Pending");
+            const safeId = requestId.replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            })[char]);
+
+            return `<tr>
+                <td><a class="resident-name-link" href="admin-request-details.html?id=${encodeURIComponent(requestId)}">${safeId}</a></td>
+                <td>${escapeHtmlText(documentName)}</td>
+                <td>${escapeHtmlText(dateRequested)}</td>
+                <td><span class="status-badge ${typeof getRequestStatusClass === "function" ? getRequestStatusClass(status) : ""}">${escapeHtmlText(status)}</span></td>
+            </tr>`;
+        }).join("");
+    } catch (error) {
+        console.error("Unable to load resident request history:", error);
+        tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Unable to load request history. Please refresh and try again.</td></tr>';
+    }
+}
+
+function escapeHtmlText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
 }
 
 
@@ -1502,6 +937,9 @@ if (adminResidentDetailPage) {
             )
         );
 
+        // Load the resident's request history from backend storage, not localStorage.
+        loadResidentRequestHistory(resident);
+
 
         /* STATUS */
 
@@ -1723,7 +1161,7 @@ function setProfileValue(
    LOAD RESIDENT PROFILE
    ========================================================= */
 
-function loadResidentProfile() {
+async function loadResidentProfile() {
 
     const session =
         getResidentSession();
@@ -1739,22 +1177,29 @@ function loadResidentProfile() {
     }
 
 
-    const residents =
-        getResidents();
+    let resident = null;
 
+    // Prefer the server record so saved profile details persist across devices
+    // and are not overwritten by stale localStorage data.
+    try {
+        const response = await fetch("/api/auth/me", {
+            credentials: "same-origin",
+            cache: "no-store"
+        });
+        if (response.ok) {
+            const result = await response.json();
+            resident = result.resident || null;
+        }
+    } catch (error) {
+        console.warn("Could not load profile from backend:", error);
+    }
 
-    const resident =
-        residents.find(
-            function (account) {
-
-                return (
-                    String(account.id) ===
-                    String(session.residentId)
-                );
-
-            }
-        );
-
+    if (!resident) {
+        const residents = getResidents();
+        resident = residents.find(function (account) {
+            return String(account.id) === String(session.residentId);
+        }) || null;
+    }
 
     if (!resident) {
 
@@ -2694,7 +2139,7 @@ function validateResidentProfile() {
    SAVE RESIDENT PROFILE
    ========================================================= */
 
-function saveResidentProfile() {
+async function saveResidentProfile() {
 
     if (
         !validateResidentProfile()
@@ -2736,24 +2181,11 @@ function saveResidentProfile() {
         );
 
 
-    if (
-        residentIndex === -1
-    ) {
-
-        showAlert(
-            "Error",
-            "Resident account could not be found."
-        );
-
-        return;
-
-    }
-
-
-    const resident =
-        residents[
-            residentIndex
-        ];
+    // The backend is the source of truth. A resident may not exist in the
+    // legacy localStorage cache, so do not block saving when that cache is empty.
+    const resident = residentIndex >= 0
+        ? residents[residentIndex]
+        : { id: session.residentId, profile: {} };
 
 
 
@@ -3028,71 +2460,82 @@ function saveResidentProfile() {
         );
 
 
-    /* SAVE */
+    /* SAVE TO BACKEND */
+    const profilePayload = {};
+    [
+        "middleName", "birthdate", "age", "gender", "civilStatus", "birthplace", "nationality",
+        "house", "street", "purok", "residencyYears", "residentStatus", "mobile", "voterStatus",
+        "householdHead", "familyMembers", "employment", "occupation", "businessName", "businessAddress",
+        "idType", "idNumber", "emergencyName", "emergencyNumber", "relationship"
+    ].forEach(function (fieldId) {
+        profilePayload[fieldId] = getProfileValue(fieldId);
+    });
 
-    saveResidents(
-        residents
-    );
-    notifyDataChange("residents");
-
-
-
-
-    /* UPDATE SESSION */
-
-    const updatedSession = {
-
-        ...session,
-
-        firstName:
-            resident.firstName,
-
-        lastName:
-            resident.lastName,
-
-        email:
-            resident.email
-
-    };
-
-
-    if (
-        localStorage.getItem(
-            "residentSession"
-        )
-    ) {
-
-        localStorage.setItem(
-            "residentSession",
-            JSON.stringify(
-                updatedSession
-            )
-        );
-
-    } else {
-
-        sessionStorage.setItem(
-            "residentSession",
-            JSON.stringify(
-                updatedSession
-            )
-        );
-
+    const saveButton = document.getElementById("saveProfileButton");
+    if (saveButton) {
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving...";
     }
 
+    try {
+        const response = await fetch("/api/resident/profile", {
+            method: "PATCH",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                firstName: getProfileValue("firstName"),
+                lastName: getProfileValue("lastName"),
+                email: newEmail,
+                profile: profilePayload
+            })
+        });
+        const result = await response.json().catch(function () { return {}; });
+        if (!response.ok || !result.resident) {
+            throw new Error(result.message || "Unable to save your profile.");
+        }
 
-    /* RETURN TO READ-ONLY */
+        // Refresh the local compatibility cache only after the backend confirms success.
+        const savedResident = result.resident;
+        const cachedResidents = getResidents();
+        const cachedIndex = cachedResidents.findIndex(function (account) {
+            return String(account.id) === String(savedResident.id);
+        });
+        if (cachedIndex >= 0) cachedResidents[cachedIndex] = savedResident;
+        else cachedResidents.push(savedResident);
+        saveResidents(cachedResidents);
+        notifyDataChange("residents");
 
-    setProfileEditing(
-        false
-    );
+        const updatedSession = {
+            ...session,
+            residentId: savedResident.id,
+            firstName: savedResident.firstName,
+            lastName: savedResident.lastName,
+            email: savedResident.email
+        };
+        if (localStorage.getItem("residentSession")) {
+            localStorage.setItem("residentSession", JSON.stringify(updatedSession));
+        } else {
+            sessionStorage.setItem("residentSession", JSON.stringify(updatedSession));
+        }
 
-
-    showAlert(
-        "Success",
-        "Your profile has been updated successfully."
-    );
-
+        // Refill from the saved backend response and return to read-only mode.
+        const savedProfile = savedResident.profile || {};
+        Object.keys(savedProfile).forEach(function (key) {
+            setProfileValue(key, savedProfile[key]);
+        });
+        setProfileValue("firstName", savedResident.firstName);
+        setProfileValue("lastName", savedResident.lastName);
+        setProfileValue("email", savedResident.email);
+        setProfileEditing(false);
+        showAlert("Success", "Your profile has been saved successfully.");
+    } catch (error) {
+        showAlert("Unable to Save", error.message || "Please check your connection and try again.");
+    } finally {
+        if (saveButton) {
+            saveButton.disabled = false;
+            saveButton.textContent = "Save Changes";
+        }
+    }
 }
 /* =========================================================
    RESIDENT REQUEST - DOCUMENT SELECTION
@@ -6741,6 +6184,395 @@ window.addEventListener(
 
     }
 );
+
+/* =========================================================
+   ADMIN - REQUEST DETAILS PAGE (BACKEND)
+   ========================================================= */
+
+if (currentPage === "admin-request-details.html") {
+    loadAdminRequestDetails();
+
+    async function loadAdminRequestDetails() {
+        const params = new URLSearchParams(window.location.search);
+        const requestId = params.get("id");
+
+        if (!requestId) {
+            showAlert("Error", "No request reference was provided.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/requests/${encodeURIComponent(requestId)}`, { cache: "no-store" });
+            const result = await response.json();
+            if (!response.ok || !result.request) {
+                throw new Error(result.message || "Request not found.");
+            }
+
+            const request = result.request;
+            const docData = request.documentData || {};
+            const residentName = request.residentName || "—";
+            const residentEmail = request.residentEmail || request.email || "—";
+
+            setRequestDetailText("requestDetailId", request.requestId || requestId);
+            setRequestDetailText("requestDetailDate", request.dateRequested
+                ? new Date(request.dateRequested).toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" })
+                : "—");
+            setRequestDetailText("requestDetailDocumentType", typeof getAdminDocumentName === "function"
+                ? getAdminDocumentName(request.documentType) : (request.documentType || "—"));
+            setRequestDetailText("requestDetailPurpose", docData.purpose || docData.reason || docData.businessNature || "—");
+            setRequestDetailText("requestDetailResidentName", residentName);
+            setRequestDetailText("requestDetailResidentEmail", residentEmail);
+            setRequestDetailText("requestDetailResidentMobile", request.mobile || "—");
+            setRequestDetailText("requestDetailResidentAddress", request.address || "—");
+
+            const statusSelect = document.getElementById("requestStatus");
+            if (statusSelect) {
+                const status = request.status || "Pending";
+                const option = Array.from(statusSelect.options).find((item) => item.value === status);
+                if (option) statusSelect.value = status;
+                else statusSelect.value = status;
+            }
+
+            const remarks = document.getElementById("adminRemarks");
+            if (remarks) remarks.value = request.remarks || "";
+
+            const saveButton = document.getElementById("saveRequestChanges");
+            if (saveButton) {
+                saveButton.addEventListener("click", async (event) => {
+                    event.preventDefault();
+                    const newStatus = statusSelect ? statusSelect.value : request.status;
+                    const newRemarks = remarks ? remarks.value.trim() : "";
+                    try {
+                        await saveBackendRequestStatus(
+                            requestId,
+                            newStatus,
+                            newRemarks || (newStatus === "Rejected" ? "" : `Request status updated to ${newStatus}.`),
+                            (getAdminSession() || {}).username || "Administrator"
+                        );
+                        showAlert("Success", "Request details have been updated.");
+                        await loadAdminRequestDetails();
+                    } catch (error) {
+                        showAlert("Error", error.message || "Unable to save request changes.");
+                    }
+                }, { once: true });
+            }
+        } catch (error) {
+            console.error("Unable to load admin request details:", error);
+            showAlert("Error", error.message || "Unable to load request details.");
+        }
+    }
+
+    function setRequestDetailText(id, value) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = String(value ?? "—");
+    }
+}
+
+
+/* =========================================================
+   ADMIN SETTINGS - BACKEND INTEGRATION
+   ========================================================= */
+
+if (currentPage === "admin-settings.html") {
+    initializeAdminSettings();
+}
+
+async function initializeAdminSettings() {
+    const nameInput = document.getElementById("adminName");
+    const emailInput = document.getElementById("adminEmail");
+    const saveProfileButton = document.getElementById("saveAdminProfile");
+    const updatePasswordButton = document.getElementById("updateAdminPassword");
+
+    try {
+        const result = await adminSettingsRequest("/api/admin/settings", { method: "GET" });
+        if (nameInput) nameInput.value = result.settings.name || "";
+        if (emailInput) emailInput.value = result.settings.email || "";
+    } catch (error) {
+        showAlert("Unable to Load Settings", error.message || "Could not load administrator settings.");
+    }
+
+    if (saveProfileButton) {
+        saveProfileButton.addEventListener("click", async () => {
+            const name = nameInput?.value.trim() || "";
+            const email = emailInput?.value.trim() || "";
+            saveProfileButton.disabled = true;
+            try {
+                const result = await adminSettingsRequest("/api/admin/settings/profile", {
+                    method: "PATCH",
+                    body: JSON.stringify({ name, email })
+                });
+                if (nameInput) nameInput.value = result.settings.name;
+                if (emailInput) emailInput.value = result.settings.email;
+                showAlert("Success", result.message || "Administrator account updated.");
+            } catch (error) {
+                showAlert("Unable to Save", error.message || "Could not save administrator account settings.");
+            } finally {
+                saveProfileButton.disabled = false;
+            }
+        });
+    }
+
+    if (updatePasswordButton) {
+        updatePasswordButton.addEventListener("click", async () => {
+            const currentPassword = document.getElementById("currentPassword")?.value || "";
+            const newPassword = document.getElementById("newPassword")?.value || "";
+            const confirmPassword = document.getElementById("confirmPassword")?.value || "";
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showAlert("Missing Information", "Complete all password fields.");
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                showAlert("Password Mismatch", "The new password and confirmation do not match.");
+                return;
+            }
+            if (newPassword.length < 8 || newPassword.length > 128) {
+                showAlert("Invalid Password", "The new password must be between 8 and 128 characters.");
+                return;
+            }
+
+            updatePasswordButton.disabled = true;
+            try {
+                const result = await adminSettingsRequest("/api/admin/settings/password", {
+                    method: "PATCH",
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+                ["currentPassword", "newPassword", "confirmPassword"].forEach((id) => {
+                    const input = document.getElementById(id);
+                    if (input) input.value = "";
+                });
+                showAlert("Success", result.message || "Administrator password updated.");
+            } catch (error) {
+                showAlert("Unable to Update Password", error.message || "Could not update the password.");
+            } finally {
+                updatePasswordButton.disabled = false;
+            }
+        });
+    }
+}
+
+async function adminSettingsRequest(url, options = {}) {
+    const response = await fetch(url, {
+        ...options,
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.headers || {})
+        }
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        if (response.status === 401) {
+            localStorage.removeItem("adminSession");
+            sessionStorage.removeItem("adminSession");
+            window.location.href = "admin-login.html";
+        }
+        throw new Error(result.message || "The server could not complete this action.");
+    }
+    return result;
+}
+
+
+/* =========================================================
+   ADMIN REPORTS - LIVE BACKEND DATA
+   ========================================================= */
+if (currentPage === "admin-reports.html") {
+    initializeAdminReports();
+}
+
+async function initializeAdminReports() {
+    const startInput = document.getElementById("startDate");
+    const endInput = document.getElementById("endDate");
+    const typeInput = document.getElementById("reportType");
+    const generateButton = document.getElementById("generateReport");
+    const exportButton = document.getElementById("exportReportCsv");
+    let currentReport = null;
+
+    const today = new Date();
+    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    if (startInput && !startInput.value) startInput.value = toDateInputValue(monthStart);
+    if (endInput && !endInput.value) endInput.value = toDateInputValue(today);
+
+    if (generateButton) generateButton.addEventListener("click", generate);
+    if (exportButton) exportButton.addEventListener("click", exportCsv);
+    await generate();
+
+    async function generate() {
+        const startDate = startInput?.value || "";
+        const endDate = endInput?.value || "";
+        if (startDate && endDate && startDate > endDate) {
+            reportMessage("The start date must be on or before the end date.");
+            return;
+        }
+
+        if (generateButton) generateButton.disabled = true;
+        reportMessage("Generating report from backend records…");
+        try {
+            const reportType = typeInput?.value || "requests";
+            const requests = reportType === "residents" ? [] : await getReportData("/api/requests", "requests");
+            const residents = reportType === "requests" ? [] : await getReportData("/api/admin/residents", "residents");
+            const filteredRequests = requests.filter(item => inDateRange(item.dateRequested || item.createdAt, startDate, endDate));
+            const filteredResidents = residents.filter(item => inDateRange(item.createdAt || item.registeredAt, startDate, endDate));
+
+            currentReport = { reportType, startDate, endDate, requests: filteredRequests, residents: filteredResidents };
+            if (reportType === "residents") renderResidentReport(filteredResidents);
+            else if (reportType === "processing") renderProcessingReport(filteredRequests);
+            else renderRequestReport(filteredRequests);
+            reportMessage(`Report generated: ${reportType === "residents" ? filteredResidents.length + " resident account(s)" : filteredRequests.length + " document request(s)"}.`);
+        } catch (error) {
+            console.error("Admin report generation failed:", error);
+            reportMessage(error.message || "Unable to generate report. Check your admin session and server.");
+        } finally {
+            if (generateButton) generateButton.disabled = false;
+        }
+    }
+
+    async function getReportData(url, key) {
+        const response = await fetch(url, { credentials: "same-origin", cache: "no-store" });
+        const result = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+            window.location.href = "admin-login.html";
+            throw new Error("Your admin session has expired. Please sign in again.");
+        }
+        if (!response.ok || !Array.isArray(result[key])) throw new Error(result.message || `Unable to load ${key}.`);
+        return result[key];
+    }
+
+    function renderRequestReport(requests) {
+        const statuses = requests.map(r => normalizeReportStatus(r.status));
+        setReportValue("reportTotalRequests", requests.length);
+        setReportValue("reportCompleted", statuses.filter(s => s === "Released").length);
+        setReportValue("reportPending", statuses.filter(s => s === "Pending" || s === "Under Review" || s === "Approved").length);
+        setReportValue("reportRejected", statuses.filter(s => s === "Rejected").length);
+
+        const typeMap = [
+            ["clearance", "Barangay Clearance"],
+            ["residency", "Certificate of Residency"],
+            ["indigency", "Certificate of Indigency"],
+            ["business", "Business Clearance"]
+        ];
+        const tbody = document.getElementById("reportDocumentTypeRows");
+        if (tbody) tbody.innerHTML = typeMap.map(([key, label]) => {
+            const group = requests.filter(r => String(r.documentType || "").toLowerCase() === key);
+            const complete = group.filter(r => normalizeReportStatus(r.status) === "Released").length;
+            const pending = group.filter(r => ["Pending", "Under Review", "Approved"].includes(normalizeReportStatus(r.status))).length;
+            return `<tr><td>${escapeReportText(label)}</td><td>${group.length}</td><td>${complete}</td><td>${pending}</td></tr>`;
+        }).join("");
+
+        const statusRows = [
+            ["Pending", ["Pending"]],
+            ["Under Review / Processing", ["Under Review", "Processing"]],
+            ["Approved", ["Approved"]],
+            ["Ready for Pickup", ["Ready for Pickup"]],
+            ["Released / Completed", ["Released", "Completed"]],
+            ["Rejected", ["Rejected"]]
+        ];
+        const statusBody = document.getElementById("reportStatusRows");
+        if (statusBody) statusBody.innerHTML = statusRows.map(([label, values]) => {
+            const count = requests.filter(r => values.includes(normalizeReportStatus(r.status))).length;
+            return `<tr><td>${escapeReportText(label)}</td><td>${count}</td></tr>`;
+        }).join("");
+    }
+
+    function renderProcessingReport(requests) {
+        renderRequestReport(requests);
+        const tbody = document.getElementById("reportDocumentTypeRows");
+        if (tbody) tbody.innerHTML = requests.map(r => {
+            const requested = r.dateRequested ? new Date(r.dateRequested) : null;
+            const processed = r.dateProcessed ? new Date(r.dateProcessed) : null;
+            const days = requested && processed && !Number.isNaN(+requested) && !Number.isNaN(+processed)
+                ? Math.max(0, Math.round((processed - requested) / 86400000)) : "In progress";
+            return `<tr><td>${escapeReportText(r.requestId || "—")}</td><td>${escapeReportText(r.documentType || "—")}</td><td>${escapeReportText(normalizeReportStatus(r.status))}</td><td>${days}</td></tr>`;
+        }).join("");
+        const table = tbody?.closest("table");
+        if (table) table.querySelector("thead").innerHTML = "<tr><th>Request Reference</th><th>Document Type</th><th>Status</th><th>Processing Days</th></tr>";
+    }
+
+    function renderResidentReport(residents) {
+        setReportValue("reportTotalRequests", residents.length);
+        setReportValue("reportCompleted", residents.filter(r => String(r.status).toLowerCase() === "approved").length);
+        setReportValue("reportPending", residents.filter(r => String(r.status).toLowerCase().includes("pending")).length);
+        setReportValue("reportRejected", residents.filter(r => String(r.status).toLowerCase() === "rejected").length);
+        const tbody = document.getElementById("reportDocumentTypeRows");
+        if (tbody) {
+            const table = tbody.closest("table");
+            if (table) table.querySelector("thead").innerHTML = "<tr><th>Resident</th><th>Email</th><th>Status</th><th>Registered</th></tr>";
+            tbody.innerHTML = residents.map(r => `<tr><td>${escapeReportText([r.firstName, r.middleName, r.lastName].filter(Boolean).join(" ") || r.name || "—")}</td><td>${escapeReportText(r.email || "—")}</td><td>${escapeReportText(r.status || "Pending Verification")}</td><td>${escapeReportText(formatReportDate(r.createdAt || r.registeredAt))}</td></tr>`).join("");
+        }
+        const statusBody = document.getElementById("reportStatusRows");
+        if (statusBody) statusBody.innerHTML = ["Approved", "Pending Verification", "Rejected"].map(status => {
+            const count = residents.filter(r => String(r.status || "Pending Verification").toLowerCase() === status.toLowerCase()).length;
+            return `<tr><td>${status}</td><td>${count}</td></tr>`;
+        }).join("");
+    }
+
+    function exportCsv() {
+        if (!currentReport) {
+            reportMessage("Generate a report before exporting.");
+            return;
+        }
+        const rows = currentReport.reportType === "residents" ? currentReport.residents : currentReport.requests;
+        const columns = currentReport.reportType === "residents"
+            ? ["id", "firstName", "lastName", "email", "status", "createdAt"]
+            : ["requestId", "residentName", "residentEmail", "documentType", "status", "dateRequested", "dateProcessed", "remarks"];
+        const csv = [columns.join(","), ...rows.map(row => columns.map(key => csvCell(row[key])).join(","))].join("\r\n");
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `barangaycert-${currentReport.reportType}-${currentReport.startDate || "all"}-to-${currentReport.endDate || "all"}.csv`;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    function reportMessage(message) {
+        const element = document.getElementById("reportMessage");
+        if (element) element.textContent = message;
+    }
+    function setReportValue(id, value) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = String(value);
+    }
+}
+
+function normalizeReportStatus(value) {
+    const status = String(value || "Pending").trim();
+    if (status.toLowerCase() === "completed") return "Released";
+    if (status.toLowerCase() === "processing") return "Under Review";
+    return status;
+}
+function inDateRange(value, start, end) {
+    if (!start && !end) return true;
+    if (!value) return false;
+    const date = new Date(value);
+    if (Number.isNaN(+date)) return false;
+    const day = toDateInputValue(date);
+    return (!start || day >= start) && (!end || day <= end);
+}
+function toDateInputValue(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}
+function formatReportDate(value) {
+    if (!value) return "—";
+    const date = new Date(value);
+    return Number.isNaN(+date) ? "—" : date.toLocaleDateString("en-PH");
+}
+function escapeReportText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+}
+function csvCell(value) {
+    const text = String(value ?? "");
+    return `"${text.replace(/"/g, '""')}"`;
+}
+
 
 /* =========================================================
    12. PAGE ACCESS PROTECTION

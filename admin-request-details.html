@@ -95,9 +95,7 @@
 
                         <span>Request ID</span>
 
-                        <strong>
-                            BRGY-2026-0001
-                        </strong>
+                        <strong id="requestDetailId">—</strong>
 
                     </div>
 
@@ -106,9 +104,7 @@
 
                         <span>Date Requested</span>
 
-                        <strong>
-                            September 27, 2026
-                        </strong>
+                        <strong id="requestDetailDate">—</strong>
 
                     </div>
 
@@ -117,9 +113,7 @@
 
                         <span>Document Type</span>
 
-                        <strong>
-                            Barangay Clearance
-                        </strong>
+                        <strong id="requestDetailDocumentType">—</strong>
 
                     </div>
 
@@ -128,9 +122,7 @@
 
                         <span>Purpose</span>
 
-                        <strong>
-                            Employment
-                        </strong>
+                        <strong id="requestDetailPurpose">—</strong>
 
                     </div>
 
@@ -166,9 +158,7 @@
 
                         <span>Full Name</span>
 
-                        <strong>
-                            Juan Dela Cruz
-                        </strong>
+                        <strong id="requestDetailResidentName">—</strong>
 
                     </div>
 
@@ -177,9 +167,7 @@
 
                         <span>Email Address</span>
 
-                        <strong>
-                            juandelacruz@email.com
-                        </strong>
+                        <strong id="requestDetailResidentEmail">—</strong>
 
                     </div>
 
@@ -188,9 +176,7 @@
 
                         <span>Contact Number</span>
 
-                        <strong>
-                            0917 123 4567
-                        </strong>
+                        <strong id="requestDetailResidentMobile">—</strong>
 
                     </div>
 
@@ -199,9 +185,7 @@
 
                         <span>Address</span>
 
-                        <strong>
-                            Barangay Poblacion, Pandi, Bulacan
-                        </strong>
+                        <strong id="requestDetailResidentAddress">—</strong>
 
                     </div>
 
@@ -308,25 +292,15 @@
 
                     <select id="requestStatus">
 
-                        <option value="pending" selected>
-                            Pending
-                        </option>
+                        <option value="Pending">Pending</option>
 
-                        <option value="processing">
-                            Processing
-                        </option>
+                        <option value="Under Review">Under Review</option>
 
-                        <option value="ready">
-                            Ready for Pickup
-                        </option>
+                        <option value="Ready for Pickup">Ready for Pickup</option>
 
-                        <option value="completed">
-                            Completed
-                        </option>
+                        <option value="Released">Released</option>
 
-                        <option value="rejected">
-                            Rejected
-                        </option>
+                        <option value="Rejected">Rejected</option>
 
                     </select>
 
@@ -357,7 +331,7 @@
                         Cancel
                     </a>
 
-                    <button
+                    <button id="saveRequestChanges"
                         type="button"
                         class="dashboard-button"
                     >

@@ -142,13 +142,16 @@
 
                         <button
                             type="button"
+                            id="generateReport"
                             class="dashboard-button"
                         >
                             Generate Report
                         </button>
-
+                        <button type="button" id="exportReportCsv" class="dashboard-button">
+                            Export CSV
+                        </button>
                     </div>
-
+                    <p id="reportMessage" role="status" aria-live="polite"></p>
                 </div>
 
             </section>
@@ -179,7 +182,7 @@
 
                     <div class="summary-card">
 
-                        <h3>0</h3>
+                        <h3><span id="reportTotalRequests">0</span></h3>
 
                         <p>
                             Total Requests
@@ -190,7 +193,7 @@
 
                     <div class="summary-card">
 
-                        <h3>0</h3>
+                        <h3><span id="reportCompleted">0</span></h3>
 
                         <p>
                             Completed
@@ -201,7 +204,7 @@
 
                     <div class="summary-card">
 
-                        <h3>0</h3>
+                        <h3><span id="reportPending">0</span></h3>
 
                         <p>
                             Pending
@@ -212,7 +215,7 @@
 
                     <div class="summary-card">
 
-                        <h3>0</h3>
+                        <h3><span id="reportRejected">0</span></h3>
 
                         <p>
                             Rejected
@@ -267,7 +270,7 @@
                         </thead>
 
 
-                        <tbody>
+                        <tbody id="reportDocumentTypeRows">
 
                             <tr>
 
@@ -399,7 +402,7 @@
                         </thead>
 
 
-                        <tbody>
+                        <tbody id="reportStatusRows">
 
                             <tr>
                                 <td>Pending</td>

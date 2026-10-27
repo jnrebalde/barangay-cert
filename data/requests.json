@@ -13,11 +13,11 @@
       "validIdType": "Driver's License",
       "validIdNumber": "3434343"
     },
-    "status": "Pending",
+    "status": "Rejected",
     "dateRequested": "2026-10-25T16:01:48.982Z",
-    "dateProcessed": null,
-    "processedBy": null,
-    "remarks": ""
+    "dateProcessed": "2026-10-26T15:01:26.555Z",
+    "processedBy": "admin",
+    "remarks": "Lacking details"
   },
   {
     "requestId": "REQ-2026-0002",
@@ -38,5 +38,128 @@
     "dateProcessed": "2026-10-25T16:30:47.477Z",
     "processedBy": "admin",
     "remarks": "Request status updated to Approved."
+  },
+  {
+    "requestId": "REQ-2026-1295afb7-fc87-41c9-bc11-5573cc8bc3fd",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "residency",
+    "documentData": {
+      "yearsOfResidency": 0,
+      "purpose": "sdsds",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Approved",
+    "dateRequested": "2026-10-26T14:25:12.170Z",
+    "dateProcessed": "2026-10-26T14:26:53.303Z",
+    "processedBy": "admin",
+    "remarks": "Request status updated to Approved."
+  },
+  {
+    "requestId": "REQ-2026-0003",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "residency",
+    "documentData": {
+      "yearsOfResidency": 1,
+      "purpose": "sdsds",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Under Review",
+    "dateRequested": "2026-10-26T14:46:07.183Z",
+    "dateProcessed": "2026-10-26T15:03:29.298Z",
+    "processedBy": "admin",
+    "remarks": "Request status updated to Under Review."
+  },
+  {
+    "requestId": "REQ-2026-0004",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "indigency",
+    "documentData": {
+      "reason": "sdsdsds",
+      "employmentStatus": "Employed",
+      "occupation": "",
+      "incomeSource": "",
+      "monthlyIncome": "",
+      "householdMembers": 1,
+      "householdHead": "Yes",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Rejected",
+    "dateRequested": "2026-10-26T14:46:58.217Z",
+    "dateProcessed": "2026-10-26T15:01:02.048Z",
+    "processedBy": "admin",
+    "remarks": "Request status updated to Under Review."
+  },
+  {
+    "requestId": "REQ-2026-0005",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "clearance",
+    "documentData": {
+      "purpose": "sdsds",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Pending",
+    "dateRequested": "2026-10-26T15:42:07.787Z",
+    "dateProcessed": null,
+    "processedBy": null,
+    "remarks": ""
+  },
+  {
+    "requestId": "REQ-2026-0006",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "residency",
+    "documentData": {
+      "yearsOfResidency": 1,
+      "purpose": "sdsd",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Pending",
+    "dateRequested": "2026-10-26T15:43:29.802Z",
+    "dateProcessed": null,
+    "processedBy": null,
+    "remarks": ""
+  },
+  {
+    "requestId": "REQ-2026-0007",
+    "residentId": 1793022285394,
+    "residentEmail": "jnrebalde@gmail.com",
+    "residentName": "Joan Gaudan Rebalde",
+    "mobile": "09191234567",
+    "address": "asasa, asasa, None, Poblacion, Pandi, Bulacan",
+    "documentType": "clearance",
+    "documentData": {
+      "purpose": "sdsds",
+      "validIdType": "Philippine National ID",
+      "validIdNumber": "12121"
+    },
+    "status": "Pending",
+    "dateRequested": "2026-10-26T15:48:10.952Z",
+    "dateProcessed": null,
+    "processedBy": null,
+    "remarks": ""
   }
 ]
